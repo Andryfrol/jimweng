@@ -2,9 +2,11 @@ package main
 
 import (
 	"fmt"
+	"sort"
 )
 
 func main(){
+	// claim a array
 	cases := []struct {
 		in, want string
 	}{
@@ -12,6 +14,8 @@ func main(){
 		{"Hello, 世界", "界世 ,olleH"},
 		{"", ""},
 	}
+
+	
 
 	fmt.Println(cases)
 }
