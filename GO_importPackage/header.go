@@ -1,7 +1,7 @@
 package main
 
 import (
-	"goexample"
+	"github.com/goPractice/GO_importPackage/goexample"
 )
 
 func main(){
