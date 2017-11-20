@@ -8,8 +8,8 @@ import (
 )
 
 func main() {
-	goexample.Hello()
 	goexample.Hi()
+	goexample.Hello()
 	var test = string.Reverse("Hello")
 	fmt.Println(test)
 }
