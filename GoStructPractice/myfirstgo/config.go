@@ -1,5 +1,6 @@
-// package myfirstgo
-package main
+package myfirstgo
+
+// package main
 
 import (
 	"errors"
@@ -103,6 +104,6 @@ func (c *Config) ListTags() string {
 	return strings.Join(tags, " ")
 }
 
-func main() {
-	fmt.Println("hello")
-}
+// func main() {
+// 	fmt.Println("hello")
+// }

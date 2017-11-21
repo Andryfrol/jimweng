@@ -12,4 +12,6 @@ func main() {
 
 	fmt.Println(m)
 
+	temp, crit := m["Jim"]
+	fmt.Println("The value:", temp, "Present?", crit)
 }
