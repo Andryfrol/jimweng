@@ -9,13 +9,13 @@ import (
 	"fmt"
 )
 
-func main() {
+// claim a struct obj to use Map
+type MapStruc struct {
+	Lat  string
+	Long float64
+}
 
-	// claim a struct obj to use Map
-	type MapStruc struct {
-		Lat  string
-		Long float64
-	}
+func main() {
 
 	// claim variable m as map with structure map[string]MapStruc
 	var m map[string]MapStruc
