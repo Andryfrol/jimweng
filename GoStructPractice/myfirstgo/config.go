@@ -1,7 +1,5 @@
 package myfirstgo
 
-// package main
-
 import (
 	"errors"
 	"fmt"
@@ -103,7 +101,3 @@ func (c *Config) ListTags() string {
 
 	return strings.Join(tags, " ")
 }
-
-// func main() {
-// 	fmt.Println("hello")
-// }
