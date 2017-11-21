@@ -24,5 +24,5 @@ func main() {
 	test := Duration{time.Hour}
 	fmt.Println(test)
 
-	fmt.Println("UnmarshalTOML value is", test.UnmarshalTOML())
+	fmt.Println("UnmarshalTOML value is", test.UnmarshalTOML([]byte("12ms")))
 }
