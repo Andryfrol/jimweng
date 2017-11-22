@@ -1,5 +1,12 @@
 package system
 
+// import (
+// 	"github.com/goPractice/GoStructPractice/myfirstgo/plugins"
+// 	// "github.com/influxdb/tivan/plugins"
+// 	"github.com/shirou/gopsutil/load"
+// 	"github.com/vektra/cypress"
+// )
+
 // type PS interface {
 // 	LoadAvg() (*load.LoadAvgStat, error)
 // }
