@@ -33,17 +33,16 @@ func main() {
 	}
 
 	fmt.Println(config)
+	// ag := myfirstgo.NewAgent(config)
 
-	ag := myfirstgo.NewAgent(config)
+	// if *fDebug {
+	// 	ag.Debug = true
+	// }
 
-	if *fDebug {
-		ag.Debug = true
-	}
-
-	plugins, err := ag.LoadPlugins()
-	if err != nil {
-		log.Fatal(err)
-	}
+	// plugins, err := ag.LoadPlugins()
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
 
 	shutdown := make(chan struct{})
 
