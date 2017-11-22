@@ -8,6 +8,7 @@ import (
 	"os/signal"
 
 	"github.com/goPractice/GoStructPractice/myfirstgo"
+	_ "github.com/goPractice/GoStructPractice/myfirstgo/plugins/all"
 )
 
 var fDebug = flag.Bool("debug", false, "show metrics as they're generated to stdout")
@@ -17,7 +18,6 @@ var fConfig = flag.String("config", "", "configuration file to load")
 func main() {
 	flag.Parse()
 
-	//
 	var (
 		config *myfirstgo.Config
 		err    error
@@ -34,16 +34,16 @@ func main() {
 
 	fmt.Println(config)
 
-	// ag := myfirstgo.NewAgent(config)
+	ag := myfirstgo.NewAgent(config)
 
-	// if *fDebug {
-	// 	ag.Debug = true
-	// }
+	if *fDebug {
+		ag.Debug = true
+	}
 
-	// plugins, err := ag.LoadPlugins()
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
+	plugins, err := ag.LoadPlugins()
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	shutdown := make(chan struct{})
 
