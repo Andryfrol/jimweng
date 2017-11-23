@@ -1,3 +1,4 @@
+// https://gobyexample.com/interfaces
 package main
 
 import (
@@ -5,15 +6,18 @@ import (
 	"math"
 )
 
+// claim a basic interface for geometric shapes
 type geometry interface {
 	area() float64
 	perim() float64
 }
 
+// claim rect struct
 type rect struct {
 	width, height float64
 }
 
+// claim circle
 type circle struct {
 	radius float64
 }
