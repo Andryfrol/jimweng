@@ -300,7 +300,3 @@ func PrintSampleConfig() {
 		}
 	}
 }
-
-// func main() {
-// 	fmt.Print("hi")
-// }
