@@ -7,6 +7,7 @@ import (
 
 func main() {
 
+	// makke a slice of string of length 3
 	s := make([]string, 3)
 	fmt.Println("emp", s)
 
@@ -26,4 +27,25 @@ func main() {
 	copy(c, s)
 	fmt.Println("cpy:", c)
 
+	l := s[2:5]
+	fmt.Println("sl1", l)
+
+	l = s[:5]
+	fmt.Println("sl2", l)
+
+	l = s[2:]
+	fmt.Println("sl3", l)
+
+	t := []string{"g", "h", "i"}
+	fmt.Println("dcl:", t)
+
+	twoD := make([][]int, 3)
+	for i := 0; i < 3; i++ {
+		innerLen := i + 1
+		twoD[i] = make([]int, innerLen)
+		for j := 0; j < innerLen; j++ {
+			twoD[i][j] = i + j
+		}
+	}
+	fmt.Println("2d: ", twoD)
 }
