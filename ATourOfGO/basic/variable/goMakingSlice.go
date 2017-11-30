@@ -5,9 +5,26 @@ import (
 	"fmt"
 )
 
-func main() {
+func normal_slice() {
+	s := []int{2, 3, 4, 5, 6}
+	fmt.Println("s ==", s)
 
-	// makke a slice of string of length 3
+	for i := 0; i < len(s); i++ {
+		fmt.Printf("s[%d]==%d\n", i, s[i])
+	}
+}
+
+func main() {
+	// nil-slices
+	var z []int
+	fmt.Println(z, len(z), cap(z))
+	if z == nil {
+		fmt.Println("nil!")
+	}
+	fmt.Println("----------for normal slice would be like this-----------")
+	normal_slice()
+	fmt.Println("----------or you can use make to build a dynamic slice-----------")
+	// 'make' a slice of string of length 3
 	s := make([]string, 3)
 	fmt.Println("emp", s)
 
