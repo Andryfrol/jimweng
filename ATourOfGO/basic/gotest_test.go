@@ -1,6 +1,6 @@
 // gonna to wirte some test code
 // https://www.youtube.com/watch?v=mb5En4BizFM
-// Run$ go test -v -cover=true gotest_test.go gotest.go
+// Run$: go test -v -cover=true gotest_test.go gotest.go
 package main
 
 import "testing"
