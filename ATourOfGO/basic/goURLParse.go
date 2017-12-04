@@ -22,7 +22,7 @@ func main() {
 	// print out "u"
 	fmt.Println("---------u  &  u.Scheme-------------")
 	fmt.Println(u)
-	fmt.Println(u.Scheme)
+	fmt.Println("u.Scheme = ",u.Scheme)
 	fmt.Println("---------u.User()  &  u.Password()-------------")
 
 	fmt.Println("u.User = ", u.User)
