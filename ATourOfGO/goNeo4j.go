@@ -15,6 +15,15 @@ curl -i XPOST -H "Accept: application/json" -H "Content-Type: application/json" 
 // addd --data 
 curl -i -XPOST -H "Accept: application/json" -H "Content-Type: application/json" --user neo4j:password -o output.log --data @create.json http://172.31.86.178:7474/db/data/cypher
 
+// another way to create node instead of create a .json file
+// CREATE (n:Person { name : {name} }) RETURN n
+curl -i -XPOST -H "Accept: application/json" -H "Content-Type: application/json" --user neo4j:password -d '{
+  "query": "CREATE (n:Person { name : {name} }) RETURN n",
+  "params": {
+    "name": "John"
+  }
+}' http://172.31.86.178:7474/db/data/cypher
+
 
 // Cypher langeuage syntax
 // add an extra .json file 
@@ -34,7 +43,7 @@ match(n) return n
 // create an node
 CREATE (n:Person { name : "create" }) RETURN n
 
-// delete all nodes
+// delete all nodesgo gogogo
 match(n) detach delete n
 
 // create a relationship
