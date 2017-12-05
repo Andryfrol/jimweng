@@ -38,7 +38,7 @@ func curlwithoutJSONfile(){
 	}
 	
 	data := Payload{
-	// fill struct
+		// fill struct
 	}
 	payloadBytes, err := json.Marshal(data)
 	if err != nil {
@@ -61,12 +61,7 @@ func curlwithoutJSONfile(){
 	defer resp.Body.Close()
 }
 
-
-
-
-
-
 func main(){
-	curlwithoutJSONfile()
-	// curlWithJSONFile()	
+	// curlwithoutJSONfile()
+	curlWithJSONFile()	
 }
