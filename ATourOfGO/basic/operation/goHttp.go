@@ -8,7 +8,7 @@ import (
 )
 
 func curlWithJSONFile() {
-	f, err := os.Open("create.json")
+	f, err := os.Open("/Users/mac/go/src/github.com/goPractice/ATourOfGO/basic/operation/create.json")
 	if err != nil {
 		// handle err
 	}
@@ -65,6 +65,9 @@ func curlwithoutJSONfile() {
 }
 
 func main() {
-	curlwithoutJSONfile()
-	// curlWithJSONFile()
+
+	curlWithJSONFile()
+
+	// curlwithoutJSONfile()
+
 }
