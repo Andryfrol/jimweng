@@ -6,6 +6,7 @@ import (
 	"bytes"
 	"net/http"
 	"os"
+	"fmt"
 )
 
 func curlWithJSONFile(){
@@ -39,8 +40,17 @@ func curlwithoutJSONfile(){
 	
 	data := Payload{
 		// fill struct
+		Query :"query",
+		// Params.Name :"CREATE (n:Person { name : {name} }) RETURN n",
+
 	}
+	
+	fmt.Println(data)
+
 	payloadBytes, err := json.Marshal(data)
+
+	fmt.Println(payloadBytes)
+
 	if err != nil {
 		// handle err
 	}
@@ -62,6 +72,6 @@ func curlwithoutJSONfile(){
 }
 
 func main(){
-	// curlwithoutJSONfile()
-	curlWithJSONFile()	
+	curlwithoutJSONfile()
+	// curlWithJSONFile()	
 }
