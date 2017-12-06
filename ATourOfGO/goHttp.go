@@ -1,15 +1,13 @@
-
 package main
 
 import (
-	"encoding/json"
 	"bytes"
+	"encoding/json"
 	"net/http"
 	"os"
-	"fmt"
 )
 
-func curlWithJSONFile(){
+func curlWithJSONFile() {
 	f, err := os.Open("create.json")
 	if err != nil {
 		// handle err
@@ -30,30 +28,27 @@ func curlWithJSONFile(){
 	defer resp.Body.Close()
 }
 
-func curlwithoutJSONfile(){
+func curlwithoutJSONfile() {
 	// claim node
-	var nameString string = "john"
-	var queryString string = "create (n:Person {name:'"+nameString+"'})"
-	
+	var nameString = "john"
+	var queryString = "create (n:Person {name:'" + nameString + "'})"
+
 	type Payload struct {
-		Query  string `json:"query"`
+		Query string `json:"query"`
 	}
 
 	data := Payload{
 		// fill struct
-		Query :queryString,
+		Query: queryString,
 	}
 
-	fmt.Println(data)
-
 	payloadBytes, err := json.Marshal(data)
-	fmt.Println(payloadBytes)
 
 	if err != nil {
 		// handle err
 	}
 	body := bytes.NewReader(payloadBytes)
-	
+
 	req, err := http.NewRequest("POST", "http://172.31.86.178:7474/db/data/cypher", body)
 	if err != nil {
 		// handle err
@@ -61,7 +56,7 @@ func curlwithoutJSONfile(){
 	req.SetBasicAuth("neo4j", "password")
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("Content-Type", "application/json")
-	
+
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		// handle err
@@ -69,7 +64,7 @@ func curlwithoutJSONfile(){
 	defer resp.Body.Close()
 }
 
-func main(){
+func main() {
 	curlwithoutJSONfile()
-	// curlWithJSONFile()	
+	// curlWithJSONFile()
 }
