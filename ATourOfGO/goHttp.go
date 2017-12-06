@@ -31,24 +31,22 @@ func curlWithJSONFile(){
 }
 
 func curlwithoutJSONfile(){
+	// claim node
+	var nameString string = "john"
+	var queryString string = "create (n:Person {name:'"+nameString+"'})"
+	
 	type Payload struct {
 		Query  string `json:"query"`
-		Params struct {
-			Name string `json:"name"`
-		} `json:"params"`
 	}
-	
+
 	data := Payload{
 		// fill struct
-		Query :"query",
-		// Params.Name :"CREATE (n:Person { name : {name} }) RETURN n",
-
+		Query :queryString,
 	}
-	
+
 	fmt.Println(data)
 
 	payloadBytes, err := json.Marshal(data)
-
 	fmt.Println(payloadBytes)
 
 	if err != nil {
