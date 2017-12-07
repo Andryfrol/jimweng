@@ -28,6 +28,9 @@ curl -i -XPOST -H "Accept: application/json" -H "Content-Type: application/json"
 // MATCH(n) RETURN n
 curl -i -XPOST -H "Accept: application/json" -H "Content-Type: application/json" --user neo4j:na -d '{"query":"match(n) return n"}' http://172.31.86.190:7474/db/data/cypher
 
+curl -i -XPOST -H "Accept: application/json" -H "Content-Type: application/json" -u neo4j:na --data-binary '{"query":"match(n) return n"}' http://172.31.86.190:7474/db/data/cypher
+
+
 // Cypher langeuage syntax
 // add an extra .json file 
 // create.json
