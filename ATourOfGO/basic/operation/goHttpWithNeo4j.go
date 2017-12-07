@@ -7,17 +7,23 @@ import (
 	"os"
 )
 
+var (
+	loginUser   = "neo4j"
+	loginPasswd = "na"
+	configURL   = "http://172.31.86.190:7474/db/data/cypher"
+)
+
 func curlWithJSONFile() {
 	f, err := os.Open("/Users/mac/go/src/github.com/goPractice/ATourOfGO/basic/operation/create.json")
 	if err != nil {
 		// handle err
 	}
 	defer f.Close()
-	req, err := http.NewRequest("POST", "http://172.31.86.178:7474/db/data/cypher", f)
+	req, err := http.NewRequest("POST", configURL, f)
 	if err != nil {
 		// handle err
 	}
-	req.SetBasicAuth("neo4j", "password")
+	req.SetBasicAuth(loginUser, loginPasswd)
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("Content-Type", "application/json")
 
@@ -49,11 +55,11 @@ func curlwithoutJSONfile() {
 	}
 	body := bytes.NewReader(payloadBytes)
 
-	req, err := http.NewRequest("POST", "http://172.31.86.178:7474/db/data/cypher", body)
+	req, err := http.NewRequest("POST", configURL, body)
 	if err != nil {
 		// handle err
 	}
-	req.SetBasicAuth("neo4j", "password")
+	req.SetBasicAuth(loginUser, loginPasswd)
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("Content-Type", "application/json")
 
@@ -66,8 +72,8 @@ func curlwithoutJSONfile() {
 
 func main() {
 
-	curlWithJSONFile()
+	// curlWithJSONFile()
 
-	// curlwithoutJSONfile()
+	curlwithoutJSONfile()
 
 }

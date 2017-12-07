@@ -22,7 +22,7 @@ func main() {
 	// print out "u"
 	fmt.Println("---------u  &  u.Scheme-------------")
 	fmt.Println(u)
-	fmt.Println("u.Scheme = ",u.Scheme)
+	fmt.Println("u.Scheme = ", u.Scheme)
 	fmt.Println("---------u.User()  &  u.Password()-------------")
 
 	fmt.Println("u.User = ", u.User)
@@ -36,25 +36,25 @@ func main() {
 	// The Host contains both the hostname and the port
 	// use SplitHostPort to separate 'host' and 'port'
 	host, port, _ := net.SplitHostPort(u.Host)
-	fmt.Println("u.Host = ",u.Host)
-	fmt.Println("host = ",host)
-	fmt.Println("port = ",port)
+	fmt.Println("u.Host = ", u.Host)
+	fmt.Println("host = ", host)
+	fmt.Println("port = ", port)
 
 	fmt.Println("---------u.Path and u.Fragment-------------")
 	// print out Path and Fragment
 	// Here we can extract the path and the fragment after the '#'
-	fmt.Println("u.Path = ",u.Path)
-	fmt.Println("u.Fragment = ",u.Fragment)
+	fmt.Println("u.Path = ", u.Path)
+	fmt.Println("u.Fragment = ", u.Fragment)
 
 	fmt.Println("---------u.RawQuery and context-------------")
 	// To get query parames in a string of k=v format, use RawQuery
-	fmt.Println("u.RawQuery is ",u.RawQuery)
-	
-	// Parse a query params into a map 
+	fmt.Println("u.RawQuery is ", u.RawQuery)
+
+	// Parse a query params into a map
 	m, _ := url.ParseQuery(u.RawQuery)
-	fmt.Println("url.ParseQuery(u.RawQuery) = ",m)
+	fmt.Println("url.ParseQuery(u.RawQuery) = ", m)
 
 	// Ths m["k"][0] would be the first value from the parased query params map
-	fmt.Println("map[k:[v]] value is ",m["k"][0])
+	fmt.Println("map[k:[v]] value is ", m["k"][0])
 
 }
