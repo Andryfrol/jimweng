@@ -4,37 +4,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"net/http"
-	"os"
 )
-
-var (
-	loginUser   = "neo4j"
-	loginPasswd = "na"
-	configURL   = "http://172.31.86.190:7474/db/data/cypher"
-)
-
-func curlWithJSONFile() {
-	f, err := os.Open("/Users/mac/go/src/github.com/goPractice/ATourOfGO/basic/operation/create.json")
-	if err != nil {
-		// handle err
-	}
-	defer f.Close()
-	req, err := http.NewRequest("POST", configURL, f)
-	if err != nil {
-		// handle err
-	}
-	req.SetBasicAuth(loginUser, loginPasswd)
-	req.Header.Set("Accept", "application/json")
-	req.Header.Set("Content-Type", "application/json")
-
-	resp, err := http.DefaultClient.Do(req)
-	if err != nil {
-		// handle err
-	}
-	defer resp.Body.Close()
-}
 
 func curlwithoutJSONfile() {
+	var (
+		loginUser   = "neo4j"
+		loginPasswd = "na"
+		configURL   = "http://172.31.86.190:7474/db/data/cypher"
+	)
 	// claim node
 	var nameString = "john"
 	var queryString = "create (n:Person {name:'" + nameString + "'})"
@@ -71,9 +48,32 @@ func curlwithoutJSONfile() {
 }
 
 func main() {
-
-	// curlWithJSONFile()
-
 	curlwithoutJSONfile()
-
 }
+
+// // neo4j url new request used
+// func curlWithJSONFile() {
+// 	var (
+// 		loginUser   = "neo4j"
+// 		loginPasswd = "na"
+// 		configURL   = "http://172.31.86.190:7474/db/data/cypher"
+// 	)
+// 	f, err := os.Open("/Users/mac/go/src/github.com/goPractice/ATourOfGO/basic/operation/create.json")
+// 	if err != nil {
+// 		// handle err
+// 	}
+// 	defer f.Close()
+// 	req, err := http.NewRequest("POST", configURL, f)
+// 	if err != nil {
+// 		// handle err
+// 	}
+// 	req.SetBasicAuth(loginUser, loginPasswd)
+// 	req.Header.Set("Accept", "application/json")
+// 	req.Header.Set("Content-Type", "application/json")
+
+// 	resp, err := http.DefaultClient.Do(req)
+// 	if err != nil {
+// 		// handle err
+// 	}
+// 	defer resp.Body.Close()
+// }
