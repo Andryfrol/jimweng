@@ -1,3 +1,2 @@
 *.vscode
-*./GoStructPractice/telegraf
-*./ATourOfGO/neo4jClient
+*./ATourOfGO/neo4jClient/
