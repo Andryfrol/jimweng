@@ -59,6 +59,7 @@ where a.name="create" and b.name="John"
 create (b)-[r:enemy]->(a)
 
 ## create nodes and relationship together
+```
 CREATE (js:Person { name: "java script", from: "Sweden", learn: "surfing" }),
 (ir:Person { name: "i read a book", from: "England", title: "author" }),
 (rvb:Person { name: "read virtual book", from: "Belgium", pet: "Orval" }),
@@ -67,3 +68,4 @@ CREATE (js:Person { name: "java script", from: "Sweden", learn: "surfing" }),
 (js)-[:KNOWS]->(ir),(js)-[:KNOWS]->(rvb),
 (ir)-[:KNOWS]->(js),(ir)-[:KNOWS]->(ally),
 (rvb)-[:KNOWS]->(ally)
+```
