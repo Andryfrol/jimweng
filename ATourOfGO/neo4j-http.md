@@ -1,6 +1,5 @@
-
-<!-- HTTP API -->
-<!-- Create node -->
+## HTTP API
+## Create node
 ```
 curl -i -XPOST -H "Accept: application/json" -H "Content-Type: application/json" --user neo4j:na -d '{
   "statements": [{
@@ -8,7 +7,7 @@ curl -i -XPOST -H "Accept: application/json" -H "Content-Type: application/json"
   }]
 }' http://172.31.86.190:7474/db/data/transaction/commit
 ```
-<!-- Execute multiple statements -->
+## Execute multiple statements
 ```
 curl -i -XPOST -H "Accept: application/json" -H "Content-Type: application/json" --user neo4j:na -d '{
   "statements": [{
@@ -23,7 +22,7 @@ curl -i -XPOST -H "Accept: application/json" -H "Content-Type: application/json"
   }]
 }' http://172.31.86.190:7474/db/data/transaction/commit
 ```
-<!-- Return results in graph format-->
+## Return results in graph format
 ```
 curl -i -XPOST -H "Accept: application/json" -H "Content-Type: application/json" --user neo4j:na -d '{
   "statements" : [ {
@@ -32,7 +31,7 @@ curl -i -XPOST -H "Accept: application/json" -H "Content-Type: application/json"
   }]
 }' http://172.31.86.190:7474/db/data/transaction/commit
 ```
-<!-- n1:Leader n2:Member n3:Member 後面的group表示標籤tag -->
+## n1:Leader n2:Member n3:Member 後面的group表示標籤tag
 ```
 curl -i -XPOST -H "Accept: application/json" -H "Content-Type: application/json" --user neo4j:na -d '{
   "statements" : [ {
