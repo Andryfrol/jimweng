@@ -13,6 +13,19 @@ type test struct {
 	Debug bool
 }
 
+var test_array []test
+
+func testInit() {
+	test_array = []test{
+		test{
+			Debug: true,
+		},
+		test{
+			Debug: false,
+		},
+	}
+}
+
 func StringInSlice(a string, list []string) bool {
 	for _, b := range list {
 		if b == a {
@@ -52,9 +65,10 @@ func main() {
 	var splitString = strings.Split(testString, ",")
 	// var splitString = strings.Split(splitString1, "=")
 	// splitString := qiReplacer.Replace(testString)
-	fmt.Println(splitString)
+	// fmt.Println(splitString)
 	fmt.Println("below would demo the length of splitString and show elements of splitString:")
-	fmt.Println(splitString[0])
-	fmt.Println(splitString[1])
+	fmt.Println(splitString[0], "---", splitString[1])
 
+	testInit()
+	fmt.Println(test_array)
 }

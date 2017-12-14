@@ -17,29 +17,21 @@ type writeInfo struct {
 	loginPasswd string
 	configURL   string
 	command     string
-	nodeInfor   nodeInfor
 }
 
 // claim node : would declare properties that would be writed to neo4j
-type nodeInfor struct {
-	domainID string
-	name     string
-	TAG      string
-	connect  bool
+type nodeInfo struct {
+	domainID  string
+	name      string
+	TAG       string
+	link      string
+	writeInfo writeInfo
 }
 
-// // neo4j interface
-// // would be designed to isolate different data
-// type neo4jDB interface {
-// 	CreateNodes()
-// 	QueryNodes()
-// 	ConnectNodes()
-// }
-
-func CreateNodes(c writeInfo) {
+func CreateNodes(c nodeInfo) {
 
 	// Define create one node strings
-	var oneNodeString = "create (n1:" + c.nodeInfor.TAG + " {domainId:'" + c.nodeInfor.domainID + "', name:'" + c.nodeInfor.name + "'})"
+	var oneNodeString = "create (n1:" + c.TAG + " {domainId:'" + c.domainID + "', name:'" + c.name + "'})"
 
 	type Payload struct {
 		Query string `json:"query"`
@@ -66,12 +58,127 @@ func CreateNodes(c writeInfo) {
 	// s := buf.String()        // claim s as string for Reader
 	// fmt.Println("Change body Reader to string :", s)
 
-	req, err := http.NewRequest("POST", c.configURL, body)
+	req, err := http.NewRequest("POST", c.writeInfo.configURL, body)
 	if err != nil {
 		// handle err
 	}
 
-	req.SetBasicAuth(c.loginUser, c.loginPasswd)
+	req.SetBasicAuth(c.writeInfo.loginUser, c.writeInfo.loginPasswd)
+	req.Header.Set("Accept", "application/json")
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		// handle err
+	}
+	defer resp.Body.Close()
+}
+
+func ConnectNodes(c1, c2 nodeInfo) {
+	// Define connect nodes strings
+	var oneNodeString = "match (n1:" + c1.TAG + " {domainId:'" + c1.domainID + "', name:'" + c1.name + "'}) match (n2:" + c2.TAG + " {domainId:'" + c2.domainID + "', name:'" + c2.name + "'}) CREATE p2 = (n2)-[:BELONG]->(n1) RETURN p2"
+
+	type Payload struct {
+		Query string `json:"query"`
+	}
+
+	data := Payload{
+		// fill struct
+		Query: oneNodeString,
+	}
+
+	payloadBytes, err := json.Marshal(data)
+
+	// fmt.Println(payloadBytes)
+
+	if err != nil {
+		// handle err
+	}
+	body := bytes.NewReader(payloadBytes)
+
+	req, err := http.NewRequest("POST", c1.writeInfo.configURL, body)
+	if err != nil {
+		// handle err
+	}
+
+	req.SetBasicAuth(c1.writeInfo.loginUser, c1.writeInfo.loginPasswd)
+	req.Header.Set("Accept", "application/json")
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		// handle err
+	}
+	defer resp.Body.Close()
+}
+
+func CreateConnectedNodes(c1, c2 nodeInfo) {
+	// Define connect nodes strings
+	var oneNodeString = "create (n1:" + c1.TAG + " {domainId:'" + c1.domainID + "', name:'" + c1.name + "'}) create (n2:" + c2.TAG + " {domainId:'" + c2.domainID + "', name:'" + c2.name + "'}) CREATE p2 = (n2)-[:BELONG]->(n1) RETURN p2"
+
+	type Payload struct {
+		Query string `json:"query"`
+	}
+
+	data := Payload{
+		// fill struct
+		Query: oneNodeString,
+	}
+
+	payloadBytes, err := json.Marshal(data)
+
+	// fmt.Println(payloadBytes)
+
+	if err != nil {
+		// handle err
+	}
+	body := bytes.NewReader(payloadBytes)
+
+	req, err := http.NewRequest("POST", c1.writeInfo.configURL, body)
+	if err != nil {
+		// handle err
+	}
+
+	req.SetBasicAuth(c1.writeInfo.loginUser, c1.writeInfo.loginPasswd)
+	req.Header.Set("Accept", "application/json")
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		// handle err
+	}
+	defer resp.Body.Close()
+}
+
+func CreateNodes(c []nodeInfo) {
+
+	// Define create one node strings
+	var oneNodeString = "create (n1:" + c.TAG + " {domainId:'" + c.domainID + "', name:'" + c.name + "'})"
+
+	type Payload struct {
+		Query string `json:"query"`
+	}
+
+	data := Payload{
+		// fill struct
+		Query: oneNodeString,
+	}
+
+	payloadBytes, err := json.Marshal(data)
+
+	// fmt.Println(payloadBytes)
+
+	if err != nil {
+		// handle err
+	}
+	body := bytes.NewReader(payloadBytes)
+
+	req, err := http.NewRequest("POST", c.writeInfo.configURL, body)
+	if err != nil {
+		// handle err
+	}
+
+	req.SetBasicAuth(c.writeInfo.loginUser, c.writeInfo.loginPasswd)
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("Content-Type", "application/json")
 
@@ -84,18 +191,41 @@ func CreateNodes(c writeInfo) {
 
 func main() {
 
-	commit1 := writeInfo{
-		loginUser:   "neo4j",
-		loginPasswd: "na",
-		configURL:   "http://172.31.86.190:7474/db/data/cypher",
-		nodeInfor: nodeInfor{
-			TAG:      "VMware",
-			domainID: "172.31.1.1",
-			name:     "Jim",
-			connect:  false,
+	commit1 := nodeInfo{
+		TAG:      "VMware",
+		domainID: "172.31.1.1",
+		name:     "jim",
+		writeInfo: writeInfo{
+			loginUser:   "neo4j",
+			loginPasswd: "na",
+			configURL:   "http://172.31.86.190:7474/db/data/cypher",
 		},
 	}
-	fmt.Println(commit1.nodeInfor)
 
-	CreateNodes(commit1)
+	commit2 := nodeInfo{
+		TAG:      "VMware",
+		domainID: "172.31.0.1",
+		name:     "bob",
+		writeInfo: writeInfo{
+			loginUser:   "neo4j",
+			loginPasswd: "na",
+			configURL:   "http://172.31.86.190:7474/db/data/cypher",
+		},
+	}
+
+	if commit1.link == "" {
+		fmt.Println("no link")
+	}
+	// create one node
+	// CreateNodes(commit1)
+	// CreateNodes(commit2)
+
+	// create connect between nodes
+	// ConnectNodes(commit1, commit2)
+
+	// create nodes and connection at the same time
+	// CreateConnectedNodes(commit1, commit2)
+
+	// create mulitple nodes
+
 }
