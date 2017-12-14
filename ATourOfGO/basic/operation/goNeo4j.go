@@ -6,7 +6,6 @@ package main
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"net/http"
 )
 
@@ -150,45 +149,6 @@ func CreateConnectedNodes(c1, c2 nodeInfo) {
 	defer resp.Body.Close()
 }
 
-func CreateNodes(c []nodeInfo) {
-
-	// Define create one node strings
-	var oneNodeString = "create (n1:" + c.TAG + " {domainId:'" + c.domainID + "', name:'" + c.name + "'})"
-
-	type Payload struct {
-		Query string `json:"query"`
-	}
-
-	data := Payload{
-		// fill struct
-		Query: oneNodeString,
-	}
-
-	payloadBytes, err := json.Marshal(data)
-
-	// fmt.Println(payloadBytes)
-
-	if err != nil {
-		// handle err
-	}
-	body := bytes.NewReader(payloadBytes)
-
-	req, err := http.NewRequest("POST", c.writeInfo.configURL, body)
-	if err != nil {
-		// handle err
-	}
-
-	req.SetBasicAuth(c.writeInfo.loginUser, c.writeInfo.loginPasswd)
-	req.Header.Set("Accept", "application/json")
-	req.Header.Set("Content-Type", "application/json")
-
-	resp, err := http.DefaultClient.Do(req)
-	if err != nil {
-		// handle err
-	}
-	defer resp.Body.Close()
-}
-
 func main() {
 
 	commit1 := nodeInfo{
@@ -213,9 +173,9 @@ func main() {
 		},
 	}
 
-	if commit1.link == "" {
-		fmt.Println("no link")
-	}
+	// if commit1.link == "" {
+	// 	fmt.Println("no link")
+	// }
 	// create one node
 	// CreateNodes(commit1)
 	// CreateNodes(commit2)
@@ -224,8 +184,6 @@ func main() {
 	// ConnectNodes(commit1, commit2)
 
 	// create nodes and connection at the same time
-	// CreateConnectedNodes(commit1, commit2)
-
-	// create mulitple nodes
+	CreateConnectedNodes(commit1, commit2)
 
 }
