@@ -6,7 +6,9 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"net/http"
+	"reflect"
 )
 
 // gonna define the basic information of neo4j database
@@ -31,7 +33,6 @@ func CreateNodes(c nodeInfo) {
 
 	// Define create one node strings
 	var oneNodeString = "create (n1:" + c.TAG + " {domainId:'" + c.domainID + "', name:'" + c.name + "'})"
-
 	type Payload struct {
 		Query string `json:"query"`
 	}
@@ -115,6 +116,9 @@ func CreateConnectedNodes(c1, c2 nodeInfo) {
 	// Define connect nodes strings
 	var oneNodeString = "create (n1:" + c1.TAG + " {domainId:'" + c1.domainID + "', name:'" + c1.name + "'}) create (n2:" + c2.TAG + " {domainId:'" + c2.domainID + "', name:'" + c2.name + "'}) CREATE p2 = (n2)-[:BELONG]->(n1) RETURN p2"
 
+	// detect oneNodeString type
+	fmt.Println(reflect.TypeOf(oneNodeString))
+
 	type Payload struct {
 		Query string `json:"query"`
 	}
@@ -124,14 +128,23 @@ func CreateConnectedNodes(c1, c2 nodeInfo) {
 		Query: oneNodeString,
 	}
 
+	// detect data and data.Query type
+	fmt.Println(reflect.TypeOf(data))
+	fmt.Println(reflect.TypeOf(data.Query))
+
 	payloadBytes, err := json.Marshal(data)
 
+	// detect payloadBytes type
+	fmt.Println(reflect.TypeOf(payloadBytes))
 	// fmt.Println(payloadBytes)
 
 	if err != nil {
 		// handle err
 	}
 	body := bytes.NewReader(payloadBytes)
+
+	// detect body type
+	fmt.Println(reflect.TypeOf(body))
 
 	req, err := http.NewRequest("POST", c1.writeInfo.configURL, body)
 	if err != nil {
