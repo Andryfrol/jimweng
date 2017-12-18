@@ -29,6 +29,19 @@ type nodeInfo struct {
 	writeInfo writeInfo
 }
 
+func CreateMultiNodes(cA []nodeInfo) {
+	// var actString = ""
+	for index := 0; index < len(cA); index++ {
+		// fmt.Println(index)
+		c := cA[index]
+		if c.writeInfo.command == "CreateNodes" {
+			// actString = "create (n1:" + c.TAG + " {domainId:'" + c.domainID + "', name:'" + c.name + "'})"
+			CreateNodes(c)
+		}
+		// fmt.Println(c.writeInfo.command) //check command
+	}
+}
+
 func CreateNodes(c nodeInfo) {
 
 	// Define create one node strings
@@ -116,6 +129,7 @@ func CreateConnectedNodes(c1, c2 nodeInfo) {
 	// Define connect nodes strings
 	var oneNodeString = "create (n1:" + c1.TAG + " {domainId:'" + c1.domainID + "', name:'" + c1.name + "'}) create (n2:" + c2.TAG + " {domainId:'" + c2.domainID + "', name:'" + c2.name + "'}) CREATE p2 = (n2)-[:BELONG]->(n1) RETURN p2"
 
+	fmt.Println(oneNodeString)
 	// detect oneNodeString type
 	fmt.Println(reflect.TypeOf(oneNodeString))
 
@@ -172,6 +186,7 @@ func main() {
 			loginUser:   "neo4j",
 			loginPasswd: "na",
 			configURL:   "http://172.31.86.190:7474/db/data/cypher",
+			command:     "CreateNodes",
 		},
 	}
 
@@ -183,13 +198,66 @@ func main() {
 			loginUser:   "neo4j",
 			loginPasswd: "na",
 			configURL:   "http://172.31.86.190:7474/db/data/cypher",
+			command:     "CreateNodes",
 		},
 	}
+	commit3 := nodeInfo{
+		TAG:      "VMware",
+		domainID: "172.31.0.1",
+		name:     "jamy",
+		writeInfo: writeInfo{
+			loginUser:   "neo4j",
+			loginPasswd: "na",
+			configURL:   "http://172.31.86.190:7474/db/data/cypher",
+			command:     "CreateNodes",
+		},
+	}
+	var commitArray = []nodeInfo{commit1, commit2, commit3}
+	CreateMultiNodes(commitArray)
 
-	// if commit1.link == "" {
-	// 	fmt.Println("no link")
-	// }
+	var commitArray2 = []nodeInfo{
+		nodeInfo{
+			TAG:      "VM",
+			domainID: "172.31.1.1",
+			name:     "amy",
+			writeInfo: writeInfo{
+				loginUser:   "neo4j",
+				loginPasswd: "na",
+				configURL:   "http://172.31.86.190:7474/db/data/cypher",
+				command:     "CreateNodes",
+			},
+		},
+
+		nodeInfo{
+			TAG:      "VM",
+			domainID: "172.31.0.1",
+			name:     "kira",
+			writeInfo: writeInfo{
+				loginUser:   "neo4j",
+				loginPasswd: "na",
+				configURL:   "http://172.31.86.190:7474/db/data/cypher",
+				command:     "CreateNodes",
+			},
+		},
+		nodeInfo{
+			TAG:      "VM",
+			domainID: "172.31.0.1",
+			name:     "lisa",
+			writeInfo: writeInfo{
+				loginUser:   "neo4j",
+				loginPasswd: "na",
+				configURL:   "http://172.31.86.190:7474/db/data/cypher",
+				command:     "CreateNodes",
+			},
+		},
+	}
+	// fmt.Println(commitArray2)
+	// fmt.Println(commitArray)
+	// fmt.Println(len(commitArray)) // would be 2 , equal to the arraysize of commitArray
 	// create one node
+	// fmt.Println(CreateBody(commitArray))
+	CreateMultiNodes(commitArray2)
+
 	// CreateNodes(commit1)
 	// CreateNodes(commit2)
 
@@ -197,6 +265,6 @@ func main() {
 	// ConnectNodes(commit1, commit2)
 
 	// create nodes and connection at the same time
-	CreateConnectedNodes(commit1, commit2)
+	// CreateConnectedNodes(commit1, commit2)
 
 }
