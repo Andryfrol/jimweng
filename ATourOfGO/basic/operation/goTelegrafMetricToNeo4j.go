@@ -98,7 +98,7 @@ func main() {
 				writeInfo: writeInfo{
 					loginUser:   "neo4j",
 					loginPasswd: "na",
-					configURL:   "http://172.31.86.190:7474/db/data/cypher",
+					configURL:   "http://127.0.0.1:7474/db/data/cypher",
 					command:     "CreateNodes",
 				},
 			}
@@ -106,43 +106,4 @@ func main() {
 			CreateNodes(nodesCreated)
 		}
 	}
-
-	// var commitArray2 = []nodeInfo{
-	// 	nodeInfo{
-	// 		TAG:      "VM",
-	// 		domainID: "172.31.1.1",
-	// 		name:     "amy",
-	// 		writeInfo: writeInfo{
-	// 			loginUser:   "neo4j",
-	// 			loginPasswd: "na",
-	// 			configURL:   "http://172.31.86.190:7474/db/data/cypher",
-	// 			command:     "CreateNodes",
-	// 		},
-	// 	},
-
-	// 	nodeInfo{
-	// 		TAG:      "VM",
-	// 		domainID: "172.31.0.1",
-	// 		name:     "kira",
-	// 		writeInfo: writeInfo{
-	// 			loginUser:   "neo4j",
-	// 			loginPasswd: "na",
-	// 			configURL:   "http://172.31.86.190:7474/db/data/cypher",
-	// 			command:     "CreateNodes",
-	// 		},
-	// 	},
-	// 	nodeInfo{
-	// 		TAG:      "VM",
-	// 		domainID: "172.31.0.1",
-	// 		name:     "lisa",
-	// 		writeInfo: writeInfo{
-	// 			loginUser:   "neo4j",
-	// 			loginPasswd: "na",
-	// 			configURL:   "http://172.31.86.190:7474/db/data/cypher",
-	// 			command:     "CreateNodes",
-	// 		},
-	// 	},
-	// }
-
-	// CreateMultiNodes(commitArray2)
 }
