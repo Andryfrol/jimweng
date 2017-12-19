@@ -34,8 +34,8 @@ func main() {
 	}
 
 	data := Payload{
-		Query: "MATCH p=(n1)-[r]->(n2) return id(r), n1.name, labels(n1), type(r), n2.name, labels(n2)",
-		// Query: "match(n) return id(n) ,n.name, n.relationship",
+		// Query: "MATCH p=(n1)-[r]->(n2) return n1.domainId, type(r), n2.domainId",
+		Query: "match(n) return n.domainId",
 	}
 	payloadBytes, err := json.Marshal(data)
 	if err != nil {
@@ -43,7 +43,7 @@ func main() {
 	}
 	body := bytes.NewReader(payloadBytes)
 
-	req, err := http.NewRequest("POST", "http://172.31.86.190:7474/db/data/cypher", body)
+	req, err := http.NewRequest("POST", "http://127.0.0.1:7474/db/data/cypher", body)
 	if err != nil {
 		// handle err
 	}
