@@ -54,7 +54,7 @@ func CreateNodes(s string) {
 	}
 	body := bytes.NewReader(payloadBytes)
 
-	req, err := http.NewRequest("POST", "http://127.0.0.1:7474/db/data/cypher", body)
+	req, err := http.NewRequest("POST", "http://172.31.86.190:7474/db/data/cypher", body)
 	if err != nil {
 		// handle err
 	}
@@ -104,7 +104,7 @@ func neo4jMainFunc(s string) {
 
 func main() {
 	// assume telegraf.Metric body would be like this
-	// neo4j telegraf.Metric woudl be pass with map[name]field ; e.g. neo4j,nodeNum=n1,tag=testTag ,domainID=testDomainID, name=testName,link=n2_n3 (rmk: n2 belong to n3),relation=belong
+	// neo4j telegraf.Metric would be pass with map[name]field ; e.g. neo4j,nodeNum=n1,tag=testTag ,domainID=testDomainID, name=testName,link=n2_n3 (rmk: n2 belong to n3),relation=belong
 	var testString = "mem,host=MacPro used_percent=57.654523849487305,total=8589934592i,cached=0i,inactive=3101143040i,slab=0i,active=3521380352i,available_percent=42.345476150512695,available=3637448704i,used=4952485888i,free=536305664i,buffered=0i 1513149940000000000\ndisk,path=/,device=disk1s1,fstype=apfs,mode=rw,host=MacPro inodes_free=9223372036853631618i,inodes_used=1144189i,total=119824367616i,free=71182340096i,used=42605252608i,used_percent=37.44279283491888,inodes_total=9223372036854775807i 1513149940000000000\nsystem,host=MacPro load15=3.35,n_users=1i,n_cpus=4i,load1=4.48,load5=4.86 1513566990000000000\nsystem,host=MacPro uptime=6809i,uptime_format= 1513566990000000000,\nneo4j,nodeNum=n1,tag=testTag,domainID=testDomainID, name=testName,link=n1_n2|n3_n1,relation=belong|take,nodeNum=n2,tag=testTag2,domainID=testDomainID2, name=testName2,link=n2_n3,relation=follow,nodeNum=n3,tag=testTag3,domainID=testDomainID3, name=testName3,link=n1_n3,relation=after"
 
 	neo4jMainFunc(testString)
