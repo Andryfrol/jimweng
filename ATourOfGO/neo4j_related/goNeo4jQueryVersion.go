@@ -10,32 +10,35 @@ import (
 
 // claim node : would declare properties that would be writed to neo4j
 type neo4jNodeInfo struct {
-	// testmap map[string]string
+	NodeNum  string
 	DomainID string
 	Name     string
-	TAG      string
+	Labels   string
 	Link     string
 	Relation string
 }
 
-// var testString = "neo4j,nodeNum=n1,tag=testTag,domainID=testDomainID, name=testName,link=n1_n2|n3_n1,relation=belong|take,nodeNum=n2,tag=testTag2,domainID=testDomainID2, name=testName2,link=n2_n3,relation=follow,nodeNum=n3,tag=testTag3,domainID=testDomainID3, name=testName3,link=n1_n3,relation=after"
-
-// assume data would only give neo4j input
-
-// declare to parse json format while use NewRequest
-
 func main() {
 	// assume telegraf.Metric body would be like this
-	// neo4j telegraf.Metric would be pass with map[name]field ; e.g. neo4j,nodeNum=n1,tag=testTag ,domainID=testDomainID, name=testName,link=n2_n3 (rmk: n2 belong to n3),relation=belong
-	var neo4jInput = map[int]neo4jNodeInfo{
-		1: {"testDomainID", "testName", "testTag1", "testDomainID_testDomainID2", "belong"},
-		2: {"testDomainID2", "testName2", "testTag2", "testDomainID2_testDomainID3", "belong2"},
-		3: {"testDomainID3", "testName3", "testTag3", "testDomainID3_testDomainID1", "belong3"},
+	// neo4j telegraf.Metric would be pass with map[name]field ; e.g. neo4j,nodeNum=n1,Labels=testTag ,domainID=testDomainID, name=testName,link=n2_n3 (rmk: n2 belong to n3),relation=belong
+	var neo4jInput = map[string]neo4jNodeInfo{
+		"n1": {"n1", "testDomainID", "testName", "testTag", "n1_n2", "belong"},
+		"n2": {"n2", "testDomainID2", "testName2", "testTag3", "n2_n3", "follow"},
+		"n3": {"n3", "testDomainID3", "testName3", "testTag3", "n3_n1", "take"},
 	}
+	// var keys []string
+	// for k, v := range []string{"n1", "n2", "n3"} {
+	// for v := range neo4jInput {
+	// 	fmt.Println(v)
+	// 	fmt.Println(reflect.TypeOf(v))
+	// }
+	// fmt.Println(len(neo4jInput))
 
-	// neo4jQueryNodes(neo4jInput["n1"])
+	// fmt.Println(keys != nil)
+
+	neo4jQueryNodes(neo4jInput["n1"])
 	// neo4jQueryLink(neo4jInput["n1"])
-	fmt.Println(neo4jQueryLink(neo4jInput[1]))
+	// fmt.Println(neo4jQueryLink(neo4jInput["n1"]))
 
 	// v,i:=range neo4jInput
 	// fmt.Println(neo4jInput.len)
@@ -43,20 +46,23 @@ func main() {
 }
 
 func neo4jQueryNodes(queryNodes neo4jNodeInfo) bool {
+
+	criterion := false
+
 	type Payload struct {
 		Query string `json:"query"`
 	}
 	data := Payload{
-		Query: "match(n) where n.domainId='" + queryNodes.DomainID + "' return n.domainId",
+		Query: "match(n:" + queryNodes.Labels + ") where n.domainId='" + queryNodes.DomainID + "' and n.name='" + queryNodes.Name + "' return n.domainId",
 	}
-	// fmt.Println(queryNodes.DomainID)
+	fmt.Println(data)
 	payloadBytes, err := json.Marshal(data)
 	if err != nil {
 		// handle err
 	}
 	body := bytes.NewReader(payloadBytes)
 
-	req, err := http.NewRequest("POST", "http://127.0.0.1:7474/db/data/cypher", body)
+	req, err := http.NewRequest("POST", "http://172.31.86.190:7474/db/data/cypher", body)
 	if err != nil {
 		// handle err
 	}
@@ -65,15 +71,19 @@ func neo4jQueryNodes(queryNodes neo4jNodeInfo) bool {
 	req.Header.Set("Content-Type", "application/json")
 
 	resp, err := http.DefaultClient.Do(req)
+	// var f map[string]interface{}
 	var f interface{}
+
 	jsonResponse := f
 	bodyBytes, _ := ioutil.ReadAll(resp.Body)
 	json.Unmarshal(bodyBytes, &jsonResponse)
 	// print out jsonResponse
 	fmt.Println(jsonResponse)
+	fmt.Println(jsonResponse.(map[string]interface{})["data"].([]interface{})[0].([]interface{})[0])
+	// fmt.Println(queryNodes.DomainID)
 
-	criterion := (jsonResponse.(map[string]interface{})["data"].([]interface{})[0].([]interface{})[0] == queryNodes.DomainID)
-
+	criterion = (jsonResponse.(map[string]interface{})["data"].([]interface{})[0].([]interface{})[0] == queryNodes.DomainID)
+	fmt.Println(criterion)
 	if err != nil {
 		// handle err
 	}
@@ -95,7 +105,7 @@ func neo4jQueryLink(queryNodes neo4jNodeInfo) bool {
 	}
 	body := bytes.NewReader(payloadBytes)
 
-	req, err := http.NewRequest("POST", "http://127.0.0.1:7474/db/data/cypher", body)
+	req, err := http.NewRequest("POST", "http://172.31.86.190:7474/db/data/cypher", body)
 	if err != nil {
 		// handle err
 	}
@@ -104,11 +114,14 @@ func neo4jQueryLink(queryNodes neo4jNodeInfo) bool {
 	req.Header.Set("Content-Type", "application/json")
 
 	resp, err := http.DefaultClient.Do(req)
+	// var f map[string][]interface{}
 	var f interface{}
 	jsonResponse := f
 	bodyBytes, _ := ioutil.ReadAll(resp.Body)
 	json.Unmarshal(bodyBytes, &jsonResponse)
-
+	// fmt.Println(jsonResponse["data"].([]interface{}))
+	// fmt.Println(reflect.TypeOf(jsonResponse["data"]))
+	// criterion := true
 	criterion := (jsonResponse.(map[string]interface{})["data"].([]interface{})[0].([]interface{})[0] == queryNodes.DomainID)
 
 	// value, criterion := jsonResponse.(map[string]interface{})["data"]
