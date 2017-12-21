@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strings"
 )
@@ -18,22 +19,23 @@ type nodeInfo struct {
 }
 
 func neo4jBodyString(c nodeInfo) string {
-	var bodyString = "create (" + c.NodeNum + ":" + c.TAG + " {domainId:'" + c.DomainID + "', name:'" + c.Name + "'})"
+	var bodyString = "merge (" + c.NodeNum + ":" + c.TAG + " {domainId:'" + c.DomainID + "', name:'" + c.Name + "'})"
 	return bodyString
 }
 
 func neo4jLinkString(c nodeInfo) string {
 	var linkString string
 	if len(strings.Split(c.Link, "|")) == 1 {
-		linkString = "create " + c.Link + " = (" + strings.Split(c.Link, "_")[0] + ")-[:" + c.Relation + "]->(" + strings.Split(c.Link, "_")[1] + ")"
+		linkString = "merge " + c.Link + " = (" + strings.Split(c.Link, "_")[0] + ")-[:" + c.Relation + "]->(" + strings.Split(c.Link, "_")[1] + ")"
 	} else {
 		linkArray := strings.Split(c.Link, "|")
 		linkRelation := strings.Split(c.Relation, "|")
 		for i := 0; i < len(linkArray); i++ {
-			tempString := "create " + linkArray[i] + " = (" + strings.Split(linkArray[i], "_")[0] + ")-[:" + linkRelation[i] + "]->(" + strings.Split(linkArray[i], "_")[1] + ")"
+			tempString := "merge " + linkArray[i] + " = (" + strings.Split(linkArray[i], "_")[0] + ")-[:" + linkRelation[i] + "]->(" + strings.Split(linkArray[i], "_")[1] + ")"
 			linkString = linkString + " " + tempString
 		}
 	}
+	fmt.Println(linkString)
 	return linkString
 }
 
