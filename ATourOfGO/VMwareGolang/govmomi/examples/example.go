@@ -25,7 +25,8 @@ import (
 	"os"
 	"text/tabwriter"
 
-	"github.com/goPractice/ATourOfGO/VMwareGolang/govmomi/examples"
+	// "github.com/goPractice/ATourOfGO/VMwareGolang/govmomi/examples"
+	"github.com/vmware/govmomi/examples"
 	"github.com/vmware/govmomi/units"
 	"github.com/vmware/govmomi/view"
 	"github.com/vmware/govmomi/vim25/mo"
