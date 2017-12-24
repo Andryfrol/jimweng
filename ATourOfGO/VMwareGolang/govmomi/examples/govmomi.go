@@ -26,20 +26,32 @@ import (
 	"reflect"
 	"text/tabwriter"
 
-	// "github.com/goPractice/ATourOfGO/VMwareGolang/govmomi/examples"
+	"github.com/vmware/govmomi/session"
+	"github.com/vmware/govmomi/vim25"
+
 	"github.com/vmware/govmomi/examples"
 	"github.com/vmware/govmomi/units"
 	"github.com/vmware/govmomi/view"
 	"github.com/vmware/govmomi/vim25/mo"
 )
 
+type Client struct {
+	*vim25.Client
+
+	SessionManager *session.Manager
+}
+
 func main() {
 	ctx := context.Background()
-	fmt.Println("content of ctx is", ctx)
+	fmt.Println(ctx)
+	fmt.Println("content of ctx is", &ctx)
 	fmt.Println("reflect.TypeOf(ctx) is", reflect.TypeOf(ctx))
 	fmt.Println()
 	// Connect and login to ESX or vCenter
 	c, err := examples.NewClient(ctx)
+	fmt.Println(c)
+	fmt.Println(err)
+
 	if err != nil {
 		log.Fatal(err)
 	}

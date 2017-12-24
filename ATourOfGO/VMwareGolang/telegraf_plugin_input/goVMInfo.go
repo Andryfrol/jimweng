@@ -40,7 +40,7 @@ var acc2 example.Accumulator
 // }
 func main() {
 	fmt.Println("-------test fields-------")
-	s := Simple{
+	s := &Simple{
 		Ok: true,
 	}
 	fmt.Println(s.Ok)

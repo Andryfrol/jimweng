@@ -30,5 +30,6 @@ func main() {
 	test := "http://172.31.86.190:7474/db/data"
 	testurl, _ := url.Parse(test)
 	fmt.Println(queryURL(testurl, "1"))
+	fmt.Println(testurl)
 
 }
