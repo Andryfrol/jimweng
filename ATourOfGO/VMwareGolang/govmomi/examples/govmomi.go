@@ -23,6 +23,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"reflect"
 	"text/tabwriter"
 
 	// "github.com/goPractice/ATourOfGO/VMwareGolang/govmomi/examples"
@@ -34,7 +35,9 @@ import (
 
 func main() {
 	ctx := context.Background()
-
+	fmt.Println("content of ctx is", ctx)
+	fmt.Println("reflect.TypeOf(ctx) is", reflect.TypeOf(ctx))
+	fmt.Println()
 	// Connect and login to ESX or vCenter
 	c, err := examples.NewClient(ctx)
 	if err != nil {
