@@ -1,7 +1,11 @@
-package example
+package main
 
 // simple.go
-import "github/goPractice/ATourOfGO/VMwareGolang/example"
+import (
+	"fmt"
+
+	"github.com/goPractice/ATourOfGO/VMwareGolang/telegraf_plugin_input/example"
+)
 
 // "github.com/influxdata/telegraf"
 // "github.com/influxdata/telegraf/plugins/inputs"
@@ -10,13 +14,13 @@ type Simple struct {
 	Ok bool
 }
 
-func (s *Simple) Description() string {
-	return "a demo plugin"
-}
+// func (s *Simple) Description() string {
+// 	return "a demo plugin"
+// }
 
-func (s *Simple) SampleConfig() string {
-	return "ok = true # indicate if everything is fine"
-}
+// func (s *Simple) SampleConfig() string {
+// 	return "ok = true # indicate if everything is fine"
+// }
 
 func (s *Simple) Gather(acc example.Accumulator) error {
 	if s.Ok {
@@ -31,3 +35,6 @@ func (s *Simple) Gather(acc example.Accumulator) error {
 // func init() {
 // 	inputs.Add("simple", func() telegraf.Input { return &Simple{} })
 // }
+func main() {
+	fmt.Println("his")
+}
