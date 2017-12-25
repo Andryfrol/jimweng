@@ -23,7 +23,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"reflect"
 	"text/tabwriter"
 
 	"github.com/vmware/govmomi/session"
@@ -43,14 +42,14 @@ type Client struct {
 
 func main() {
 	ctx := context.Background()
-	fmt.Println(ctx)
-	fmt.Println("content of ctx is", &ctx)
-	fmt.Println("reflect.TypeOf(ctx) is", reflect.TypeOf(ctx))
-	fmt.Println()
+	// fmt.Println(ctx)
+	// fmt.Println("content of ctx is", &ctx)
+	// fmt.Println("reflect.TypeOf(ctx) is", reflect.TypeOf(ctx))
+	// fmt.Println()
 	// Connect and login to ESX or vCenter
 	c, err := examples.NewClient(ctx)
-	fmt.Println(c)
-	fmt.Println(err)
+	// fmt.Println(c)
+	// fmt.Println(err)
 
 	if err != nil {
 		log.Fatal(err)

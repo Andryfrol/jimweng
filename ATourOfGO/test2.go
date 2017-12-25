@@ -1,4 +1,3 @@
-// https://hawksnowlog.blogspot.tw/2017/06/fetch-vapps-with-govmomi.html
 package main
 
 import (
@@ -10,6 +9,8 @@ import (
 
 	"github.com/vmware/govmomi"
 	"github.com/vmware/govmomi/find"
+	"github.com/vmware/govmomi/vim25/mo"
+	"github.com/vmware/govmomi/vim25/types"
 )
 
 var envURL = "https://172.31.17.100/sdk"
@@ -70,7 +71,7 @@ func main() {
 	// pc := property.Collector(c.Client)
 	// fmt.Println("pc value is", &pc)
 
-	// varefs := []types.ManagedObjectReference{}
+	varefs := []types.ManagedObjectReference{}
 	// vas, err := f.VirtualAppList(ctx, "*")
 	vas, err := f.VirtualMachineList(ctx, "*")
 	// fmt.Println("vas is ", vas, err)
@@ -78,37 +79,20 @@ func main() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-
-	// for _, va := range vas {
-	// 	// fmt.Println(va.Common.InventoryPath)
-	// 	// func (c Common) ObjectName(ctx context.Context) (string, error) {
-	// 	// fmt.Println(va.Common.ObjectName(ctx))
-	// 	// fmt.Println(va.Common.Name())
-	// 	// fmt.Println(va.MarkAsVirtualMachine(ctx).VAppConfig.EntityConfig)
-	// 	// var f interface{}
-	// 	f, _ := va.QueryConfigTarget(ctx)
-	// 	fmt.Printf("", f.Network)
-	// 	varefs = append(varefs, va.Reference())
-	// }
-	f1, _ := vas[0].QueryConfigTarget(ctx)
-	for _, t := range f1.Network {
-		fmt.Printf("%+v", t)
+	for _, va := range vas {
+		fmt.Println(va.Common.InventoryPath)
+		varefs = append(varefs, va.Reference())
 	}
-	// varefs = append(varefs, va.Reference())
-
-	// record VM id
-	// fmt.Println(varefs)
-
-	// var vadst []mo.VirtualApp
+	var vadst []mo.VirtualApp
 
 	// err = pc.Retrieve(ctx, varefs, nil, &vadst)
 	// if err != nil {
 	// 	fmt.Println(err)
 	// 	os.Exit(1)
 	// }
-	// for _, va := range vadst {
-	// 	fmt.Println(va.VAppConfig.Annotation)
-	// 	fmt.Println(va.VAppConfig.EntityConfig) // VApp 内の VM の情報
-	// 	fmt.Println(va.Name)
-	// }
+	for _, va := range vadst {
+		fmt.Println(va.VAppConfig.Annotation)
+		fmt.Println(va.VAppConfig.EntityConfig) // VApp 内の VM の情報
+		fmt.Println(va.Name)
+	}
 }
