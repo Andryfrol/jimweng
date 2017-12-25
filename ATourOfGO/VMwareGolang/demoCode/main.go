@@ -44,16 +44,7 @@ func main() {
 	// データセンターの取得
 	f := find.NewFinder(c.Client, true)
 
-	// fmt.Println("----")
-	// fmt.Println(f)
-	// fmt.Println("----")
-
 	dc, err := f.Datacenter(ctx, "DiskProphet")
-	// dc, err := f.DefaultDatacenter(ctx)
-
-	// fmt.Println("----")
-	// fmt.Println("the diskprophet center return is", dc, err)
-	// fmt.Println("----")
 
 	if err != nil {
 		fmt.Println(err)
@@ -62,53 +53,15 @@ func main() {
 	f.SetDatacenter(dc)
 	fmt.Println(dc)
 
-	// fmt.Println("-------")
-	// fmt.Println(f)
-	// fmt.Println("-------")
-	// 全 VirtualApp の取得
-	// pc := property.DefaultCollector(c.Client)
-	// pc := property.Collector(c.Client)
-	// fmt.Println("pc value is", &pc)
-
-	// varefs := []types.ManagedObjectReference{}
-	// vas, err := f.VirtualAppList(ctx, "*")
 	vas, err := f.VirtualMachineList(ctx, "*")
-	// fmt.Println("vas is ", vas, err)
+
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
 
-	// for _, va := range vas {
-	// 	// fmt.Println(va.Common.InventoryPath)
-	// 	// func (c Common) ObjectName(ctx context.Context) (string, error) {
-	// 	// fmt.Println(va.Common.ObjectName(ctx))
-	// 	// fmt.Println(va.Common.Name())
-	// 	// fmt.Println(va.MarkAsVirtualMachine(ctx).VAppConfig.EntityConfig)
-	// 	// var f interface{}
-	// 	f, _ := va.QueryConfigTarget(ctx)
-	// 	fmt.Printf("", f.Network)
-	// 	varefs = append(varefs, va.Reference())
-	// }
 	f1, _ := vas[0].QueryConfigTarget(ctx)
 	for _, t := range f1.Network {
 		fmt.Printf("%+v", t)
 	}
-	// varefs = append(varefs, va.Reference())
-
-	// record VM id
-	// fmt.Println(varefs)
-
-	// var vadst []mo.VirtualApp
-
-	// err = pc.Retrieve(ctx, varefs, nil, &vadst)
-	// if err != nil {
-	// 	fmt.Println(err)
-	// 	os.Exit(1)
-	// }
-	// for _, va := range vadst {
-	// 	fmt.Println(va.VAppConfig.Annotation)
-	// 	fmt.Println(va.VAppConfig.EntityConfig) // VApp 内の VM の情報
-	// 	fmt.Println(va.Name)
-	// }
 }
