@@ -6,11 +6,10 @@ import (
 	"fmt"
 	"net/url"
 	"os"
+	"reflect"
 
 	"github.com/vmware/govmomi"
 	"github.com/vmware/govmomi/find"
-	"github.com/vmware/govmomi/vim25/mo"
-	"github.com/vmware/govmomi/vim25/types"
 )
 
 var envURL = "https://172.31.17.100/sdk"
@@ -48,6 +47,7 @@ func main() {
 	// fmt.Println("----")
 	// fmt.Println(f)
 	// fmt.Println("----")
+	// dcs, err :=
 
 	dc, err := f.Datacenter(ctx, "DiskProphet")
 	// dc, err := f.DefaultDatacenter(ctx)
@@ -56,12 +56,13 @@ func main() {
 	// fmt.Println("the diskprophet center return is", dc, err)
 	// fmt.Println("----")
 
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
-	f.SetDatacenter(dc)
+	// if err != nil {
+	// 	fmt.Println(err)
+	// 	os.Exit(1)
+	// }
+	// f.SetDatacenter(dc)
 	fmt.Println(dc)
+	fmt.Println(reflect.TypeOf(dc))
 
 	// fmt.Println("-------")
 	// fmt.Println(f)
@@ -71,28 +72,28 @@ func main() {
 	// pc := property.Collector(c.Client)
 	// fmt.Println("pc value is", &pc)
 
-	varefs := []types.ManagedObjectReference{}
-	// vas, err := f.VirtualAppList(ctx, "*")
-	vas, err := f.VirtualMachineList(ctx, "*")
-	// fmt.Println("vas is ", vas, err)
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
-	for _, va := range vas {
-		fmt.Println(va.Common.InventoryPath)
-		varefs = append(varefs, va.Reference())
-	}
-	var vadst []mo.VirtualApp
-
+	// varefs := []types.ManagedObjectReference{}
+	// // vas, err := f.VirtualAppList(ctx, "*")
+	// vas, err := f.VirtualMachineList(ctx, "*")
+	// // fmt.Println("vas is ", vas, err)
+	// if err != nil {
+	// 	fmt.Println(err)
+	// 	os.Exit(1)
+	// }
+	// for _, va := range vas {
+	// 	fmt.Println(va.Common.Name())
+	// 	varefs = append(varefs, va.Reference())
+	// }
+	// // var vadst []mo.VirtualApp
+	// fmt.Println(varefs)
 	// err = pc.Retrieve(ctx, varefs, nil, &vadst)
 	// if err != nil {
 	// 	fmt.Println(err)
 	// 	os.Exit(1)
 	// }
-	for _, va := range vadst {
-		fmt.Println(va.VAppConfig.Annotation)
-		fmt.Println(va.VAppConfig.EntityConfig) // VApp 内の VM の情報
-		fmt.Println(va.Name)
-	}
+	// for _, va := range vadst {
+	// 	fmt.Println(va.VAppConfig.Annotation)
+	// 	fmt.Println(va.VAppConfig.EntityConfig) // VApp 内の VM の情報
+	// 	fmt.Println(va.Name)
+	// }
 }

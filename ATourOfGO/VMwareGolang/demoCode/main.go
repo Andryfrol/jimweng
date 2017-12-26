@@ -12,13 +12,15 @@ import (
 	"github.com/vmware/govmomi/find"
 )
 
-var envURL = "https://172.31.17.100/sdk"
-var urlDescription = fmt.Sprintf("ESX or vCenter URL [%s]", envURL)
-var urlFlag = flag.String("url", envURL, urlDescription)
+var (
+	envURL         = "https://172.31.17.100/sdk"
+	urlDescription = fmt.Sprintf("ESX or vCenter URL [%s]", envURL)
+	urlFlag        = flag.String("url", envURL, urlDescription)
 
-var envInsecure = true
-var insecureDescription = fmt.Sprintf("Don't verify the server's certificate chain [%s]", envInsecure)
-var insecureFlag = flag.Bool("insecure", envInsecure, insecureDescription)
+	envInsecure         = true
+	insecureDescription = fmt.Sprintf("Don't verify the server's certificate chain [%s]", envInsecure)
+	insecureFlag        = flag.Bool("insecure", envInsecure, insecureDescription)
+)
 
 func main() {
 	// vCenter への接続

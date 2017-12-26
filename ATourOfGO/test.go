@@ -1,72 +1,102 @@
-// Basic example of getting disk.usage performance information from ESX hosts
-// using govmomi. This code does not include any error checking right now on
-// purpose.
-//
-// This program relies on an environment variable called VC_URL, which would be
-// the URL to the vCenter SDK. For example:
-//
-//      VC_URL=https://user:pass@vcenter-ip/sdk go run this_code.go
-//
 package main
 
 import (
+	"context"
+	"flag"
 	"fmt"
-	"log"
 	"net/url"
 	"os"
-	"reflect"
-
-	"golang.org/x/net/context"
 
 	"github.com/vmware/govmomi"
 	"github.com/vmware/govmomi/find"
-	"github.com/vmware/govmomi/vim25/methods"
-	"github.com/vmware/govmomi/vim25/types"
 )
 
-func main() {
-	// url, _ := url.Parse(os.Getenv("VC_URL"))
-	// https://user:pass@vcenter-ip/sdk
-	// https://agent.test:agent.test@172.31.17.100/sdk
-	// url, _ := url.Parse("https://agent.test:agent.test@172.31.17.100/sdk")
-	url, _ := url.Parse("https://172.31.17.100/sdk")
+type Neo4j struct {
+	Urls               string
+	InsecureSkipVerify bool
+}
 
-	fmt.Println(os.Getenv)
-	fmt.Println(reflect.TypeOf(url))
+func vCenterVmName(neo4j Neo4j) interface{} {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
-
-	client, _ := govmomi.NewClient(ctx, url, true)
-	fmt.Println(client)
-
-	finder := find.NewFinder(client.Client, true)
-	fmt.Println()
-
-	dc, _ := finder.DefaultDatacenter(ctx)
-	finder.SetDatacenter(dc)
-
-	hosts, _ := finder.HostSystemList(ctx, "*")
-
-	// disk.usage
-	metricId := types.PerfMetricId{CounterId: 125, Instance: "*"}
-
-	for _, host := range hosts {
-		querySpec := types.PerfQuerySpec{
-			Entity:     host.Reference(),
-			MaxSample:  1,
-			MetricId:   []types.PerfMetricId{metricId},
-			IntervalId: 20,
-		}
-		query := types.QueryPerf{
-			This:      *client.ServiceContent.PerfManager,
-			QuerySpec: []types.PerfQuerySpec{querySpec},
-		}
-
-		res, _ := methods.QueryPerf(ctx, client, &query)
-		muck := res.Returnval[0]
-		log.Printf("Response: (%T) %+v", muck, muck)
-
-		// causes "muck.SampleInfo undefined (type types.BasePerfEntityMetricBase has no field or method SampleInfo)"
-		// log.Printf("SampleInfo: %+v", muck.SampleInfo)
+	flag.Parse()
+	u, err := url.Parse(neo4j.Urls)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
 	}
+	u.User = url.UserPassword("agent.test", "agent.test")
+	c, err := govmomi.NewClient(ctx, u, neo4j.InsecureSkipVerify)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+	f := find.NewFinder(c.Client, true)
+
+	dc, err := f.Datacenter(ctx, "DiskProphet")
+
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+	f.SetDatacenter(dc)
+	vas, err := f.VirtualMachineList(ctx, "*")
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	// varefs := []types.ManagedObjectReference{}
+	s := make(map[string]interface{}, len(vas))
+
+	for _, va := range vas {
+		// fmt.Printf("%d\n", index)
+		// fmt.Printf("%s\n", va.Common.Name())
+		// fmt.Println(va.QueryConfigTarget.Name)
+		// fmt.Println(reflect.TypeOf(va.Common.Name()))
+		s[va.Common.Name()] = va.Common.Name()
+		// varefs = append(varefs, va.Reference())
+		// varefs = append()
+	}
+	return s
 }
+
+func main() {
+	neo4jTest := Neo4j{
+		Urls:               "https://172.31.17.100/sdk",
+		InsecureSkipVerify: true,
+	}
+	fmt.Println(vCenterVmName(neo4jTest))
+}
+
+// relationship terms
+var (
+	VMDataCenterLabelName       = "VMDataCenter"
+	VMClusterLabelName          = "VMClusterCenter"
+	VMHostLabelName             = "VMHost"
+	VMVSanClusterLabelName      = "VMVSanCluster"
+	VMVSanDiskGroupLabelName    = "VMVSanDiskGroup"
+	VMVSanCacheDiskLabelName    = "VMVSanCacheDisk"
+	VMVSanCapacityDiskLabelName = "VMVSanCapacityDisk"
+	VMDatastoreLabelName        = "VMDatastore"
+	VMDiskLabelName             = "VMDisk"
+	VMVirtualMachinesLabelName  = "VMVirtualMachine"
+	VMSnapshotLabelName         = "VMSnapshot"
+
+	VMDataCenterContainsVMClusterRelationName        = "VmDataCenterContainsVmCluster"
+	VMDataCenterContainsVMVSanClusterRelationName    = "VmDataCenterContainsVSanCluster"
+	VMVSanClusterContainsVMVSanDiskGroupRelationName = "VSanClusterContainsVSanDiskGroup"
+	VMClusterContainsVMHostRelationName              = "VmClusterContainsVmHost"
+	VMClusterContainsVMDatastoreRelationName         = "VmClusterContainsVmDatastore"
+	VMHostContainsVMDiskRelationName                 = "VmHostContainsVmDisk"
+	VMHostHasVMDiskGroupRelationName                 = "VmHostHasVmDiskGroup"
+	VMVsanDatastoreContainsVMDiskGroupRelationName   = "VsanDatastoreContainsVmDiskGroup"
+
+	VMVSanDiskGroupHasCacheVMDiskRelationName    = "VSanDiskGroupHasCacheVmDisk"
+	VMVSanDiskGroupHasCapacityVMDiskRelationName = "VSanDiskGroupHasCapacityVmDisk"
+	VMHostHostsVMVirtualMachineRelationName      = "VmHostHostsVmVirtualMachine"
+	VMDatastoreComposesOfVMDiskRelationName      = "VmDatastoreComposesOfVmDisk"
+	VMHostHasVMDatastoreRelationName             = "VmHostHasVmDatastore"
+	VMVirtualMachineUsesVMDatastoreRelationName  = "VmVirtualMachineUsesVmDatastore"
+	VMVirtualMachineTakesVMSnapshotRelationName  = "VmVirtualMachineTakesVmSnapshot"
+)
