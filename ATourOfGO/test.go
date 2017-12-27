@@ -47,14 +47,23 @@ func vCenterVmName(neo4j Neo4j) interface{} {
 	}
 
 	// varefs := []types.ManagedObjectReference{}
-	s := make(map[string]interface{}, len(vas))
+	type nodeInfo struct {
+		domainId string
+		name     string
+		labels   int
+	}
+	s := make(map[string]nodeInfo, len(vas))
 
-	for _, va := range vas {
+	for index, va := range vas {
 		// fmt.Printf("%d\n", index)
 		// fmt.Printf("%s\n", va.Common.Name())
 		// fmt.Println(va.QueryConfigTarget.Name)
 		// fmt.Println(reflect.TypeOf(va.Common.Name()))
-		s[va.Common.Name()] = va.Common.Name()
+		s[va.Common.Name()] = nodeInfo{
+			domainId: va.Common.Name(),
+			name:     va.Common.Name(),
+			labels:   index,
+		}
 		// varefs = append(varefs, va.Reference())
 		// varefs = append()
 	}
