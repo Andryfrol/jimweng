@@ -16,7 +16,13 @@ type Neo4j struct {
 	InsecureSkipVerify bool
 }
 
-func vCenterVmName(neo4j Neo4j) interface{} {
+type nodeInfo struct {
+	domainId string
+	name     string
+	labels   int
+}
+
+func vCenterVmName(neo4j Neo4j) map[string]nodeInfo {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 	flag.Parse()
@@ -33,7 +39,12 @@ func vCenterVmName(neo4j Neo4j) interface{} {
 	}
 	f := find.NewFinder(c.Client, true)
 
-	dc, err := f.Datacenter(ctx, "DiskProphet")
+	datacenterList, err := f.DatacenterList(ctx, "*")
+	objectNameOfDatacenter, err := datacenterList[1].ObjectName(ctx)
+
+	fmt.Println(objectNameOfDatacenter)
+
+	dc, err := f.Datacenter(ctx, objectNameOfDatacenter)
 
 	if err != nil {
 		fmt.Println(err)
@@ -46,27 +57,27 @@ func vCenterVmName(neo4j Neo4j) interface{} {
 		os.Exit(1)
 	}
 
-	// varefs := []types.ManagedObjectReference{}
-	type nodeInfo struct {
-		domainId string
-		name     string
-		labels   int
-	}
-	s := make(map[string]nodeInfo, len(vas))
+	fmt.Println(f.DatastoreList(ctx, "*"))
 
+	// varefs := []types.ManagedObjectReference{}
+
+	s := make(map[string]nodeInfo, len(vas))
 	for index, va := range vas {
-		// fmt.Printf("%d\n", index)
-		// fmt.Printf("%s\n", va.Common.Name())
-		// fmt.Println(va.QueryConfigTarget.Name)
-		// fmt.Println(reflect.TypeOf(va.Common.Name()))
-		s[va.Common.Name()] = nodeInfo{
-			domainId: va.Common.Name(),
-			name:     va.Common.Name(),
-			labels:   index,
+		keyString := fmt.Sprintf("n%d", index)
+		if index == 0 {
+			s[keyString] = nodeInfo{
+				domainId: va.Name(),
+				name:     va.Name(),
+				labels:   index,
+			}
+			// t, _ := va.Device(ctx)
+			// l := t.ChildDisk()
+			// fmt.Println(l)
+		} else {
+			continue
 		}
-		// varefs = append(varefs, va.Reference())
-		// varefs = append()
 	}
+
 	return s
 }
 
@@ -75,6 +86,7 @@ func main() {
 		Urls:               "https://172.31.17.100/sdk",
 		InsecureSkipVerify: true,
 	}
+	// fmt.Printf("%v", vCenterVmName(neo4jTest))
 	fmt.Println(vCenterVmName(neo4jTest))
 }
 
