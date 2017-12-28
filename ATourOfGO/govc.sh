@@ -71,3 +71,5 @@ govc ls -u='agent.test@aildap.prophetstor.com:agent.test@172.31.17.100' -k=true 
 # this command lind would return all the vm under DiksProphet
 
 govc vm.info -u='agent.test@aildap.prophetstor.com:agent.test@172.31.17.100' -k=true -dc='DiskProphet' VCSA_6.5_17_100
+
+govc vm.info -u='agent.test@aildap.prophetstor.com:agent.test@172.31.17.100' -k=true -dc='DiskProphet' DSBB

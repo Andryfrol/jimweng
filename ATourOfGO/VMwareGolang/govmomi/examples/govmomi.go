@@ -20,15 +20,17 @@ package main
 
 import (
 	"context"
+	"flag"
 	"fmt"
 	"log"
+	"net/url"
 	"os"
 	"text/tabwriter"
 
+	"github.com/vmware/govmomi"
 	"github.com/vmware/govmomi/session"
 	"github.com/vmware/govmomi/vim25"
 
-	"github.com/vmware/govmomi/examples"
 	"github.com/vmware/govmomi/units"
 	"github.com/vmware/govmomi/view"
 	"github.com/vmware/govmomi/vim25/mo"
@@ -40,31 +42,44 @@ type Client struct {
 	SessionManager *session.Manager
 }
 
+type Neo4j struct {
+	Urls               string
+	InsecureSkipVerify bool
+}
+
 func main() {
-	ctx := context.Background()
-	// fmt.Println(ctx)
-	// fmt.Println("content of ctx is", &ctx)
-	// fmt.Println("reflect.TypeOf(ctx) is", reflect.TypeOf(ctx))
-	// fmt.Println()
-	// Connect and login to ESX or vCenter
-	c, err := examples.NewClient(ctx)
-	// fmt.Println(c)
-	// fmt.Println(err)
-
-	if err != nil {
-		log.Fatal(err)
+	neo4j := Neo4j{
+		Urls:               "https://172.31.17.100/sdk",
+		InsecureSkipVerify: true,
 	}
-
-	defer c.Logout(ctx)
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	flag.Parse()
+	u, err := url.Parse(neo4j.Urls)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+	u.User = url.UserPassword("agent.test", "agent.test")
+	c, err := govmomi.NewClient(ctx, u, neo4j.InsecureSkipVerify)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
 
 	// Create a view of HostSystem objects
 	m := view.NewManager(c.Client)
+
+	// m2 := NewHostConfigManager(ctx)
+
+	// fmt.Println(m)
 
 	v, err := m.CreateContainerView(ctx, c.ServiceContent.RootFolder, []string{"HostSystem"}, true)
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	// fmt.Println(v)
 	defer v.Destroy(ctx)
 
 	// Retrieve summary property for all hosts
@@ -95,4 +110,5 @@ func main() {
 	}
 
 	_ = tw.Flush()
+
 }

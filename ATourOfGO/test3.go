@@ -8,6 +8,7 @@ import (
 	"net/url"
 	"os"
 
+	"github.com/vmware/govmomi/object"
 	"github.com/vmware/govmomi/view"
 	"github.com/vmware/govmomi/vim25/mo"
 
@@ -44,6 +45,51 @@ func vCenterVmName(neo4j Neo4j) map[int]nodeInfo {
 		os.Exit(1)
 	}
 	viewNewManager := view.NewManager(c.Client)
+
+	//
+	m1 := object.NewVirtualDiskManager(c.Client)
+
+	fmt.Println(m1)
+
+	type Datacenter struct {
+		Common
+	}
+	
+	func NewDatacenter(c *vim25.Client, ref types.ManagedObjectReference) *Datacenter {
+		return &Datacenter{
+			Common: NewCommon(c, ref),
+		}
+	}
+
+	dc := NewDatacenter(c.Client, ref1)
+
+	// testString := "DiskProphet"
+	// testString2 := &testString
+
+	infor, _ := m1.QueryVirtualDiskInfo(ctx, "*", testString2, true)
+	fmt.Println(infor)
+
+	// var ds *object.Datastore
+
+	// dc, err := cmd.Datacenter()
+	// if err != nil {
+	// 	return err
+	// }
+
+	// ds, err := cmd.Datastore()
+	// if err != nil {
+	// 	return err
+	// }
+
+	// m := object.NewVirtualDiskManager(ds.Client())
+
+	// info, err := m.QueryVirtualDiskInfo(ctx, ds.Path(f.Arg(0)), dc, true)
+	// if err != nil {
+	// 	return err
+	// }
+
+	// fmt.Println(info)
+	//
 
 	fmt.Println(c.PropertyCollector())
 
@@ -148,35 +194,3 @@ func main() {
 	}
 	fmt.Println(vCenterVmName(neo4jTest))
 }
-
-// relationship terms
-var (
-	VMDataCenterLabelName       = "VMDataCenter"
-	VMClusterLabelName          = "VMClusterCenter"
-	VMHostLabelName             = "VMHost"
-	VMVSanClusterLabelName      = "VMVSanCluster"
-	VMVSanDiskGroupLabelName    = "VMVSanDiskGroup"
-	VMVSanCacheDiskLabelName    = "VMVSanCacheDisk"
-	VMVSanCapacityDiskLabelName = "VMVSanCapacityDisk"
-	VMDatastoreLabelName        = "VMDatastore"
-	VMDiskLabelName             = "VMDisk"
-	VMVirtualMachinesLabelName  = "VMVirtualMachine"
-	VMSnapshotLabelName         = "VMSnapshot"
-
-	VMDataCenterContainsVMClusterRelationName        = "VmDataCenterContainsVmCluster"
-	VMDataCenterContainsVMVSanClusterRelationName    = "VmDataCenterContainsVSanCluster"
-	VMVSanClusterContainsVMVSanDiskGroupRelationName = "VSanClusterContainsVSanDiskGroup"
-	VMClusterContainsVMHostRelationName              = "VmClusterContainsVmHost"
-	VMClusterContainsVMDatastoreRelationName         = "VmClusterContainsVmDatastore"
-	VMHostContainsVMDiskRelationName                 = "VmHostContainsVmDisk"
-	VMHostHasVMDiskGroupRelationName                 = "VmHostHasVmDiskGroup"
-	VMVsanDatastoreContainsVMDiskGroupRelationName   = "VsanDatastoreContainsVmDiskGroup"
-
-	VMVSanDiskGroupHasCacheVMDiskRelationName    = "VSanDiskGroupHasCacheVmDisk"
-	VMVSanDiskGroupHasCapacityVMDiskRelationName = "VSanDiskGroupHasCapacityVmDisk"
-	VMHostHostsVMVirtualMachineRelationName      = "VmHostHostsVmVirtualMachine"
-	VMDatastoreComposesOfVMDiskRelationName      = "VmDatastoreComposesOfVmDisk"
-	VMHostHasVMDatastoreRelationName             = "VmHostHasVmDatastore"
-	VMVirtualMachineUsesVMDatastoreRelationName  = "VmVirtualMachineUsesVmDatastore"
-	VMVirtualMachineTakesVMSnapshotRelationName  = "VmVirtualMachineTakesVmSnapshot"
-)
