@@ -64,7 +64,9 @@ func vCenterVmName(neo4j Neo4j) map[int]nodeInfo {
 		fmt.Printf("%s\t", hs.Summary.Config.Name)
 		// fmt.Println()
 	}
+
 	fmt.Println()
+
 	fmt.Println("------------above is host IP---------------")
 
 	f := find.NewFinder(c.Client, true)

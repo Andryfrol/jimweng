@@ -38,7 +38,8 @@ func vCenterVmName(neo4j Neo4j) map[int]nodeInfo {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-	u.User = url.UserPassword("agent.test", "agent.test")
+	// u.User = url.UserPassword("agent.test", "agent.test")
+	u.User = url.UserPassword("matt.wu", "password")
 	c, err := govmomi.NewClient(ctx, u, neo4j.InsecureSkipVerify)
 	if err != nil {
 		fmt.Println(err)
@@ -46,52 +47,8 @@ func vCenterVmName(neo4j Neo4j) map[int]nodeInfo {
 	}
 	viewNewManager := view.NewManager(c.Client)
 
-	//
-	m1 := object.NewVirtualDiskManager(c.Client)
-
-	fmt.Println(m1)
-
-	type Datacenter struct {
-		Common
-	}
-	
-	func NewDatacenter(c *vim25.Client, ref types.ManagedObjectReference) *Datacenter {
-		return &Datacenter{
-			Common: NewCommon(c, ref),
-		}
-	}
-
-	dc := NewDatacenter(c.Client, ref1)
-
-	// testString := "DiskProphet"
-	// testString2 := &testString
-
-	infor, _ := m1.QueryVirtualDiskInfo(ctx, "*", testString2, true)
-	fmt.Println(infor)
-
-	// var ds *object.Datastore
-
-	// dc, err := cmd.Datacenter()
-	// if err != nil {
-	// 	return err
-	// }
-
-	// ds, err := cmd.Datastore()
-	// if err != nil {
-	// 	return err
-	// }
-
-	// m := object.NewVirtualDiskManager(ds.Client())
-
-	// info, err := m.QueryVirtualDiskInfo(ctx, ds.Path(f.Arg(0)), dc, true)
-	// if err != nil {
-	// 	return err
-	// }
-
-	// fmt.Println(info)
-	//
-
-	fmt.Println(c.PropertyCollector())
+	// var HosthssStorageSystem mo.HostStorageSystem
+	// _, := ss
 
 	jim, _ := viewNewManager.CreateContainerView(ctx, c.ServiceContent.RootFolder, []string{"HostSystem"}, true)
 	if err != nil {
@@ -100,10 +57,13 @@ func vCenterVmName(neo4j Neo4j) map[int]nodeInfo {
 	defer jim.Destroy(ctx)
 
 	var hss []mo.HostSystem
+	// err = jim.Retrieve(ctx, []string{"HostSystem"}, []string{"summary"}, &hss)
 	err = jim.Retrieve(ctx, []string{"HostSystem"}, []string{"summary"}, &hss)
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	// fmt.Println(hss)
 
 	// Print VMHost
 	for _, hs := range hss {
@@ -145,10 +105,25 @@ func vCenterVmName(neo4j Neo4j) map[int]nodeInfo {
 		os.Exit(1)
 	}
 
-	test, _ := f.VirtualAppList(ctx, "*")
+	hostsTest, _ := f.HostSystemList(ctx, "/DiskProphet")
+	// fmt.Println(hostsTest)
+	fmt.Println(hostsTest[3].ObjectName(ctx))
+	dsTest, _ := hostsTest[3].ConfigManager().StorageSystem(ctx)
 
-	fmt.Println(test)
-	fmt.Println("-------------------------")
+	var hostStorageSystemeTest mo.HostStorageSystem
+	dsTest.Properties(ctx, dsTest.Reference(), nil, &hostStorageSystemeTest)
+	fmt.Println(err)
+	fmt.Println(hostStorageSystemeTest)
+	// dsTest, _ := hostsTest[3].ConfigManager().DatastoreSystem(ctx)
+
+	// fmt.Println(dsTest)
+	// disks, _ := dsTest.QueryAvailableDisksForVmfs(ctx)
+	// fmt.Println("---------------------------------------------------")
+	// // fmt.Println(disks[0].DurableName)
+	// fmt.Println(disks[0].CanonicalName)
+	// // fmt.Println(disks[0].DisplayName)
+	// // fmt.Println(disks[0].DeviceName)
+	// fmt.Println("------------above is the host's vmdisk-------------")
 
 	// DatastoreList(ctx,"*") would return VMDatastore -- original default VMDataCenter is "DiskProphet"
 	// fmt.Println(f.DatastoreList(ctx, "*"))
@@ -164,6 +139,17 @@ func vCenterVmName(neo4j Neo4j) map[int]nodeInfo {
 
 	fmt.Println("VMDatastore nodes are", len(i))
 	fmt.Println("----------above would list vmware VMDataCenter-----------")
+
+	//
+	m1 := object.NewVirtualDiskManager(c.Client)
+
+	fmt.Println("-----query disk")
+
+	dc1 := datacenterList[0]
+
+	infor, _ := m1.QueryVirtualDiskInfo(ctx, i[0].InventoryPath, dc1, true)
+	fmt.Println(infor)
+	//
 
 	// varefs := []types.ManagedObjectReference{}
 

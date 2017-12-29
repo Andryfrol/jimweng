@@ -73,3 +73,10 @@ govc ls -u='agent.test@aildap.prophetstor.com:agent.test@172.31.17.100' -k=true 
 govc vm.info -u='agent.test@aildap.prophetstor.com:agent.test@172.31.17.100' -k=true -dc='DiskProphet' VCSA_6.5_17_100
 
 govc vm.info -u='agent.test@aildap.prophetstor.com:agent.test@172.31.17.100' -k=true -dc='DiskProphet' DSBB
+
+
+# query disk under particular datacenter / datastore
+govc host.storage.info -u='agent.test@aildap.prophetstor.com:agent.test@172.31.17.100' -k=true -dc='DiskProphet' -host='172.31.17.94'
+
+# query snapshot vm under particular datacenter datastore
+govc snapshot.tree -u='agent.test@aildap.prophetstor.com:agent.test@172.31.17.100' -k=true -dc='DiskProphet' -vm DSBB
