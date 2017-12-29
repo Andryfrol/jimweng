@@ -105,15 +105,15 @@ func vCenterVmName(neo4j Neo4j) map[int]nodeInfo {
 		os.Exit(1)
 	}
 
-	hostsTest, _ := f.HostSystemList(ctx, "/DiskProphet")
-	// fmt.Println(hostsTest)
+	hostsTest, _ := f.HostSystemList(ctx, "*")
 	fmt.Println(hostsTest[3].ObjectName(ctx))
 	dsTest, _ := hostsTest[3].ConfigManager().StorageSystem(ctx)
 
-	var hostStorageSystemeTest mo.HostStorageSystem
-	dsTest.Properties(ctx, dsTest.Reference(), nil, &hostStorageSystemeTest)
-	fmt.Println(err)
-	fmt.Println(hostStorageSystemeTest)
+	var hssTT mo.HostStorageSystem
+
+	_ = dsTest.Properties(ctx, dsTest.Reference(), nil, &hssTT)
+	fmt.Println(hssTT)
+	fmt.Println("================")
 	// dsTest, _ := hostsTest[3].ConfigManager().DatastoreSystem(ctx)
 
 	// fmt.Println(dsTest)
@@ -155,7 +155,15 @@ func vCenterVmName(neo4j Neo4j) map[int]nodeInfo {
 
 	s := make(map[int]nodeInfo, len(vas))
 	fmt.Println(len(vas))
+
 	for index, va := range vas {
+		fmt.Println("index:", index, " va:", va)
+		var o mo.VirtualMachine
+		_ = vas[index].Properties(ctx, vas[index].Reference(), []string{"snapshot"}, &o)
+		if o.Snapshot != nil {
+			fmt.Println("o.Snapshot is ", o.Snapshot.CurrentSnapshot)
+		}
+
 		keyString := fmt.Sprintf("n%d", index)
 		if index == 0 {
 			s[index] = nodeInfo{
