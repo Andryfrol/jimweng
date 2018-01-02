@@ -19,6 +19,7 @@ govc datacenter.info -u='agent.test@aildap.prophetstor.com:agent.test@172.31.17.
 # need to specify a datacenter
 govc datastore.info -u='agent.test@aildap.prophetstor.com:agent.test@172.31.17.100' -k=true -dc='DiskProphet'
 govc datastore.info -u='agent.test@aildap.prophetstor.com:agent.test@172.31.17.100' -k=true -dc='Elsvent'
+
 # Usage: govc datastore.info [OPTIONS] [PATH]...
 
 # Options:
@@ -82,3 +83,10 @@ govc host.storage.info -u='agent.test@aildap.prophetstor.com:agent.test@172.31.1
 govc snapshot.tree -u='agent.test@aildap.prophetstor.com:agent.test@172.31.17.100' -k=true -dc='DiskProphet' -vm 'DiskProphet Agents'
 govc snapshot.tree -u='agent.test@aildap.prophetstor.com:agent.test@172.31.17.100' -k=true -dc='DiskProphet' -vm 'hxexsa-fix'
 govc snapshot.tree -u='agent.test@aildap.prophetstor.com:agent.test@172.31.17.100' -k=true -dc='DiskProphet' -vm 'JP1'
+
+
+
+
+govc datastore.disk.info -u='agent.test@aildap.prophetstor.com:agent.test@172.31.17.100' -k=true -dc='DiskProphet' -ds='vsanB'
+
+

@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"net/url"
 
-	"github.com/vmware/govmomi/view"
-	"github.com/vmware/govmomi/vim25/mo"
-
 	"github.com/vmware/govmomi"
 	"github.com/vmware/govmomi/find"
+	"github.com/vmware/govmomi/view"
+	"github.com/vmware/govmomi/vim25/mo"
+	"github.com/vmware/govmomi/vim25/types"
 )
 
 type Neo4j struct {
@@ -50,6 +50,11 @@ func vCenterVmName(neo4j Neo4j) map[int]nodeInfo {
 	for _, hs := range hss {
 		fmt.Printf("%s\n", hs.Summary.Config.Name)
 	}
+
+	// for _, hs := range hss2 {
+	// 	fmt.Printf("%s\n", hs)
+	// }
+
 	fmt.Println("------------above is host IP---------------")
 
 	// ====================================================================================================== //
@@ -68,18 +73,29 @@ func vCenterVmName(neo4j Neo4j) map[int]nodeInfo {
 
 	dc, _ := f.Datacenter(ctx, objectNameOfDatacenter)
 
+	// 設定finder的datacenter為dc
 	f.SetDatacenter(dc)
+
 	vas, _ := f.VirtualMachineList(ctx, "*")
 
 	hostsTest, _ := f.HostSystemList(ctx, "*")
 	fmt.Println(hostsTest[3].ObjectName(ctx))
+	fmt.Println("================")
+
 	dsTest, _ := hostsTest[3].ConfigManager().StorageSystem(ctx)
 
 	var hssTT mo.HostStorageSystem
 
 	_ = dsTest.Properties(ctx, dsTest.Reference(), nil, &hssTT)
-	fmt.Println(hssTT)
-	// fmt.Println("================")
+	for _, b := range hssTT.StorageDeviceInfo.HostBusAdapter {
+		fmt.Println(b.GetHostHostBusAdapter())
+	}
+
+	// buf := new(bytes.Buffer)
+	// f(buf)
+
+	// pretty.Fprintf(io.Writer, "%# v\n", dumpValue(hss))
+	// fmt.Println(WriteResult(hssTT))
 	// dsTest, _ := hostsTest[3].ConfigManager().DatastoreSystem(ctx)
 
 	// fmt.Println(dsTest)
@@ -103,14 +119,17 @@ func vCenterVmName(neo4j Neo4j) map[int]nodeInfo {
 	s := make(map[int]nodeInfo, len(vas))
 
 	for index, va := range vas {
-		fmt.Println("index:", index, " va:", va)
 		var o mo.VirtualMachine
 		_ = vas[index].Properties(ctx, vas[index].Reference(), []string{"snapshot"}, &o)
 		if o.Snapshot != nil {
-			fmt.Println("o.Snapshot is ", o.Snapshot.CurrentSnapshot)
-			fmt.Println("o.Snapshot.RootSnapshotList.ChildSnapshotList is ", o.Snapshot.RootSnapshotList[0].ChildSnapshotList)
-		}
+			// fmt.Println("o.Snapshot is", o.Snapshot.RootSnapshotList[0].State)
+			fmt.Println("index:", index, " va.Name:", va.Name())
+			fmt.Println("check leaf")
+			check(o.Snapshot.RootSnapshotList)
 
+			// fmt.Println(o.Snapshot.RootSnapshotList[0].ChildSnapshotList)
+
+		}
 		keyString := fmt.Sprintf("n%d", index)
 		if index == 0 {
 			s[index] = nodeInfo{
@@ -124,7 +143,6 @@ func vCenterVmName(neo4j Neo4j) map[int]nodeInfo {
 			continue
 		}
 	}
-
 	return s
 }
 
@@ -134,4 +152,16 @@ func main() {
 		InsecureSkipVerify: true,
 	}
 	fmt.Println(vCenterVmName(neo4jTest))
+}
+
+func check(leaf []types.VirtualMachineSnapshotTree) string {
+	if leaf[0].ChildSnapshotList != nil {
+		for index := range leaf[0].ChildSnapshotList {
+			fmt.Println("the leaf is", index)
+			check(leaf)
+		}
+	} else {
+		fmt.Println("no other leaf left")
+	}
+	return "nothing"
 }
