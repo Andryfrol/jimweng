@@ -2,13 +2,9 @@ package main
 
 import (
 	"context"
-	"flag"
 	"fmt"
-	"log"
 	"net/url"
-	"os"
 
-	"github.com/vmware/govmomi/object"
 	"github.com/vmware/govmomi/view"
 	"github.com/vmware/govmomi/vim25/mo"
 
@@ -30,80 +26,50 @@ type nodeInfo struct {
 }
 
 func vCenterVmName(neo4j Neo4j) map[int]nodeInfo {
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
-	flag.Parse()
-	u, err := url.Parse(neo4j.Urls)
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
-	// u.User = url.UserPassword("agent.test", "agent.test")
+
+	// 製作一個ctx當作紀錄點
+	ctx, _ := context.WithCancel(context.Background())
+
+	// 給定要查詢的網址以及對應的使用者名稱及密碼
+	u, _ := url.Parse(neo4j.Urls)
 	u.User = url.UserPassword("matt.wu", "password")
-	c, err := govmomi.NewClient(ctx, u, neo4j.InsecureSkipVerify)
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
+
+	// 建立govmomi的新使用者 govmomi.NewClient
+	c, _ := govmomi.NewClient(ctx, u, neo4j.InsecureSkipVerify)
+
+	// 建立一個view.NewManager後面可以利用它來查詢nodes
 	viewNewManager := view.NewManager(c.Client)
+	ContainView, _ := viewNewManager.CreateContainerView(ctx, c.ServiceContent.RootFolder, []string{"HostSystem"}, true)
+	defer ContainView.Destroy(ctx)
 
-	// var HosthssStorageSystem mo.HostStorageSystem
-	// _, := ss
-
-	jim, _ := viewNewManager.CreateContainerView(ctx, c.ServiceContent.RootFolder, []string{"HostSystem"}, true)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer jim.Destroy(ctx)
-
+	// 使用mo.HostSystem將ctx路徑下的HostSystem的summary紀錄給hss
 	var hss []mo.HostSystem
-	// err = jim.Retrieve(ctx, []string{"HostSystem"}, []string{"summary"}, &hss)
-	err = jim.Retrieve(ctx, []string{"HostSystem"}, []string{"summary"}, &hss)
-	if err != nil {
-		log.Fatal(err)
-	}
+	_ = ContainView.Retrieve(ctx, []string{"HostSystem"}, []string{"summary"}, &hss)
 
-	// fmt.Println(hss)
-
-	// Print VMHost
+	// 打印出來確認hosts名稱
 	for _, hs := range hss {
-		fmt.Printf("%s\t", hs.Summary.Config.Name)
-		// fmt.Println()
+		fmt.Printf("%s\n", hs.Summary.Config.Name)
 	}
-	fmt.Println()
 	fmt.Println("------------above is host IP---------------")
 
+	// ====================================================================================================== //
+	// 建立一個Finder
 	f := find.NewFinder(c.Client, true)
 
-	// fmt.Println(f.HostSystemList)
+	// 使用DatacenterList去找尋指定路徑"*"下的datacenterList
+	datacenterList, _ := f.DatacenterList(ctx, "*")
 
-	datacenterList, err := f.DatacenterList(ctx, "*")
-	fmt.Println(len(datacenterList))
-
-	// datacenterList(f.DatacenterList(ctx,"*")) would return VMDataCenter
 	for i := 0; i < len(datacenterList); i++ {
 		fmt.Println(datacenterList[i].ObjectName(ctx))
 	}
 	fmt.Println("----------above would list vmware VMDataCenter-----------")
 
-	// fmt.Println(datacenterList[1])
+	objectNameOfDatacenter, _ := datacenterList[1].ObjectName(ctx)
 
-	objectNameOfDatacenter, err := datacenterList[1].ObjectName(ctx)
+	dc, _ := f.Datacenter(ctx, objectNameOfDatacenter)
 
-	// fmt.Println(objectNameOfDatacenter)
-
-	dc, err := f.Datacenter(ctx, objectNameOfDatacenter)
-
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
 	f.SetDatacenter(dc)
-	vas, err := f.VirtualMachineList(ctx, "*")
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
+	vas, _ := f.VirtualMachineList(ctx, "*")
 
 	hostsTest, _ := f.HostSystemList(ctx, "*")
 	fmt.Println(hostsTest[3].ObjectName(ctx))
@@ -113,7 +79,7 @@ func vCenterVmName(neo4j Neo4j) map[int]nodeInfo {
 
 	_ = dsTest.Properties(ctx, dsTest.Reference(), nil, &hssTT)
 	fmt.Println(hssTT)
-	fmt.Println("================")
+	// fmt.Println("================")
 	// dsTest, _ := hostsTest[3].ConfigManager().DatastoreSystem(ctx)
 
 	// fmt.Println(dsTest)
@@ -123,38 +89,18 @@ func vCenterVmName(neo4j Neo4j) map[int]nodeInfo {
 	// fmt.Println(disks[0].CanonicalName)
 	// // fmt.Println(disks[0].DisplayName)
 	// // fmt.Println(disks[0].DeviceName)
-	// fmt.Println("------------above is the host's vmdisk-------------")
+	fmt.Println("==================above is the host's vmdisk==================")
 
-	// DatastoreList(ctx,"*") would return VMDatastore -- original default VMDataCenter is "DiskProphet"
-	// fmt.Println(f.DatastoreList(ctx, "*"))
+	// 打印確認該datacenter下有幾個datastores
 	i, _ := f.DatastoreList(ctx, "*")
 	for index := 0; index < len(i); index++ {
 		objectNameOfDatastores, _ := i[index].ObjectName(ctx)
-		fmt.Printf("%s ", objectNameOfDatastores)
-		// w, _ := i[index].
-		// fmt.Println(w)
+		fmt.Printf("%s\n", objectNameOfDatastores)
 	}
-	fmt.Println()
-	// fmt.Println(i[0].AttachedHosts(ctx))
 
-	fmt.Println("VMDatastore nodes are", len(i))
-	fmt.Println("----------above would list vmware VMDataCenter-----------")
-
-	//
-	m1 := object.NewVirtualDiskManager(c.Client)
-
-	fmt.Println("-----query disk")
-
-	dc1 := datacenterList[0]
-
-	infor, _ := m1.QueryVirtualDiskInfo(ctx, i[0].InventoryPath, dc1, true)
-	fmt.Println(infor)
-	//
-
-	// varefs := []types.ManagedObjectReference{}
+	fmt.Println("----------above would list vmware DataCenter's datastores-----------")
 
 	s := make(map[int]nodeInfo, len(vas))
-	fmt.Println(len(vas))
 
 	for index, va := range vas {
 		fmt.Println("index:", index, " va:", va)

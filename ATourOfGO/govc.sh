@@ -80,3 +80,5 @@ govc host.storage.info -u='agent.test@aildap.prophetstor.com:agent.test@172.31.1
 
 # query snapshot vm under particular datacenter datastore
 govc snapshot.tree -u='agent.test@aildap.prophetstor.com:agent.test@172.31.17.100' -k=true -dc='DiskProphet' -vm 'DiskProphet Agents'
+govc snapshot.tree -u='agent.test@aildap.prophetstor.com:agent.test@172.31.17.100' -k=true -dc='DiskProphet' -vm 'hxexsa-fix'
+govc snapshot.tree -u='agent.test@aildap.prophetstor.com:agent.test@172.31.17.100' -k=true -dc='DiskProphet' -vm 'JP1'
