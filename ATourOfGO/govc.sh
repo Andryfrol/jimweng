@@ -1,3 +1,8 @@
+# 503 service unavailable
+# https://kb.vmware.com/s/article/2121043
+# https://communities.vmware.com/thread/547345
+
+
 # govc about -u='agent.test@aildap.prophetstor.com:agent.test@172.31.17.100' -k=true
 
 govc datacenter.info -u='agent.test@aildap.prophetstor.com:agent.test@172.31.17.100' -k=true
