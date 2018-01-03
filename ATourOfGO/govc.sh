@@ -90,3 +90,6 @@ govc snapshot.tree -u='agent.test@aildap.prophetstor.com:agent.test@172.31.17.10
 govc datastore.disk.info -u='agent.test@aildap.prophetstor.com:agent.test@172.31.17.100' -k=true -dc='DiskProphet' -ds='vsanB'
 
 
+govc datastore.ls -u='matt.wu:password@172.31.17.100' -k=true -dc='DiskProphet' -ds='vsanB'
+
+govc find -u='matt.wu:password@172.31.17.100' -k=true . -type s -summary.type vsan
