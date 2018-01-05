@@ -44,11 +44,14 @@ func vCenterVmName(neo4j Neo4j) map[int]nodeInfo {
 
 	// 使用mo.HostSystem將ctx路徑下的HostSystem的summary紀錄給hss
 	var hss []mo.HostSystem
-	_ = ContainView.Retrieve(ctx, []string{"HostSystem"}, []string{"summary"}, &hss)
+	_ = ContainView.Retrieve(ctx, []string{"HostSystem"}, []string{"summary", "datastore", "vm", "configManager", "systemResources"}, &hss)
 
 	// 打印出來確認hosts名稱
 	for _, hs := range hss {
 		fmt.Printf("%s\n", hs.Summary.Config.Name)
+		fmt.Printf("%v\n", hs.Datastore)
+
+		// fmt.Println(hs.SystemResources)
 	}
 
 	fmt.Println("------------above is host IP---------------")
@@ -75,10 +78,12 @@ func vCenterVmName(neo4j Neo4j) map[int]nodeInfo {
 	vas, _ := f.VirtualMachineList(ctx, "*")
 
 	hostsTest, _ := f.HostSystemList(ctx, "*")
+	// fmt.Println(hostsTest) //[HostSystem:host-223 @ /DiskProphet/host/172.31.17.88/172.31.17.88 HostSystem:host-113 @ /DiskProphet/host/vSAN/172.31.17.92 HostSystem:host-234 @ /DiskProphet/host/vSAN/172.31.17.96 HostSystem:host-54 @ /DiskProphet/host/vSAN/172.31.17.94]
 	fmt.Println(hostsTest[3].ObjectName(ctx))
 	fmt.Println("================")
 
 	dsTest, _ := hostsTest[3].ConfigManager().StorageSystem(ctx)
+	// fmt.Println(dsTest)
 
 	var hssTT mo.HostStorageSystem
 

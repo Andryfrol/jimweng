@@ -47,13 +47,12 @@ type Neo4j struct {
 	InsecureSkipVerify bool
 }
 
-func main() {
+func test() (*govmomi.Client, context.Context, error) {
 	neo4j := Neo4j{
 		Urls:               "https://172.31.17.100/sdk",
 		InsecureSkipVerify: true,
 	}
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
+	ctx := context.Background()
 	flag.Parse()
 	u, err := url.Parse(neo4j.Urls)
 	if err != nil {
@@ -66,7 +65,29 @@ func main() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
+	return c, ctx, err
+}
 
+func main() {
+	// neo4j := Neo4j{
+	// 	Urls:               "https://172.31.17.100/sdk",
+	// 	InsecureSkipVerify: true,
+	// }
+	// ctx, cancel := context.WithCancel(context.Background())
+	// defer cancel()
+	// flag.Parse()
+	// u, err := url.Parse(neo4j.Urls)
+	// if err != nil {
+	// 	fmt.Println(err)
+	// 	os.Exit(1)
+	// }
+	// u.User = url.UserPassword("agent.test", "agent.test")
+	// c, err := govmomi.NewClient(ctx, u, neo4j.InsecureSkipVerify)
+	// if err != nil {
+	// 	fmt.Println(err)
+	// 	os.Exit(1)
+	// }
+	c, ctx, _ := test()
 	// Create a view of HostSystem objects
 	m := view.NewManager(c.Client)
 
