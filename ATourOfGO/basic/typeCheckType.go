@@ -13,32 +13,34 @@ type NodeInfo struct {
 	vcsa     string
 }
 
-type test struct {
-	A string
+type test1 struct {
+	V string
 }
 
-type test1 struct {
-	B int
+type test2 struct {
+	V int
 }
 
 func genNode(a interface{}) *NodeInfo {
 
 	switch a.(type) {
-	case test:
-		fmt.Println("string")
+	case *test1:
+		a := a.(*test1)
+		fmt.Println(a.V)
 	default:
-		fmt.Println("not string")
+		a := a.(*test2)
+		fmt.Println(a.V)
 	}
 
 	return nil
 }
 
 func main() {
-	a := test{
-		A: "string",
+	a := &test1{
+		V: "string",
 	}
-	b := test1{
-		B: 123,
+	b := &test2{
+		V: 123,
 	}
 	genNode(a)
 	genNode(b)
