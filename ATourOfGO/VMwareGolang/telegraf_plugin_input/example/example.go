@@ -1,46 +1,44 @@
-package example
+// // func body() string { return 123 }
 
-import "time"
+// type body interface {
+// 	test1() string
+// }
 
-// Accumulator is an interface for "accumulating" metrics from plugin(s).
-// The metrics are sent down a channel shared between all plugins.
-type Accumulator interface {
-	// AddFields adds a metric to the accumulator with the given measurement
-	// name, fields, and tags (and timestamp). If a timestamp is not provided,
-	// then the accumulator sets it to "now".
-	// Create a point with a value, decorating it with tags
-	// NOTE: tags is expected to be owned by the caller, don't mutate
-	// it after passing to Add.
-	AddFields(measurement string,
-		fields map[string]interface{},
-		tags map[string]string,
-		t ...time.Time)
+// type Test func() body
 
-	// AddGauge is the same as AddFields, but will add the metric as a "Gauge" type
-	AddGauge(measurement string,
-		fields map[string]interface{},
-		tags map[string]string,
-		t ...time.Time)
+package main
 
-	// AddCounter is the same as AddFields, but will add the metric as a "Counter" type
-	AddCounter(measurement string,
-		fields map[string]interface{},
-		tags map[string]string,
-		t ...time.Time)
+import (
+	"fmt"
+)
 
-	// AddSummary is the same as AddFields, but will add the metric as a "Summary" type
-	AddSummary(measurement string,
-		fields map[string]interface{},
-		tags map[string]string,
-		t ...time.Time)
+type Greeting func(name string) string
 
-	// AddHistogram is the same as AddFields, but will add the metric as a "Histogram" type
-	AddHistogram(measurement string,
-		fields map[string]interface{},
-		tags map[string]string,
-		t ...time.Time)
+// func say(g Greeting, n string) {
+// 	fmt.Println(g(n))
+// }
 
-	SetPrecision(precision, interval time.Duration)
-
-	AddError(err error)
+func (g Greeting) say(n string) {
+	fmt.Println(g(n))
 }
+
+func english(name string) string {
+	return "hello, " + name
+}
+
+func main() {
+	g := Greeting(english)
+	g.say("world")
+	// say(english, "world")
+
+}
+
+// type niceToMeetYou func() test
+
+// type test interface {
+// 	str() string
+// }
+
+// func givenFunc(niceToMeetYou) {
+
+// }
