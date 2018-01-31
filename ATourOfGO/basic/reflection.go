@@ -1,5 +1,6 @@
 // refer to
 // https://gist.github.com/drewolson/4771479
+// https://studygolang.com/articles/2553
 
 package main
 
