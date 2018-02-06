@@ -1,5 +1,4 @@
-package main
-
+// 筆記TestServer
 import (
 	"bytes"
 	"encoding/json"
@@ -13,17 +12,23 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func HttpTestServer(t *testing.T) {
+func TestHttpTestServer(t *testing.T) {
+	// 宣告一個新的測試Server（參數：handlerFunc() : http.HandlerFunc( func( ... ))
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
+		// 可以自行定義header ,這邊不進行定義。
+		// w.Header().Set("Content-Type", "application/json")
 		if r.Method != "POST" {
 			t.Errorf("Expected 'POST' request, got '%s'", r.Method)
 		}
 		if r.Body != nil {
+			// 這邊因為要接收傳進來的body並判斷，所以做json
 			jsonResponse := map[string]string{}
 			body, _ := ioutil.ReadAll(r.Body)
 			json.Unmarshal(body, &jsonResponse)
+
+			// 利用傳送進來的body判斷是否符合需求
 			if jsonResponse["email"] == "testUser" && jsonResponse["password"] == "testPasswd" {
+				// 寫入handler
 				w.WriteHeader(http.StatusOK)
 				w.Write([]byte("pass"))
 			} else {
@@ -33,15 +38,9 @@ func HttpTestServer(t *testing.T) {
 		}
 	}))
 	defer ts.Close()
-
 	data := map[string]string{}
-
-	// i := Aiservice{
-	// 	Username: "testUser",
-	// 	Password: "testPasswd",
-	// }
-	data["email"] = "Username"
-	data["password"] = "Password"
+	data["email"] = "testUser"
+	data["password"] = "testPasswd"
 
 	payloadBytes, _ := json.Marshal(data)
 	body := bytes.NewReader(payloadBytes)
@@ -53,9 +52,4 @@ func HttpTestServer(t *testing.T) {
 	respbody, _ := ioutil.ReadAll(res.Body)
 	assert.Equal(t, "pass", string(respbody))
 
-}
-
-func main() {
-	var t *testing.T
-	HttpTestServer(t)
 }
