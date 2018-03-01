@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net"
 	"os"
+	"regexp"
 )
 
 func getIp1() {
@@ -38,6 +39,7 @@ func getIp2() {
 			fmt.Printf("%v\n", err)
 		}
 		for _, addr := range addrs {
+			// fmt.Printf("%v\n", addr)
 			var ip net.IP
 			switch v := addr.(type) {
 			case *net.IPNet:
@@ -46,10 +48,19 @@ func getIp2() {
 				ip = v.IP
 			}
 			// process IP address
-			fmt.Printf("ip address is %v\n", ip)
+			fmt.Printf("ip address is %v\n", ip.String())
+
+			if str := netRegexp.FindStringSubmatch(ip.String()); len(str) > 1 {
+				fmt.Printf("ip Reg address is %v\n", ip)
+			}
 		}
 	}
 }
+
+var netRegexp = regexp.MustCompile(".*:(.*):$")
+
+// var netRegexp = regexp.MustCompile("fe80::9b27:2557:57f8:aa9a")
+// var netRegexp = regexp.MustCompile(".*::*.")
 
 func main() {
 	// getIp1()
