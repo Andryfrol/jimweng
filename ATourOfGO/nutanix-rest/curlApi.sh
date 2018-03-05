@@ -8,13 +8,6 @@ curl --user USERACCOUNT:USERPASSWORD --insecure -H "Content-Type: application/js
 # Using different kind of Nutanix REST APIs (v0.8, v1, v2 , v3)
 # … a lot more
 
-https://10.2.10.119:9440
-
-admin
-
-RyfUA8xC3b}7@3[
-
-
 curl --user admin:RyfUA8xC3b}7@3[ --insecure -H "Content-Type: application/json" -H "Accept: application/json" https://10.2.10.119:9440/PrismGateway/services/rest/v1/vms/
 
 curl --user admin:RyfUA8xC3b}7@3[ --insecure -H "Content-Type: application/json" -H "Accept: application/json" https://10.2.10.119:9440/PrismGateway/services/rest/v2.0/vms/

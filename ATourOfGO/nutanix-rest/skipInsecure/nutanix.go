@@ -111,7 +111,7 @@ type get_fn_name func(rc Restclient, uuid string) (status, result string)
 
 func main() {
 	var cluster_uuid string
-	cluster_uuid = "00054fd5-6de4-8422-74c5-782bcb637d0e"
+	// cluster_uuid = "00054fd5-6de4-8422-74c5-782bcb637d0e"
 
 	var status, response string
 
