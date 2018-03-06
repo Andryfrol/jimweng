@@ -18,4 +18,16 @@ curl --user admin:RyfUA8xC3b}7@3[ --insecure -H "Content-Type: application/json"
 # list clusters with particular uuid
 curl --user admin:RyfUA8xC3b}7@3[ --insecure -H "Content-Type: application/json" -H "Accept: application/json" https://10.2.10.119:9440/api/nutanix/v3/clusters/00054fd5-6de4-8422-74c5-782bcb637d0e
 
+# curl --user admin:RyfUA8xC3b}7@3[ --insecure -H "Content-Type: application/json" -H "Accept: application/json" -d '{ "kind" : "cluster" , "offset" : 0 , "length" : 0}' https://10.2.10.119:9440/api/nutanix/v3/clusters/list
 
+
+curl --user admin:RyfUA8xC3b}7@3[ --insecure -H "Content-Type: application/json" -H "Accept: application/json" https://10.2.10.119:9440/api/nutanix/v3/clusters/list -d '{ "kind" : "cluster" , "offset" : 0 , "length" : 0}' 
+
+
+curl --user admin:RyfUA8xC3b}7@3[ --insecure -H "Content-Type: application/json" -H "Accept: application/json" https://10.2.10.119:9440/api/nutanix/v3/clusters/list
+
+
+curl --user admin:RyfUA8xC3b}7@3[ --insecure -H "Content-Type: application/json" -H "Accept: application/json" https://10.2.10.119:9440/api/nutanix/v3/disks/list
+
+
+ -d '{ "kind" : "disk" }'
