@@ -24,10 +24,47 @@ curl --user admin:RyfUA8xC3b}7@3[ --insecure -H "Content-Type: application/json"
 curl --user admin:RyfUA8xC3b}7@3[ --insecure -H "Content-Type: application/json" -H "Accept: application/json" https://10.2.10.119:9440/api/nutanix/v3/clusters/list -d '{ "kind" : "cluster" , "offset" : 0 , "length" : 0}' 
 
 
-curl --user admin:RyfUA8xC3b}7@3[ --insecure -H "Content-Type: application/json" -H "Accept: application/json" https://10.2.10.119:9440/api/nutanix/v3/clusters/list
+curl --user admin:RyfUA8xC3b}7@3[ --insecure -H "Content-Type: application/json" -H "Accept: application/json" https://10.2.10.119:9440/api/nutanix/v3/clusters/list -d '{ "kind" : "cluster" }' 
 
 
-curl --user admin:RyfUA8xC3b}7@3[ --insecure -H "Content-Type: application/json" -H "Accept: application/json" https://10.2.10.119:9440/api/nutanix/v3/disks/list
+curl --user admin:RyfUA8xC3b}7@3[ --insecure -H "Content-Type: application/json" -H "Accept: application/json" https://10.2.10.119:9440/api/nutanix/v3/disks/list -d '{ "kind" : "disk" }' 
 
 
- -d '{ "kind" : "disk" }'
+ 
+#  
+# nutanix curl with v2 restApi
+# 
+
+# cluster
+curl -X GET --header 'Accept: application/json' 'https://10.2.10.119:9440/api/nutanix/v2.0/cluster/' -u admin:RyfUA8xC3b}7@3[ -k
+
+# disk
+curl -X GET --header 'Accept: application/json' 'https://10.2.10.119:9440/api/nutanix/v2.0/disks/' -u admin:RyfUA8xC3b}7@3[ -k
+
+# host
+curl -X GET --header 'Accept: application/json' 'https://10.2.10.119:9440/api/nutanix/v2.0/hosts/' -u admin:RyfUA8xC3b}7@3[ -k
+
+# storage_container
+curl -X GET --header 'Accept: application/json' 'https://10.2.10.119:9440/api/nutanix/v2.0/storage_containers/' -u admin:RyfUA8xC3b}7@3[ -k
+
+# virtual machine
+curl -X GET --header 'Accept: application/json' 'https://10.2.10.119:9440/api/nutanix/v2.0/vms/' -u admin:RyfUA8xC3b}7@3[ -k
+
+# volume groups
+curl -X GET --header 'Accept: application/json' 'https://10.2.10.119:9440/api/nutanix/v2.0/volume_groups/' -u admin:RyfUA8xC3b}7@3[ -k
+
+# vstores
+curl -X GET --header 'Accept: application/json' 'https://10.2.10.119:9440/api/nutanix/v2.0/vstores/' -u admin:RyfUA8xC3b}7@3[ -k
+
+
+# 
+# nutanix curl with v1 restApi 
+# 
+
+ curl -u admin:RyfUA8xC3b}7@3[ -k -H "Content-Type: application/json" -H "Accept: application/json" https://10.2.10.119:9440/PrismGateway/services/rest/v1/hosts/
+
+ curl --user admin:RyfUA8xC3b}7@3[ --insecure -H "Content-Type: application/json" -H "Accept: application/json" https://10.2.10.119:9440/PrismGateway/services/rest/v1/disks/
+ 
+
+ RyfUA8xC3b}7@3[
+

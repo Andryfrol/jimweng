@@ -37,7 +37,7 @@ func main() {
 
 	// fmt.Printf("\tvmResp 1 %v\n", vmResp.Entities)
 	for _, vmir := range vmResp.Entities {
-		// fmt.Printf("0. %v\n vmdir is", vmir)
+		fmt.Printf("0. vmdir is %v\n", vmir.Status.Resources.HostReference)
 		// fmt.Printf("1. %v\n", vmir.Metadata)
 		fmt.Printf("1. vm_Name %v\n", vmir.Metadata.Name) //wrong vm name
 		fmt.Printf("1-2. vm_Uuid %v\n", vmir.Metadata.Uuid)
@@ -64,7 +64,7 @@ func main() {
 		}
 	}
 
-	fmt.Printf("\n\n\n\n\n\tvmResp %v\n", vmResp.Metadata)
+	fmt.Printf("\n\n\n\n\tvmResp %v\n", vmResp.Metadata)
 	fmt.Printf("\n\tvmApiResp %v\n", vmApiResp)
 
 }
