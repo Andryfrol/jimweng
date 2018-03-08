@@ -8,6 +8,12 @@ import (
 	"net/http"
 )
 
+var (
+	Username = "admin"
+	Password = "RyfUA8xC3b}7@3["
+	hostIp   = "https://10.2.10.119:9440/api/nutanix/v2.0/clusters/"
+)
+
 func main() {
 
 	tr := &http.Transport{
@@ -15,11 +21,11 @@ func main() {
 	}
 	client := &http.Client{Transport: tr}
 
-	req, err := http.NewRequest("GET", "https://10.2.10.119:9440/api/nutanix/v2.0/cluster/", nil)
+	req, err := http.NewRequest("GET", hostIp, nil)
 	if err != nil {
 		// handle err
 	}
-	req.SetBasicAuth("admin", "RyfUA8xC3b}7@3[")
+	req.SetBasicAuth(Username, Password)
 	req.Header.Set("Accept", "application/json")
 
 	resp, err := client.Do(req)
@@ -33,13 +39,35 @@ func main() {
 	bodyBytes, _ := ioutil.ReadAll(resp.Body)
 	json.Unmarshal(bodyBytes, &jsonResp)
 	pritntVar := jsonResp //.(map[string]interface{})
-	for k, v := range pritntVar {
-		fmt.Printf("%v__%v\n", k, v)
+	for i, v := range pritntVar {
+		switch v.(type) {
+		case map[string]interface{}:
+			spanStruct(v)
+		default:
+			fmt.Printf("%v__%v\n", i, v)
+		}
 	}
 
 	defer resp.Body.Close()
 
 }
 
-type clusterStruct struct {
+func spanStruct(t interface{}) {
+	switch t.(type) {
+	case map[string]interface{}:
+		for i, v := range t.(map[string]interface{}) {
+			fmt.Printf("%v__%v\n", i, v)
+			spanStruct(v)
+		}
+	case []map[string]interface{}:
+		for i, v1 := range t.([]map[string]interface{}) {
+			fmt.Printf("index %v\t\t", i)
+			for j, v := range v1 {
+				fmt.Printf("%v__%v\n", j, v)
+				spanStruct(v)
+			}
+		}
+	default:
+		// fmt.Printf("%v\n", t)
+	}
 }
