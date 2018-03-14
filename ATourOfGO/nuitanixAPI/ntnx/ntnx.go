@@ -138,7 +138,7 @@ func main() {
 			json.Unmarshal(*bodyBytes, &jsonResp)
 
 			// print and check
-			if m == ntnxVirtualMachine {
+			if m == ntnxHosts {
 				fmt.Printf("%v____%v\n", v, queryString)
 				fmt.Printf("%v\n", jsonResp)
 			}
