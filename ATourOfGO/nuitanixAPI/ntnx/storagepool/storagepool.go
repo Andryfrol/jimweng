@@ -1,6 +1,6 @@
 package storagepool
 
-type StoragePool struct {
+type NtnxStoragePool struct {
 	Metadata struct {
 		GrandTotalEntities int    `json:"grandTotalEntities"`
 		TotalEntities      int    `json:"totalEntities"`
