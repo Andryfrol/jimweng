@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package proto;
+
+service Blockchain {
+	rpc AddBlock(AddBlockRequest) returns (AddBlockResponse) {}
+	rpc GetBlockchain(GetBlockchainRequest) returns (GetBlockchainResponse) {}
+	rpc RemoveBlockchain(RemoveBlockRequest) returns (RemoveBlockResponse) {}	
+}
+
+message RemoveBlockRequest{
+	string data = 1;
+}
+
+message RemoveBlockResponse{
+	string hash = 1;
+}
+
+message AddBlockRequest {
+	string data = 1;
+}
+
+message AddBlockResponse {
+	string hash = 1;
+}
+
+message Block {
+	string prevBlockHash = 1;
+	string data = 2;
+	string hash = 3;
+}
+
+message RemoveBlockchain{}
+
+message GetBlockchainRequest {}
+
+message GetBlockchainResponse {
+	repeated Block blocks = 1;
+}
