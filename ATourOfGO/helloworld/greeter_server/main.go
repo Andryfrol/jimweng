@@ -40,6 +40,7 @@ type server struct{}
 
 // SayHello implements helloworld.GreeterServer
 func (s *server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloReply, error) {
+	fmt.Printf("show enum test %v\n", in.EnumTest)
 	return &pb.HelloReply{Message: "Hello " + in.Name + fmt.Sprintf("the test Number is %d", in.TestNum)}, nil
 }
 

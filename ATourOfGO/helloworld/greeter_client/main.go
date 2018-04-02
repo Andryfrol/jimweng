@@ -19,6 +19,7 @@
 package main
 
 import (
+	"flag"
 	"log"
 	"os"
 	"time"
@@ -28,6 +29,8 @@ import (
 	pb "google.golang.org/grpc/examples/helloworld/helloworld"
 )
 
+var Input_flag_num = flag.Int("NumOut", 10, "Input number")
+
 const (
 	address           = "localhost:50051"
 	defaultName       = "world"
@@ -35,6 +38,7 @@ const (
 )
 
 func main() {
+	flag.Parse()
 	// Set up a connection to the server.
 	conn, err := grpc.Dial(address, grpc.WithInsecure())
 	if err != nil {
@@ -48,12 +52,16 @@ func main() {
 	number := defaultNum
 	if len(os.Args) > 1 {
 		name = os.Args[1]
-		number = 456
+		number = int32(*Input_flag_num)
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 
-	r, err := c.SayHello(ctx, &pb.HelloRequest{Name: name, TestNum: number})
+	r, err := c.SayHello(ctx, &pb.HelloRequest{
+		Name:     name,
+		TestNum:  number,
+		EnumTest: 5,
+	})
 	if err != nil {
 		log.Fatalf("could not greet: %v", err)
 	}

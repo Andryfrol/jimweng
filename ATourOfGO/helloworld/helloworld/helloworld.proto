@@ -32,6 +32,13 @@ service Greeter {
 message HelloRequest {
   string name = 1;
   int32 testNum = 2;
+  enum EnumTest{
+    testNNum = 0;
+    testString = 1;
+    jim =2;
+    bob =3;
+  }
+  EnumTest enumTest =4;
 }
 
 // The response message containing the greetings
