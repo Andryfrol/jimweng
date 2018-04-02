@@ -24,9 +24,9 @@ import (
 	"os"
 	"time"
 
+	"github.com/goPractice/ATourOfGO/helloworld/helloworld"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
-	pb "google.golang.org/grpc/examples/helloworld/helloworld"
 )
 
 var Input_flag_num = flag.Int("NumOut", 10, "Input number")
@@ -45,7 +45,7 @@ func main() {
 		log.Fatalf("did not connect: %v", err)
 	}
 	defer conn.Close()
-	c := pb.NewGreeterClient(conn)
+	c := helloworld.NewGreeterClient(conn)
 
 	// Contact the server and print out its response.
 	name := defaultName
@@ -57,18 +57,18 @@ func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 
-	r, err := c.SayHello(ctx, &pb.HelloRequest{
+	r, err := c.SayHello(ctx, &helloworld.HelloRequest{
 		Name:    name,
 		TestNum: number,
-		// convert int32 into pb.HelloRequest_EnumTest
-		EnumTest: pb.HelloRequest_EnumTest(number),
+		// convert int32 into helloworld.HelloRequest_EnumTest
+		EnumTest: helloworld.HelloRequest_EnumTest(number),
 	})
 	if err != nil {
 		log.Fatalf("could not greet: %v", err)
 	}
 	log.Printf("Greeting: %s", r.Message)
 
-	r, err = c.SayHelloAgain(context.Background(), &pb.HelloRequest{Name: name})
+	r, err = c.SayHelloAgain(context.Background(), &helloworld.HelloRequest{Name: name})
 	if err != nil {
 		log.Fatalf("could not greet: %v", err)
 	}

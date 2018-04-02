@@ -25,9 +25,9 @@ import (
 	"log"
 	"net"
 
+	"github.com/goPractice/ATourOfGO/helloworld/helloworld"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
-	pb "google.golang.org/grpc/examples/helloworld/helloworld"
 	"google.golang.org/grpc/reflection"
 )
 
@@ -39,13 +39,13 @@ const (
 type server struct{}
 
 // SayHello implements helloworld.GreeterServer
-func (s *server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloReply, error) {
+func (s *server) SayHello(ctx context.Context, in *helloworld.HelloRequest) (*helloworld.HelloReply, error) {
 	fmt.Printf("show enum test %v\n", in.EnumTest)
-	return &pb.HelloReply{Message: "Hello " + in.Name + fmt.Sprintf("the test Number is %d", in.TestNum)}, nil
+	return &helloworld.HelloReply{Message: "Hello " + in.Name + fmt.Sprintf("the test Number is %d", in.TestNum)}, nil
 }
 
-func (s *server) SayHelloAgain(ctx context.Context, in *pb.HelloRequest) (*pb.HelloReply, error) {
-	return &pb.HelloReply{Message: "Hello again " + in.Name}, nil
+func (s *server) SayHelloAgain(ctx context.Context, in *helloworld.HelloRequest) (*helloworld.HelloReply, error) {
+	return &helloworld.HelloReply{Message: "Hello again " + in.Name}, nil
 }
 
 func main() {
@@ -54,7 +54,7 @@ func main() {
 		log.Fatalf("failed to listen: %v", err)
 	}
 	s := grpc.NewServer()
-	pb.RegisterGreeterServer(s, &server{})
+	helloworld.RegisterGreeterServer(s, &server{})
 	// Register reflection service on gRPC server.
 	reflection.Register(s)
 	if err := s.Serve(lis); err != nil {
