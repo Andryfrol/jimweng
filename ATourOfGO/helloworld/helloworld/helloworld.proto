@@ -28,6 +28,10 @@ service Greeter {
   rpc SayHelloAgain(HelloRequest) returns (HelloReply){}
 }
 
+service Greeter2 {
+  rpc SayBye(HelloRequest) returns (HelloReply){}
+}
+
 // The request message containing the user's name.
 message HelloRequest {
   string name = 1;

@@ -58,9 +58,10 @@ func main() {
 	defer cancel()
 
 	r, err := c.SayHello(ctx, &pb.HelloRequest{
-		Name:     name,
-		TestNum:  number,
-		EnumTest: 5,
+		Name:    name,
+		TestNum: number,
+		// convert int32 into pb.HelloRequest_EnumTest
+		EnumTest: pb.HelloRequest_EnumTest(number),
 	})
 	if err != nil {
 		log.Fatalf("could not greet: %v", err)
