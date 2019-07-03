@@ -22,3 +22,4 @@
 - https://github.com/PuerkitoBio/goquery
 - https://github.com/fuadajip/dockercompose-mysql-phpmyadmin
 - https://stackoverflow.com/questions/27933866/use-goquery-to-find-a-class-whose-value-contains-whitespace
+- https://studygolang.com/articles/4602

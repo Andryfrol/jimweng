@@ -1,6 +1,6 @@
 package inputs
 
-import "github.com/mlytics/micro-reporter/utils"
+import "github.com/goPractice/goCrawler/pkgmanagement/utils"
 
 type Creator func() utils.Input
 

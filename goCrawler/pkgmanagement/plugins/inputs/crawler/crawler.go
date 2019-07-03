@@ -1,10 +1,12 @@
-package main
+package crawler
 
 import (
 	"fmt"
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
+	"github.com/goPractice/goCrawler/pkgmanagement/plugins/inputs"
+	"github.com/goPractice/goCrawler/pkgmanagement/utils"
 )
 
 type QueryUrl struct {
@@ -17,12 +19,22 @@ type PkgNode struct {
 	Href     string
 }
 
-func main() {
-	doc, err := goquery.NewDocument("https://golang.google.cn/pkg/")
+func (q *QueryUrl) Gather() (interface{}, error) {
+	doc, err := goquery.NewDocument(q.Url)
 	if err != nil {
 		fmt.Printf("%v\n", err)
 	}
+	PkgList, err := parseDoc(doc)
+	return PkgList, err
+}
 
+func stripTaps(str string) string {
+	str = strings.Replace(str, "\t", "", -1)
+	str = strings.Replace(str, "\n", "", -1)
+	return str
+}
+
+func parseDoc(doc *goquery.Document) (*[]*PkgNode, error) {
 	var PkgList []*PkgNode
 
 	/*
@@ -42,33 +54,29 @@ func main() {
 			pkgnode := PkgNode{}
 
 			rowhtml.Find(".pkg-name").Each(func(indexPkgName int, tableClsPkgName *goquery.Selection) {
-				pkgnode.Name = striptaps(tableClsPkgName.Text())
+				pkgnode.Name = stripTaps(tableClsPkgName.Text())
 
 				tableClsPkgName.Find("a").Each(func(indexa int, tdcell *goquery.Selection) {
 					href_text, ok := tdcell.Attr("href")
 					if ok {
-						pkgnode.Href = striptaps(href_text)
+						pkgnode.Href = stripTaps(href_text)
 					}
 				})
 			})
 
 			rowhtml.Find(".pkg-synopsis").Each(func(indexSynpopsis int, tableClsSynopsis *goquery.Selection) {
-				pkgnode.Synopsis = striptaps(tableClsSynopsis.Text())
+				pkgnode.Synopsis = stripTaps(tableClsSynopsis.Text())
 			})
 
 			PkgList = append(PkgList, &pkgnode)
 
 		})
 	})
-
-	for i, j := range PkgList {
-
-		fmt.Printf("%d\n%v\n%v\n%v\n----\n", i, j.Href, j.Name, j.Synopsis)
-	}
+	return &PkgList, nil
 }
 
-func striptaps(str string) string {
-	str = strings.Replace(str, "\t", "", -1)
-	str = strings.Replace(str, "\n", "", -1)
-	return str
+func init() {
+	inputs.Add("crawler", func() utils.Input {
+		return &QueryUrl{}
+	})
 }
