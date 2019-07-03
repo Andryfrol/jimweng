@@ -17,3 +17,7 @@ https://tutorialedge.net/golang/golang-orm-tutorial/
 https://github.com/jinzhu/gorm/issues/403
 - mysql創造新的database遇到的坑
 https://stackoverflow.com/questions/44916136/error-1064-42000-when-creating-database-in-mysql
+
+# 中文參考
+- https://www.bookstack.cn/read/gorm-cn-doc/crud.md
+- https://segmentfault.com/a/1190000013216540
