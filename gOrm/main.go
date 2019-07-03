@@ -2,8 +2,10 @@ package main
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
 // Our User Struct
@@ -14,22 +16,17 @@ type User struct {
 }
 
 // our initial migration function
-func initialMigration() {
-	db, err := gorm.Open("mysql", "test.db")
+func init() {
+	db, err := gorm.Open("mysql", "jim:password@tcp(localhost:3306)/demo_db?charset=utf8&parseTime=True&loc=Local")
 	if err != nil {
-		fmt.Println(err.Error())
-		panic("failed to connect database")
+		log.Fatal(err)
 	}
 	defer db.Close()
 
-	// Migrate the schema
 	db.AutoMigrate(&User{})
 }
 
 func main() {
 	fmt.Println("Go ORM Tutorial")
-
-	// Add the call to our new initialMigration function
-	initialMigration()
 
 }
