@@ -9,5 +9,16 @@
 8. 使用nginx_pass代理http api接口
 
 
+# 環境設定
+1. 架設mysql與phpadmin: docker-compose up -d
+   1. 登入帳號(密碼): root/user(root/user)
+   2. 從終端機登入mysql: docker exec -it mysql mysql -u root -p ... 密碼 root
+2. 
+
+
+
+
 # refer
-https://jdanger.com/build-a-web-crawler-in-go.html
+- https://github.com/PuerkitoBio/goquery
+- https://github.com/fuadajip/dockercompose-mysql-phpmyadmin
+- https://stackoverflow.com/questions/27933866/use-goquery-to-find-a-class-whose-value-contains-whitespace

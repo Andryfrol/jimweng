@@ -2,15 +2,19 @@ package main
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/PuerkitoBio/goquery"
 )
+
+type QueryUrl struct {
+	Url string
+}
 
 type PkgNode struct {
 	Name     string
 	Synopsis string
 	Href     string
-	// Child    *PkgNode
 }
 
 func main() {
@@ -21,28 +25,50 @@ func main() {
 
 	var PkgList []*PkgNode
 
-	// 尋找table，在這個case只有pkg table
+	/*
+		DOM: [table]
+		~ ~ ~
+		|-tr
+		|	|---td
+		|	|	|--cls `pkg-name`
+		|	|		|-a
+		|	|
+		|	|---td
+		|		|--cls `pkg-synopsis`
+		~ ~ ~
+	*/
 	doc.Find("table").Each(func(index int, tablehtml *goquery.Selection) {
-		// table 下每一個row即為一個pkg管理套件
 		tablehtml.Find("tr").Each(func(indextr int, rowhtml *goquery.Selection) {
-			rowhtml.Find("td").Each(func(indextd int, tablecell *goquery.Selection) {
-				pkgnode := PkgNode{}
-				pkgnode.Name = tablecell.Text()
-				// row = append(row, tablecell.Text())
-				tablecell.Find("a").Each(func(indexa int, tdcell *goquery.Selection) {
+			pkgnode := PkgNode{}
+
+			rowhtml.Find(".pkg-name").Each(func(indexPkgName int, tableClsPkgName *goquery.Selection) {
+				pkgnode.Name = striptaps(tableClsPkgName.Text())
+
+				tableClsPkgName.Find("a").Each(func(indexa int, tdcell *goquery.Selection) {
 					href_text, ok := tdcell.Attr("href")
 					if ok {
-						pkgnode.Href = href_text
-						// row_href = append(row_href, href_text)
+						pkgnode.Href = striptaps(href_text)
 					}
 				})
-				PkgList = append(PkgList, &pkgnode)
 			})
+
+			rowhtml.Find(".pkg-synopsis").Each(func(indexSynpopsis int, tableClsSynopsis *goquery.Selection) {
+				pkgnode.Synopsis = striptaps(tableClsSynopsis.Text())
+			})
+
+			PkgList = append(PkgList, &pkgnode)
 
 		})
 	})
 
 	for i, j := range PkgList {
-		fmt.Printf("%d___%v___%v__%v\n", i, j.Href, j.Name, j.Synopsis)
+
+		fmt.Printf("%d\n%v\n%v\n%v\n----\n", i, j.Href, j.Name, j.Synopsis)
 	}
+}
+
+func striptaps(str string) string {
+	str = strings.Replace(str, "\t", "", -1)
+	str = strings.Replace(str, "\n", "", -1)
+	return str
 }
