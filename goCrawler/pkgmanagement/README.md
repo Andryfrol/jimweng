@@ -11,15 +11,37 @@
 
 # 環境設定
 1. 架設mysql與phpadmin: docker-compose up -d
-   1. 登入帳號(密碼): root/user(root/user)
-   2. 從終端機登入mysql: docker exec -it mysql mysql -u root -p ... 密碼 root
-2. 
+   1. 登入mysql admin: http://localhost:8080, 伺服器:`db`;帳號:`root`;密碼:`example`;資料庫:`(留空)`
+   2. 從終端機登入mysql: `docker exec -it mysql mysql -u root -p` ... 密碼 `example`
+2. 在`mysql`資料庫下創建一個表`pkg_content`
+```sql
+CREATE TABLE `pkg_content` (
+  `id` int(25) NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `parent` varchar(50) NOT NULL,
+  `link` varchar(50),
+  `synopsis` varchar(50),
+  PRIMARY KEY (`id`, `name`, `parent`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+```
+
+# 實作步驟
+1. 使用goquery將網頁的資料做解析
+2. 使用gorm將解析出來的資料寫入mysql
+3. 使用proto產生gPRC伺服器以及用戶所需要的文件，定義出`message`方法拉取資料
+4. 
 
 
+# 參考
+- 使用goquery解析html
+https://github.com/PuerkitoBio/goquery
 
+- 使用docker-compose快速啟用前置環境
+https://docs.docker.com/samples/library/mysql/
 
-# refer
-- https://github.com/PuerkitoBio/goquery
-- https://github.com/fuadajip/dockercompose-mysql-phpmyadmin
+- 使用gorm將資料寫入db
+https://github.com/jinzhu/gorm
+
+# 其他補充
 - https://stackoverflow.com/questions/27933866/use-goquery-to-find-a-class-whose-value-contains-whitespace
 - https://studygolang.com/articles/4602
