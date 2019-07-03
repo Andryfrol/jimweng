@@ -1,34 +1,16 @@
-#### Goal
+# 使用google Remote Process Control
 
-Create gRPC Server and Client in Go. We will create a fictional blockchain service.
+# 安裝protoc步驟
+1. 下載protoc檔案
+   1. https://developers.google.com/protocol-buffers/docs/downloads
+2. 下載golang的gRPC套件
+   1. 
+3. 
 
-#### Steps
 
- - Install [protoc](https://github.com/google/protobuf/releases) compiler.
- - Install `protoc-gen-go plugin`: `go get -u github.com/golang/protobuf/protoc-gen-go`
- - Define service definition in `.proto` file.
- - Build Go bindings from `.proto` file. `protoc --go_out=plugins=grpc:. proto/blockchain.proto`
- - Install grpc Go package - `go get -u google.golang.org/grpc`.
- - Install context package - `go get -u golang.org/x/net/context`.
- - Install protobuf package - `go get -u github.com/golang/protobuf/proto`
- - Implement Server, interface `BlockchainServer`.
- - Create a client using `BlockchainClient`.
- - Run server first.
- - Run client.
+# refer
+https://developers.google.com/protocol-buffers/docs/gotutorial
+https://ithelp.ithome.com.tw/articles/10207405?sc=hot
 
-#### Usage
-
-Start server:
-```
-go run server/main.go
-```
-
-Add block as client:
-```
-go run client/main.go --add
-```
-
-get blockchain as client:
-```
-go run client/main.go --list
-```
+# 整理筆記
+https://github.com/jim0409/LinuxIssue/blob/master/OS%E7%92%B0%E5%A2%83%E7%9B%B8%E9%97%9C/%E6%9C%89%E9%97%9CgRPC%E5%85%A9%E4%B8%89%E4%BA%8B.md
