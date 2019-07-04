@@ -1,8 +1,7 @@
-package main
+package mysql
 
 import (
 	"fmt"
-	"log"
 
 	"github.com/goPractice/pkgmanagement/plugins/outputs"
 	"github.com/goPractice/pkgmanagement/utils"
@@ -27,6 +26,12 @@ func (s *SQLConfig) openDB() (*gorm.DB, error) {
 		return nil, err
 	} else {
 		db.AutoMigrate(&utils.PKGContent{})
+		// initialize DB settings for connection max nums 10 and keep-alive
+		if dbconfig := db.DB(); dbconfig != nil {
+			dbconfig.SetMaxOpenConns(10)
+			dbconfig.SetMaxIdleConns(0)
+			dbconfig.SetConnMaxLifetime(-1)
+		}
 		return db, nil
 	}
 }
@@ -40,12 +45,11 @@ func (s *SQLConfig) closeDB(db *gorm.DB) error {
 
 func insertData(db *gorm.DB, points *[]*utils.PKGContent) error {
 	for _, pt := range *points {
-		if exists := db.NewRecord(pt); exists {
-			fmt.Printf("%v\n", exists)
-			fmt.Printf("%v\n", db.Find(&utils.PKGContent{Name: "123"}).Value)
-			db.Find(&utils.PKGContent{Name: pt.Name}).Update(pt)
-		} else {
-			db.Create(pt)
+		// 抓取primary_key; 使用primary_key來判斷是否有建過該record，有的話更新。沒有則創建
+		if err := db.Find(&utils.PKGContent{Name: pt.Name}).Update(&pt).Error; err != nil {
+			if err := db.Create(&pt).Error; err != nil {
+				fmt.Printf("Some error happened with msg : %v\n", err)
+			}
 		}
 	}
 	return nil
@@ -62,25 +66,20 @@ func init() {
 	})
 }
 
-var demo_pts = []*utils.PKGContent{
-	&utils.PKGContent{Name: "jim", Parent: "jsasdfjsdf12adfasf3im", Synopsis: "jjimm", Href: "jimm"},
-}
-
-func main() {
-	sc := &SQLConfig{
-		DBName:   "pkg_lists",
-		DBPort:   "3306",
-		DBAddr:   "localhost",
-		User:     "jim",
-		Password: "password",
-	}
-	db, err := sc.openDB()
-	if err != nil {
-		log.Fatal(err)
-	}
-	err = insertData(db, &demo_pts)
-	if err != nil {
-		log.Fatal(err)
-	}
-	// db.Create(&utils.PKGContent{Name: "jim", Parent: "jjim", Synopsis: "jjimm", Href: "jimm"})
-}
+// func main() {
+// 	sc := &SQLConfig{
+// 		DBName:   "pkg_lists",
+// 		DBPort:   "3306",
+// 		DBAddr:   "localhost",
+// 		User:     "jim",
+// 		Password: "password",
+// 	}
+// 	db, err := sc.openDB()
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+// 	err = insertData(db, &demo_pts)
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+// }
