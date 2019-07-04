@@ -5,8 +5,8 @@ import (
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
-	"github.com/goPractice/goCrawler/pkgmanagement/plugins/inputs"
-	"github.com/goPractice/goCrawler/pkgmanagement/utils"
+	"github.com/goPractice/pkgmanagement/plugins/inputs"
+	"github.com/goPractice/pkgmanagement/utils"
 )
 
 type QueryUrl struct {

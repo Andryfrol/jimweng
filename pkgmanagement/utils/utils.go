@@ -1,8 +1,10 @@
 package utils
 
+import "github.com/jinzhu/gorm"
+
 type Output interface {
 	// Write takes in group of points to be written to the Output
-	Write(points *[]*[]*DBSchema) error
+	Write(points *[]*PKGContent) error
 }
 
 type Input interface {
@@ -10,15 +12,10 @@ type Input interface {
 	Gather() (interface{}, error)
 }
 
-type DBSchema struct {
-	Hostname   string
-	Ptime      int64
-	Name       string
-	TimePeriod int
-	Counter    string
-	Ingress    int
-	Egress     int
-	KeyDepth   int
-	KeyValue   []string
-	Drilldown  int
+type PKGContent struct {
+	gorm.Model
+	Name     string `gorm:"primary_key"`
+	Parent   string `gorm:"primary_key"`
+	Synopsis string
+	Href     string
 }

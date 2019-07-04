@@ -1,6 +1,6 @@
 package outputs
 
-import "github.com/goPractice/goCrawler/pkgmanagement/utils"
+import "github.com/goPractice/pkgmanagement/utils"
 
 type Creator func() utils.Output
 

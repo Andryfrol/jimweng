@@ -11,7 +11,7 @@ import (
 // Our User Struct
 type User struct {
 	gorm.Model
-	Name  string
+	Name  string `gorm:"primary_key"`
 	Email string
 }
 

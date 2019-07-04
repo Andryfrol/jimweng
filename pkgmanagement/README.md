@@ -15,14 +15,9 @@
    2. 從終端機登入mysql: `docker exec -it mysql mysql -u root -p` ... 密碼 `example`
 2. 在`mysql`資料庫下創建一個表`pkg_content`
 ```sql
-CREATE TABLE `pkg_content` (
-  `id` int(25) NOT NULL,
-  `name` varchar(50) NOT NULL,
-  `parent` varchar(50) NOT NULL,
-  `link` varchar(50),
-  `synopsis` varchar(50),
-  PRIMARY KEY (`id`, `name`, `parent`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+create user 'jim' IDENTIFIED by 'password';
+create database `pkg_lists`;
+grant all privileges on pkg_lists.* to 'jim';
 ```
 
 # 實作步驟
