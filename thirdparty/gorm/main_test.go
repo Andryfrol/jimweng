@@ -60,6 +60,8 @@ func TestNewDBOperation(t *testing.T) {
 	}
 	update_email := "update_email@example.com"
 
+	opdb.debug()
+
 	err = opdb.create(dt.Name, dt.Email)
 	assert.Nil(t, err)
 
@@ -67,15 +69,15 @@ func TestNewDBOperation(t *testing.T) {
 	assert.Equal(t, dt.Email, resStr)
 	assert.Nil(t, err)
 
-	err = opdb.update_email(dt.Name, update_email)
+	err = opdb.updateEmail(dt.Name, update_email)
 	assert.Nil(t, err)
 
 	resStr, err = opdb.queryWithName(dt.Name)
 	assert.Equal(t, update_email, resStr)
 
-	err = opdb.deleteData(dt.Name, dt.Email)
-	assert.Error(t, err)
-
 	err = opdb.deleteData(dt.Name, update_email)
 	assert.Nil(t, err)
+
+	resStr, err = opdb.queryWithName(dt.Name)
+	assert.Equal(t, "Can't find the email with jim", resStr)
 }

@@ -32,11 +32,10 @@ type OperationDatabase struct {
 type OPDB interface {
 	create(name string, email string) error
 	queryWithName(name string) (string, error)
-	update_email(name string, email string) error
+	updateEmail(name string, email string) error
 	deleteData(name string, email string) error
 	Closed()
 	debug()
-	returnDB() *gorm.DB
 }
 
 func (dbc *DBConfig) NewDBConnection() (OPDB, error) {
@@ -88,12 +87,7 @@ func (db *OperationDatabase) Closed() {
 
 // 透過使用Debug()可以轉譯語言為SQL語法
 func (db *OperationDatabase) debug() {
-	db.DB.Debug().Where("name =?", "jim").First(&DemoTable{})
-}
-
-// 返回DB指標
-func (db *OperationDatabase) returnDB() *gorm.DB {
-	return db.DB
+	db.DB = db.DB.Debug()
 }
 
 // 實做CRUD
@@ -126,7 +120,7 @@ func (db *OperationDatabase) queryWithName(name string) (string, error) {
 }
 
 // Update ... 更新相當於Read以後在把Read的資料改成新的資料；notes:在gorm裡面，更新以後也會更新updated_at的時間
-func (db *OperationDatabase) update_email(name string, email string) error {
+func (db *OperationDatabase) updateEmail(name string, email string) error {
 	// log.Printf("The %s's Email has been update to %s", name, db.DB.First(&DemoTable{Name: name}).Update(&DemoTable{Name: name, Email: email}).Value)
 	if err := db.DB.First(&DemoTable{Name: name}).Update(&DemoTable{Name: name, Email: email}).Error; err != nil {
 		return err
@@ -137,7 +131,7 @@ func (db *OperationDatabase) update_email(name string, email string) error {
 // Delete ... 因為delete已經有預設方法，這邊改用deleteData來宣告該函數；notes:在gorm裡面刪除不是代表從db完全移除。而是去更改deleted_at的時間
 func (db *OperationDatabase) deleteData(name string, email string) error {
 	// log.Printf("The %s's Email has been delete (%s)", name, db.DB.Delete(&DemoTable{Name: name, Email: email}).Value)
-	if err := db.DB.Delete(&DemoTable{Name: name, Email: email}).Error; err != nil {
+	if err := db.DB.Where("email = ?", email).Delete(&DemoTable{}).Error; err != nil {
 		log.Fatal("Encount Error with no data to delete")
 		return err
 	}
