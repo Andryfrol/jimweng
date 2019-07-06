@@ -23,7 +23,7 @@ https://github.com/jinzhu/gorm/issues/1427
 https://github.com/jinzhu/gorm/issues/1544
 - gorm在做(關聯)對多的情況
 https://blog.csdn.net/rocky0503/article/details/80915157
-- goorm做transaction
+- gorm做transaction
 https://motion-express.com/blog/gorm:-a-simple-guide-on-crud
 
 # 中文參考

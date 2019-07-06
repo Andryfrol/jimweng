@@ -80,4 +80,6 @@ func TestNewDBOperation(t *testing.T) {
 
 	resStr, err = opdb.queryWithName(dt.Name)
 	assert.Equal(t, "Can't find the email with jim", resStr)
+	assert.Error(t, err)
+
 }

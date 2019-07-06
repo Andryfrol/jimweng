@@ -1,12 +1,11 @@
 package mysql
 
 import (
-	"testing"
+	"log"
+	"os"
 
 	"github.com/goPractice/pkgmanagement/utils"
-	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/mysql"
-	"gopkg.in/DATA-DOG/go-sqlmock.v1"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 var demo_pts = []*utils.PKGContent{
@@ -16,39 +15,23 @@ var demo_pts = []*utils.PKGContent{
 	&utils.PKGContent{Name: "name1", Parent: "parentu1", Synopsis: "synopsisu1", Href: "hrefu1"},
 }
 
-func TestSomething(t *testing.T) {
-	db, mock, _ := sqlmock.New()
-	models.Db, _ = gorm.Open("mysql", db)
+func init() {
+	clearTestEnv()
 }
 
-// func TestSomething(t *testing.T) {
-// 	sc := &SQLConfig{
-// 		DBName:   "pkg_lists",
-// 		DBPort:   "3306",
-// 		DBAddr:   "127.0.0.1",
-// 		User:     "jim",
-// 		Password: "password",
-// 	}
-// 	db, err := sc.openDB()
-// 	assert.Nil(t, err)
-// 	err = sc.closeDB(db)
-// 	assert.Nil(t, err)
-// }
+func clearTestEnv() {
+	log.Println("Clear test env")
+	if _, err := os.Stat("/tmp/gorm.db"); !os.IsNotExist(err) {
+		log.Println("Remove Origin gorm.db Files")
+		os.Remove("/tmp/gorm.db")
+	}
+}
 
-// func TestInsertData(t *testing.T) {
-// 	sc := &SQLConfig{
-// 		DBName:   "pkg_lists",
-// 		DBPort:   "3306",
-// 		DBAddr:   "127.0.0.1",
-// 		User:     "jim",
-// 		Password: "password",
-// 	}
-// 	db, err := sc.openDB()
-// 	assert.Nil(t, err)
-// 	// assert.Equal(t, "", fmt.Sprintf("%v\n", db))
-// 	err = insertData(db, &demo_pts)
-// 	assert.Nil(t, err)
-
-// 	err = sc.closeDB(db)
-// 	assert.Nil(t, err)
+// // Set mock DB env
+// func mockTestEnv() (OPDB, error) {
+// 	var dbc = DBConfig{}
+// 	dbc.DBUri = "/tmp/gorm.db"
+// 	dbc.DBType = "sqlite3"
+// 	opdb, err := dbc.NewDBConnection()
+// 	return opdb, err
 // }

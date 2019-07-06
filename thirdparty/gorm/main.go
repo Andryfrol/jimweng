@@ -34,7 +34,7 @@ type OPDB interface {
 	queryWithName(name string) (string, error)
 	updateEmail(name string, email string) error
 	deleteData(name string, email string) error
-	Closed()
+	Closed() error
 	debug()
 }
 
@@ -75,14 +75,14 @@ func main() {
 	}
 
 	defer db.Closed()
-	// db.debug()
 }
 
-func (db *OperationDatabase) Closed() {
-	log.Printf("Going to close DB")
+func (db *OperationDatabase) Closed() error {
 	if err := db.DB.Close(); err != nil {
-		log.Fatal(err)
+		return fmt.Errorf("Error happended while closing db : %v\n", err)
 	}
+	log.Fatalln("Going to close DB")
+	return nil
 }
 
 // 透過使用Debug()可以轉譯語言為SQL語法
