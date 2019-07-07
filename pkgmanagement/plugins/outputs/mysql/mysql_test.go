@@ -3,9 +3,11 @@ package mysql
 import (
 	"log"
 	"os"
+	"testing"
 
 	"github.com/goPractice/pkgmanagement/utils"
 	_ "github.com/mattn/go-sqlite3"
+	"github.com/stretchr/testify/assert"
 )
 
 var demo_pts = []*utils.PKGContent{
@@ -19,6 +21,15 @@ func init() {
 	clearTestEnv()
 }
 
+// Set mock DB env
+func mockTestEnv() (dbOperationInterface, error) {
+	var sqlc = SQLConfig{DBType: "sqlite3"}
+	connection := "/tmp/gorm.db"
+	opdb, err := sqlc.newDBConnection(connection)
+	return opdb, err
+}
+
+// Clear origin test env if existed
 func clearTestEnv() {
 	log.Println("Clear test env")
 	if _, err := os.Stat("/tmp/gorm.db"); !os.IsNotExist(err) {
@@ -27,11 +38,29 @@ func clearTestEnv() {
 	}
 }
 
-// // Set mock DB env
-// func mockTestEnv() (OPDB, error) {
-// 	var dbc = DBConfig{}
-// 	dbc.DBUri = "/tmp/gorm.db"
-// 	dbc.DBType = "sqlite3"
-// 	opdb, err := dbc.NewDBConnection()
-// 	return opdb, err
-// }
+func TestNewConnection(t *testing.T) {
+	sqlc := SQLConfig{
+		DBName:   "demo_db",
+		DBPort:   "3306",
+		DBAddr:   "127.0.0.1",
+		User:     "jim",
+		Password: "password",
+		DBType:   "mysql",
+	}
+	resStr := sqlc.newConnection()
+	expectConection := "jim:password@tcp(127.0.0.1:3306)/demo_db?charset=utf8&parseTime=True&loc=Local"
+	assert.Equal(t, expectConection, resStr)
+}
+
+func TestOpenDB(t *testing.T) {
+	mockDB, err := mockTestEnv()
+	assert.Nil(t, err)
+	assert.NotNil(t, mockDB)
+
+	// opendebug mode
+	mockDB.debug()
+
+	err = mockDB.insertData(&demo_pts)
+	// err = mockDB.batchInsertData(&demo_pts)
+	assert.Nil(t, err)
+}

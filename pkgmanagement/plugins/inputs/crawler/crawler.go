@@ -13,12 +13,6 @@ type QueryUrl struct {
 	Url string
 }
 
-type PkgNode struct {
-	Name     string
-	Synopsis string
-	Href     string
-}
-
 func (q *QueryUrl) Gather() (interface{}, error) {
 	doc, err := goquery.NewDocument(q.Url)
 	if err != nil {
@@ -34,8 +28,8 @@ func stripTaps(str string) string {
 	return str
 }
 
-func parseDoc(doc *goquery.Document) (*[]*PkgNode, error) {
-	var PkgList []*PkgNode
+func parseDoc(doc *goquery.Document) (*[]*utils.PKGContent, error) {
+	var PkgList []*utils.PKGContent
 
 	/*
 		DOM: [table]
@@ -51,7 +45,7 @@ func parseDoc(doc *goquery.Document) (*[]*PkgNode, error) {
 	*/
 	doc.Find("table").Each(func(index int, tablehtml *goquery.Selection) {
 		tablehtml.Find("tr").Each(func(indextr int, rowhtml *goquery.Selection) {
-			pkgnode := PkgNode{}
+			pkgnode := utils.PKGContent{}
 
 			rowhtml.Find(".pkg-name").Each(func(indexPkgName int, tableClsPkgName *goquery.Selection) {
 				pkgnode.Name = stripTaps(tableClsPkgName.Text())
@@ -60,6 +54,21 @@ func parseDoc(doc *goquery.Document) (*[]*PkgNode, error) {
 					href_text, ok := tdcell.Attr("href")
 					if ok {
 						pkgnode.Href = stripTaps(href_text)
+						parentArray := strings.Split(pkgnode.Href, "/")
+						lenParentArray := len(parentArray)
+						/*
+							archive/ ==> [archive ] <-len(2)
+							parent would be self, loc = 0
+							archive/tar/ ==> [archive tar ] <- len(3)
+							parent would be "archive", loc = 0
+							net/http/cgi ==> [net http cgi ] <- len(4)
+							parent would be "http", loc = 1
+						*/
+						if lenParentArray <= 2 {
+							pkgnode.Parent = parentArray[0]
+						} else {
+							pkgnode.Parent = parentArray[lenParentArray-3]
+						}
 					}
 				})
 			})

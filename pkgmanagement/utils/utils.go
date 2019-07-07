@@ -1,5 +1,7 @@
 package utils
 
+import "github.com/jinzhu/gorm"
+
 type Output interface {
 	// Write takes in group of points to be written to the Output
 	Write(points *[]*PKGContent) error
@@ -11,8 +13,8 @@ type Input interface {
 }
 
 type PKGContent struct {
-	// gorm.Model
-	Name     string `gorm:"primary_key"`
+	gorm.Model
+	Name     string `gorm:"unique;not null"`
 	Parent   string
 	Synopsis string
 	Href     string

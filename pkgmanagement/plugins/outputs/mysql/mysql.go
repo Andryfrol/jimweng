@@ -1,7 +1,7 @@
 package mysql
 
 import (
-	"fmt"
+	"log"
 
 	"github.com/goPractice/pkgmanagement/plugins/outputs"
 	"github.com/goPractice/pkgmanagement/utils"
@@ -9,7 +9,13 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
-type MySQLClient struct {
+type operationDatabase struct {
+	DB *gorm.DB
+}
+
+type dbOperationInterface interface {
+	insertData(*[]*utils.PKGContent) error
+	debug()
 }
 
 type SQLConfig struct {
@@ -18,11 +24,37 @@ type SQLConfig struct {
 	DBAddr   string
 	User     string
 	Password string
+	DBType   string
 }
 
-func (s *SQLConfig) openDB() (*gorm.DB, error) {
-	connectionUrl := s.User + ":" + s.Password + "@tcp(" + s.DBAddr + ":" + s.DBPort + ")/" + s.DBName + "?charset=utf8&parseTime=True&loc=Local"
-	if db, err := gorm.Open("mysql", connectionUrl); err != nil {
+func (opdb *operationDatabase) debug() {
+	opdb.DB = opdb.DB.Debug()
+}
+
+func (opdb *operationDatabase) insertData(points *[]*utils.PKGContent) error {
+	// 抓取primary_key; 使用primary_key來判斷是否有建過該record，有的話更新。沒有則創建
+	// 要如何用batch 塞資料? https://github.com/jinzhu/gorm/issues/255
+	for _, pt := range *points {
+		// 1.先create，報錯後再update
+		log.Printf("The value of name:%v\tparent:%v\tsynopsis:%v\thref:%v\n", pt.Name, pt.Parent, pt.Synopsis, pt.Href)
+		if err := opdb.DB.Create(pt).Error; err != nil {
+			log.Printf("C!; The value of name:%v\tparent:%v\tsynopsis:%v\thref:%v\n", pt.Name, pt.Parent, pt.Synopsis, pt.Href)
+			if err := opdb.DB.First(&utils.PKGContent{Name: pt.Name}).Update(pt).Error; err != nil {
+				return err
+			}
+		}
+		// // 2.先update，報錯後在create
+		// if err := opdb.DB.First(&utils.PKGContent{Name: pt.Name}).Update(pt).Error; err != nil {
+		// 	if err := opdb.DB.Create(pt).Error; err != nil {
+		// 		return fmt.Errorf("Some error happened with msg : %v\n", err)
+		// 	}
+		// }
+	}
+	return nil
+}
+
+func (s *SQLConfig) newDBConnection(connection string) (dbOperationInterface, error) {
+	if db, err := gorm.Open(s.DBType, connection); err != nil {
 		return nil, err
 	} else {
 		db.AutoMigrate(&utils.PKGContent{})
@@ -32,8 +64,13 @@ func (s *SQLConfig) openDB() (*gorm.DB, error) {
 			dbconfig.SetMaxIdleConns(0)
 			dbconfig.SetConnMaxLifetime(-1)
 		}
-		return db, nil
+		return &operationDatabase{DB: db}, nil
 	}
+}
+
+func (s *SQLConfig) newConnection() string {
+	connectionUrl := s.User + ":" + s.Password + "@tcp(" + s.DBAddr + ":" + s.DBPort + ")/" + s.DBName + "?charset=utf8&parseTime=True&loc=Local"
+	return connectionUrl
 }
 
 func (s *SQLConfig) closeDB(db *gorm.DB) error {
@@ -43,20 +80,8 @@ func (s *SQLConfig) closeDB(db *gorm.DB) error {
 	return nil
 }
 
-func insertData(db *gorm.DB, points *[]*utils.PKGContent) error {
-	for _, pt := range *points {
-		// 抓取primary_key; 使用primary_key來判斷是否有建過該record，有的話更新。沒有則創建
-		if err := db.Find(&utils.PKGContent{Name: pt.Name}).Update(&pt).Error; err != nil {
-			if err := db.Create(&pt).Error; err != nil {
-				fmt.Printf("Some error happened with msg : %v\n", err)
-			}
-		}
-	}
-	return nil
-}
-
 func (s *SQLConfig) Write(points *[]*utils.PKGContent) error {
-	s.openDB()
+	// s.openDB()
 	return nil
 }
 
@@ -65,21 +90,3 @@ func init() {
 		return &SQLConfig{}
 	})
 }
-
-// func main() {
-// 	sc := &SQLConfig{
-// 		DBName:   "pkg_lists",
-// 		DBPort:   "3306",
-// 		DBAddr:   "localhost",
-// 		User:     "jim",
-// 		Password: "password",
-// 	}
-// 	db, err := sc.openDB()
-// 	if err != nil {
-// 		log.Fatal(err)
-// 	}
-// 	err = insertData(db, &demo_pts)
-// 	if err != nil {
-// 		log.Fatal(err)
-// 	}
-// }
