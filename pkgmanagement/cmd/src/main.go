@@ -80,22 +80,22 @@ func collect() {
 		}
 		points = pts.(*[]*utils.PKGContent)
 	}
-	// fmt.Println(points)
-	for i, j := range *points {
-		if i == 0 {
-			continue
-		}
-		fmt.Printf("%d____the value of j includes Name:%v___Parent:%v___Synopsis:%v___Href:%v\n", i, j.Name, j.Parent, j.Synopsis, j.Href)
-
-	}
-
-	// for i, j := range cfg.Outputs {
-	// 	if i == "mysql" {
-	// 		if err := j.Write(points); err != nil {
-	// 			log.Fatal("%v\n", err)
-	// 		}
+	// // fmt.Println(points)
+	// for i, j := range *points {
+	// 	if i == 0 {
+	// 		continue
 	// 	}
+	// 	fmt.Printf("%d____the value of j includes Name:%v___Parent:%v___Synopsis:%v___Href:%v\n", i, j.Name, j.Parent, j.Synopsis, j.Href)
+
 	// }
+
+	for i, j := range cfg.Outputs {
+		if i == "mysql" {
+			if err := j.Write(points); err != nil {
+				log.Fatal("%v\n", err)
+			}
+		}
+	}
 }
 
 func agent(c chan string, t int) {
