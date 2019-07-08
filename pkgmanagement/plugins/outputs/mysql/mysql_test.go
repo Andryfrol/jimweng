@@ -25,7 +25,9 @@ func init() {
 func mockTestEnv() (dbOperationInterface, error) {
 	var sqlc = SQLConfig{DBType: "sqlite3"}
 	connection := "/tmp/gorm.db"
-	opdb, err := sqlc.newDBConnection(connection)
+	sqlc.ConnectionUrl = connection
+	opdb, err := sqlc.newDBConnection()
+
 	return opdb, err
 }
 
@@ -35,6 +37,10 @@ func clearTestEnv() {
 	if _, err := os.Stat("/tmp/gorm.db"); !os.IsNotExist(err) {
 		log.Println("Remove Origin gorm.db Files")
 		os.Remove("/tmp/gorm.db")
+	}
+	if _, err := os.Stat("/tmp/mocksqlite3.db"); !os.IsNotExist(err) {
+		log.Println("Remove Origin mocksqlite3 Files")
+		os.Remove("/tmp/mocksqlite3")
 	}
 }
 
@@ -47,9 +53,16 @@ func TestNewConnection(t *testing.T) {
 		Password: "password",
 		DBType:   "mysql",
 	}
-	resStr := sqlc.newConnection()
+	sqlc.newConnection()
 	expectConection := "jim:password@tcp(127.0.0.1:3306)/demo_db?charset=utf8&parseTime=True&loc=Local"
-	assert.Equal(t, expectConection, resStr)
+	assert.Equal(t, expectConection, sqlc.ConnectionUrl)
+}
+
+func TestSQLWrite(t *testing.T) {
+	sqlc := SQLConfig{DBType: "sqlite3"}
+	sqlc.ConnectionUrl = "/tmp/mocksqlite3.db"
+	err := sqlc.Write(&demo_pts)
+	assert.Nil(t, err)
 }
 
 func TestOpenDB(t *testing.T) {

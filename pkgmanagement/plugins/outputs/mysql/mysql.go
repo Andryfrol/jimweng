@@ -19,12 +19,13 @@ type dbOperationInterface interface {
 }
 
 type SQLConfig struct {
-	DBName   string
-	DBPort   string
-	DBAddr   string
-	User     string
-	Password string
-	DBType   string
+	DBName        string
+	DBPort        string
+	DBAddr        string
+	User          string
+	Password      string
+	DBType        string
+	ConnectionUrl string
 }
 
 func (opdb *operationDatabase) debug() {
@@ -54,8 +55,8 @@ func (opdb *operationDatabase) insertData(points *[]*utils.PKGContent) error {
 	return nil
 }
 
-func (s *SQLConfig) newDBConnection(connection string) (dbOperationInterface, error) {
-	if db, err := gorm.Open(s.DBType, connection); err != nil {
+func (s *SQLConfig) newDBConnection() (dbOperationInterface, error) {
+	if db, err := gorm.Open(s.DBType, s.ConnectionUrl); err != nil {
 		return nil, err
 	} else {
 		db.AutoMigrate(&utils.PKGContent{})
@@ -69,9 +70,9 @@ func (s *SQLConfig) newDBConnection(connection string) (dbOperationInterface, er
 	}
 }
 
-func (s *SQLConfig) newConnection() string {
+func (s *SQLConfig) newConnection() {
 	connectionUrl := s.User + ":" + s.Password + "@tcp(" + s.DBAddr + ":" + s.DBPort + ")/" + s.DBName + "?charset=utf8&parseTime=True&loc=Local"
-	return connectionUrl
+	s.ConnectionUrl = connectionUrl
 }
 
 func (s *SQLConfig) closeDB(db *gorm.DB) error {
@@ -82,9 +83,10 @@ func (s *SQLConfig) closeDB(db *gorm.DB) error {
 }
 
 func (s *SQLConfig) Write(points *[]*utils.PKGContent) error {
-	connectionUrl := s.newConnection()
-	db, err := s.newDBConnection(connectionUrl)
-	log.Println(connectionUrl)
+	if s.ConnectionUrl == "" {
+		s.newConnection()
+	}
+	db, err := s.newDBConnection()
 	if err != nil {
 		log.Fatalf("Error happened while connecting to DB: %v", err)
 		return err
