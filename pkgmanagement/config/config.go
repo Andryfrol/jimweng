@@ -31,17 +31,19 @@ var envfile = `
 
 [inputs]
   [inputs.crawler]
-  url = "https://golang.googl.cn/pkg/"
+    url = "https://golang.google.cn/pkg/"
 
 [outputs]
   [outputs.mysql]
-  dbname = "mysql"
-  dbport = "3306"
-  dbaddr = "127.0.0.1"
-  user = "root"
-  password = "secret"
-  dbtype = "mysql"
-
+    dbname = "pkg_lists"
+    dbport = "3306"
+    dbaddr = "172.18.0.3"
+    user = "jim"
+    password = "password"
+    dbtype = "mysql"
+    maxidelconns = 10
+    maxopenconns = 0
+	keepalive = -1
 `
 
 func NewConfig(conf string) *CrawlerConfig {
