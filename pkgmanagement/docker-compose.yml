@@ -9,6 +9,8 @@ services:
     command: --default-authentication-plugin=mysql_native_password
     environment:
       MYSQL_ROOT_PASSWORD: secret
+    ports:
+     - 3306:3306
 
   adminer:
     container_name: adminer
