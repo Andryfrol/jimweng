@@ -47,6 +47,7 @@ func TestNewConnection(t *testing.T) {
 	assert.Equal(t, dbname, NewDBConfig.DBName)
 	assert.Equal(t, dbport, NewDBConfig.DBPort)
 	assert.Equal(t, dbaddr, NewDBConfig.DBAddress)
+	assert.Equal(t, "jim:pw@tcp(127.0.0.1:3306)/demo_db?charset=utf8&parseTime=True&loc=Local", NewDBConfig.DBUri)
 
 }
 

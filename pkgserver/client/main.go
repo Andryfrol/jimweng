@@ -17,7 +17,7 @@ import (
 
 const (
 	address     = "localhost:50051"
-	defaultName = "world"
+	defaultName = "tar"
 )
 
 type HelloHandler struct{}
