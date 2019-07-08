@@ -14,8 +14,8 @@ type Input interface {
 
 type PKGContent struct {
 	gorm.Model
-	Name     string `gorm:"unique;not null"`
-	Parent   string
+	Name     string `gorm:"primary_key"`
+	Parent   string `gorm:"primary_key"`
 	Synopsis string
 	Href     string
 }

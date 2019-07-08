@@ -25,3 +25,18 @@ https://golang.org/doc/code.html
 > 每一個套件包內可能都是許多的 .go 檔
 5. The path to a package's directory determines its import path.
 > 要 import 的套件包必須放在他指定的路徑下
+
+
+### Advance GO
+- Discussion: Concurrency is not Parallelism
+https://talks.golang.org/2012/waza.slide#1
+> example : https://medium.com/@thejasbabu/concurrency-patterns-golang-5c5e1bcd0833
+
+- lightweight loadbalance
+https://github.com/yyyar/gobetween
+
+- check goroutine : stacktrace
+https://colobu.com/2016/12/21/how-to-dump-goroutine-stack-traces/
+
+- detect goroutine leaks
+https://blog.minio.io/debugging-go-routine-leaks-a1220142d32c

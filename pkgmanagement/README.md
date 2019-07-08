@@ -40,3 +40,9 @@ https://github.com/jinzhu/gorm
 # 其他補充
 - https://stackoverflow.com/questions/27933866/use-goquery-to-find-a-class-whose-value-contains-whitespace
 - https://studygolang.com/articles/4602
+
+# MySQL check status syntax
+> show status like "%connect";
+https://stackoverflow.com/questions/7432241/mysql-show-status-active-or-total-connections
+- Connections: The number of connection attempts (successful or not) to the MySQL server.
+- Threads_connected: The number of currently open connections.

@@ -7,6 +7,8 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"os/signal"
+	"syscall"
 	"time"
 
 	"github.com/goPractice/pkgmanagement/config"
@@ -32,20 +34,20 @@ func main() {
 
 	go matric(c, 5)
 
+	// go agent(c, 15)
 	collect()
+	sigs := make(chan os.Signal, 1)
+	done := make(chan bool, 1)
+	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
 
-	// sigs := make(chan os.Signal, 1)
-	// done := make(chan bool, 1)
-	// signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
+	go func() {
+		sig := <-sigs
+		log.Printf("%v\n", sig)
 
-	// go func() {
-	// 	sig := <-sigs
-	// 	log.Printf("%v\n", sig)
+		done <- true
+	}()
 
-	// 	done <- true
-	// }()
-
-	// <-done
+	<-done
 }
 
 type HelloHandler struct{}

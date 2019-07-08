@@ -2,6 +2,7 @@ package mysql
 
 import (
 	"log"
+	"time"
 
 	"github.com/goPractice/pkgmanagement/plugins/outputs"
 	"github.com/goPractice/pkgmanagement/utils"
@@ -14,7 +15,7 @@ type operationDatabase struct {
 }
 
 type dbOperationInterface interface {
-	insertData(*[]*utils.PKGContent) error
+	Write(*[]*utils.PKGContent) error
 	debug()
 }
 
@@ -25,21 +26,29 @@ type SQLConfig struct {
 	User          string
 	Password      string
 	DBType        string
+	MaxIdleConns  int
+	MaxOpenConns  int
+	KeepAlive     int
 	ConnectionUrl string
+	DBClient      dbOperationInterface
 }
 
 func (opdb *operationDatabase) debug() {
 	opdb.DB = opdb.DB.Debug()
 }
 
-func (opdb *operationDatabase) insertData(points *[]*utils.PKGContent) error {
+func (s *SQLConfig) debug() {
+
+}
+
+func (opdb *operationDatabase) Write(points *[]*utils.PKGContent) error {
 	// 抓取primary_key; 使用primary_key來判斷是否有建過該record，有的話更新。沒有則創建
 	// 要如何用batch 塞資料? https://github.com/jinzhu/gorm/issues/255
 	for _, pt := range *points {
 		// 1.先create，報錯後再update
-		log.Printf("C!; The value of name:%v\tparent:%v\tsynopsis:%v\thref:%v\n", pt.Name, pt.Parent, pt.Synopsis, pt.Href)
+		// log.Printf("C!; The value of name:%v\tparent:%v\tsynopsis:%v\thref:%v\n", pt.Name, pt.Parent, pt.Synopsis, pt.Href)
 		if err := opdb.DB.Create(pt).Error; err != nil {
-			log.Printf("U!; The value of name:%v\tparent:%v\tsynopsis:%v\thref:%v\n", pt.Name, pt.Parent, pt.Synopsis, pt.Href)
+			// log.Printf("U!; The value of name:%v\tparent:%v\tsynopsis:%v\thref:%v\n", pt.Name, pt.Parent, pt.Synopsis, pt.Href)
 			if err := opdb.DB.First(&utils.PKGContent{Name: pt.Name}).Update(pt).Error; err != nil {
 				log.Printf("E!; The value of name:%v\tparent:%v\tsynopsis:%v\thref:%v\n", pt.Name, pt.Parent, pt.Synopsis, pt.Href)
 				// return err
@@ -62,9 +71,9 @@ func (s *SQLConfig) newDBConnection() (dbOperationInterface, error) {
 		db.AutoMigrate(&utils.PKGContent{})
 		// initialize DB settings for connection max nums 10 and keep-alive
 		if dbconfig := db.DB(); dbconfig != nil {
-			dbconfig.SetMaxOpenConns(10)
-			dbconfig.SetMaxIdleConns(0)
-			dbconfig.SetConnMaxLifetime(-1)
+			dbconfig.SetMaxOpenConns(s.MaxOpenConns)
+			dbconfig.SetMaxIdleConns(s.MaxIdleConns)
+			dbconfig.SetConnMaxLifetime(time.Duration(s.KeepAlive))
 		}
 		return &operationDatabase{DB: db}, nil
 	}
@@ -92,9 +101,13 @@ func (s *SQLConfig) Write(points *[]*utils.PKGContent) error {
 		return err
 	}
 
-	if err = db.insertData(points); err != nil {
+	if err = db.Write(points); err != nil {
 		return err
 	}
+
+	// if err = db.insertData(points); err != nil {
+	// 	return err
+	// }
 
 	return nil
 }

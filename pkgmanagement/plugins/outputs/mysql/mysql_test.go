@@ -73,7 +73,7 @@ func TestOpenDB(t *testing.T) {
 	// opendebug mode
 	mockDB.debug()
 
-	err = mockDB.insertData(&demo_pts)
+	err = mockDB.Write(&demo_pts)
 	// err = mockDB.batchInsertData(&demo_pts)
 	assert.Nil(t, err)
 }
