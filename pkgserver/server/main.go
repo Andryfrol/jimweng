@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"os"
 
 	pb "github.com/goPractice/pkgserver/pkgserver"
 	"github.com/jinzhu/gorm"
@@ -16,7 +17,7 @@ const (
 	port = ":50051"
 )
 
-var OpDB = NewDBConfiguration("root", "secret", "mysql", "mysql", "3306", "127.0.0.1").NewDBConnection()
+var OpDB = NewDBConfiguration("root", "secret", "mysql", "mysql", "3306", os.Getenv("DBADDRESS")).NewDBConnection()
 
 type DBConfig struct {
 	User      string

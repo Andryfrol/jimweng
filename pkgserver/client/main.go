@@ -16,8 +16,8 @@ import (
 	"google.golang.org/grpc"
 )
 
-const (
-	address     = "localhost:50051"
+var (
+	address     = os.Getenv("GRPCADD") + ":50051"
 	defaultName = ""
 )
 
