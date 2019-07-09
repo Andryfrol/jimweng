@@ -44,7 +44,7 @@ func (h HelloHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 	}
 	json.Unmarshal(bodyBytes, &a)
-	log.Printf("%v\n", a.Data)
+	log.Printf("client query for %v\n", a.Data)
 
 	// Set up a connection to the server.
 	conn, err := grpc.Dial(address, grpc.WithInsecure())
@@ -67,10 +67,10 @@ func (h HelloHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		log.Fatalf("could not greet: %v", err)
 	}
 
-	log.Printf("Expected: %s", rr.Message)
+	// log.Printf("Expected: %s", rr.Message)
 
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode("{status:'OK'}")
+	json.NewEncoder(w).Encode(rr.Message)
 }
 
 func main() {

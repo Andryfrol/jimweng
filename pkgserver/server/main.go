@@ -6,8 +6,6 @@ import (
 	"log"
 	"net"
 
-	"github.com/goPractice/pkgmanagement/utils"
-
 	pb "github.com/goPractice/pkgserver/pkgserver"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
@@ -53,13 +51,24 @@ func (db *OperationDatabase) debug() {
 	db.DB = db.DB.Debug()
 }
 
+type PKGContent struct {
+	// gorm.Model
+	Name     string `gorm:"primary_key"`
+	Parent   string `gorm:"primary_key"`
+	Synopsis string
+	Href     string
+}
+
 // Read
 func (db *OperationDatabase) queryWithName(name string) string {
-	queryDB := db.DB.Select("parent").Where("name = ?", name).Find(&utils.PKGContent{})
-	if err := queryDB.Error; err != nil {
+	queryNameInfo := db.DB.Select([]string{"parent", "href", "synopsis"}).Where("name = ?", name).Find(&PKGContent{})
+	if err := queryNameInfo.Error; err != nil {
 		return fmt.Sprintf("Can't find the parent with "+name, err)
 	}
-	return queryDB.Value.(*utils.PKGContent).Parent
+
+	respContext := queryNameInfo.Value.(*PKGContent)
+
+	return fmt.Sprintf("{name:'%v',parent:'%v',href:'%v',synopsis:'%v'}", name, respContext.Parent, respContext.Href, respContext.Synopsis)
 }
 
 func (dbc *DBConfig) NewDBConnection() OPDB {
