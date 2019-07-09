@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -17,7 +18,7 @@ import (
 
 const (
 	address     = "localhost:50051"
-	defaultName = "tar"
+	defaultName = ""
 )
 
 type HelloHandler struct{}
@@ -26,12 +27,24 @@ func matric(c chan string, t int) {
 	http.Handle("/metrics", promhttp.Handler())
 
 	helloHandler := HelloHandler{}
-	http.Handle("/_health", helloHandler)
+	http.Handle("/query", helloHandler)
 
 	log.Fatal(http.ListenAndServe(":8001", nil))
 }
 
 func (h HelloHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	type requestData struct {
+		Data string `json:"data"`
+	}
+
+	a := requestData{}
+
+	bodyBytes, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Println(err)
+	}
+	json.Unmarshal(bodyBytes, &a)
+	log.Printf("%v\n", a.Data)
 
 	// Set up a connection to the server.
 	conn, err := grpc.Dial(address, grpc.WithInsecure())
@@ -48,11 +61,13 @@ func (h HelloHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
-	rr, err := c.SayHello(ctx, &pb.HelloRequest{Name: name})
+
+	rr, err := c.SayHello(ctx, &pb.HelloRequest{Name: name + a.Data})
 	if err != nil {
 		log.Fatalf("could not greet: %v", err)
 	}
-	log.Printf("Greeting: %s", rr.Message)
+
+	log.Printf("Expected: %s", rr.Message)
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode("{status:'OK'}")
