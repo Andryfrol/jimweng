@@ -17,7 +17,7 @@ const (
 	port = ":50051"
 )
 
-var OpDB = NewDBConfiguration("root", "secret", "mysql", "mysql", "3306", os.Getenv("DBADDRESS")).NewDBConnection()
+var OpDB = NewDBConfiguration("root", "secret", "mysql", "mysql", "3306", os.Getenv("DBADD")).NewDBConnection()
 
 type DBConfig struct {
 	User      string
