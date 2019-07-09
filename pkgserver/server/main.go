@@ -13,11 +13,10 @@ import (
 	"google.golang.org/grpc"
 )
 
-const (
+var (
 	port = ":50051"
+	OpDB = NewDBConfiguration("root", "secret", "mysql", "mysql", "3306", os.Getenv("DBADD")).NewDBConnection()
 )
-
-var OpDB = NewDBConfiguration("root", "secret", "mysql", "mysql", "3306", os.Getenv("DBADD")).NewDBConnection()
 
 type DBConfig struct {
 	User      string
