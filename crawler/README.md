@@ -9,6 +9,9 @@ crawler --> mysql
 mysql ----|                                                         |-- nginx
           |-- grpc_server -- grpc_client(net/http listen server) -- |
 ```
+4. query with specific `pkg name`
+> curl http://$URI/query -d '{"data":$pkg_name}'
+> e.g. curl http://localhost/query -d '{"data":"cgi"}'
 
 # Requirement
 1. `git` (version: 2.17.1 or later)
@@ -29,7 +32,8 @@ Under this directory, execute command below
 ### Future Work
 1. parallism crawler components
 2. refactor grpc client and server
-3. add health check and prometheus monitor for better analysis
+3. add `health check`, `prometheus` and `monitor` for better analysis
+4. use `decorator mode`/`redis` to cache query result in grpc client
 
 ### Known Issue
 1. crawler components would use `gorm.Open` everytime, could separate the function to extra interface
