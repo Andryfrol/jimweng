@@ -23,7 +23,7 @@ mysql ----|                                                         |-- nginx
 
 # Command to build the environment
 Under this directory, execute command below
-> docker-compose up --sacle grpcclient=2 --scale grpcserver=2 -d
+> docker-compose up --scale grpcclient=2 --scale grpcserver=2 -d
 
 # note
 ### Future Work
