@@ -7,18 +7,21 @@ RUN set -eux; \
 
 # env for go workdir and mod vendor
 ENV GOPATH /go/
-ENV GO_WORKDIR $GOPATH/src/github.com/goPractice/pkgserver/
+ENV GO_WORKDIR $GOPATH/src/github.com/goPractice/crawler/crawler
 ENV GO111MODULE=on
 # claim workdir and move to workdir loc
 WORKDIR $GO_WORKDIR
 # copy files into workdir
 ADD . $GO_WORKDIR
 RUN go mod vendor
-RUN pwd
-RUN cd ${gRPCRole};go build main.go
+RUN cd cmd/src; go build -o crawler -i main.go
 
 FROM alpine:3.8
+RUN set -eux; \
+        apk add --no-cache ca-certificates wget openssl
 # copy binary into container
-COPY --from=builder /go/src/github.com/goPractice/pkgserver/${gRPCRole} .
+COPY --from=builder /go/src/github.com/goPractice/crawler/crawler/cmd/src .
+ADD ./entrypoint.sh .
+RUN chmod +x entrypoint.sh
 
-CMD ["sh"]
+CMD ["./entrypoint.sh"]

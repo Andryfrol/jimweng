@@ -13,33 +13,39 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./pipeline/nginx/default.conf:/etc/nginx/conf.d/default.conf
 
   grpcclient:
     container_name: grpcclient
     networks:
       - proxy-net
     build:
-      context: .
-      args:
-        gRPCRole: client
+      context: ./pipeline
+      # args:
+      #   gRPCRole: client
     ports:
-      - 8001:8001
+      # - 8001:8001
+      - 8001
     environment:
       - GRPCADD=grpcserver
+      - ENV=client
 
   grpcserver:
     container_name: grpcserver
     networks:
       - proxy-net
     build:
-      context: .
-      args:
-        gRPCRole: server
+      context: ./pipeline
+      # args:
+      #   gRPCRole: server
     ports:
-      - 50051:50051
+      # - 50051:50051
+      - 50051
     environment:
       - DBADD=mysql
+      - ENV=server
+    depends_on:
+      - crawler
 
   mysql:
     container_name: mysql
@@ -51,3 +57,14 @@ services:
       MYSQL_ROOT_PASSWORD: secret
     ports:
      - 3306:3306
+
+  crawler:
+    container_name: crawler
+    networks:
+      - proxy-net
+    build:
+      context: ./crawler
+    depends_on: 
+      - mysql
+    # volumes:
+      # - ./crawler/cmd/src/.env.conf:/.env.file

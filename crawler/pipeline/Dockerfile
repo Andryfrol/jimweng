@@ -1,9 +1,5 @@
 FROM golang:1.11.5-alpine3.8 AS builder
 
-# ARG gRPCRole=client
-# ARG gRPCRole=server
-# ARG gRPCRole=PleaseInputRole
-
 # basic packages needed
 RUN set -eux; \
         apk update && \
@@ -18,19 +14,13 @@ WORKDIR $GO_WORKDIR
 # copy files into workdir
 ADD . $GO_WORKDIR
 RUN go mod vendor
-RUN pwd
-RUN ls
-
 RUN cd client;go build -o client -i main.go
-RUN pwd;
 
 WORKDIR $GO_WORKDIR
 RUN cd server;go build -o server -i main.go
 
 FROM alpine:3.8
 # copy binary into container
-# ARG gRPCRole=PleaseInputRole
-# COPY --from=builder /go/src/github.com/goPractice/pkgserver/${gRPCRole}/server .
 COPY --from=builder /go/src/github.com/goPractice/crawler/pipeline/client/client .
 COPY --from=builder /go/src/github.com/goPractice/crawler/pipeline/server/server .
 ADD ./entrypoint.sh .
