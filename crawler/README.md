@@ -16,9 +16,10 @@ mysql ----|                                                         |-- nginx
 3. `docker-compose`
 
 # Installation
-With git cli
+- With git cli
 > git clone https://github.com/jim0409/goPractice.git
-Move to this folder
+- Move to this folder
+> cd ./crawler
 
 # Command to build the environment
 Under this directory, execute command below
@@ -32,7 +33,7 @@ Under this directory, execute command below
 
 ### Known Issue
 1. crawler components would use `gorm.Open` everytime, could separate the function to extra interface
-> workaround `set idle connections as 0 to make sure no more connection while crawler is not working`
+> workaround, `set idle connections as 0 to make sure no more connection while crawler is not working`
 
 # refer
 - way to use docker-compose with network
