@@ -19,7 +19,7 @@ type fakeCheckout struct {
 }
 
 func (fakeCheckout) GetItems() []InterfaceCartItem {
-	return []InterfaceCartItem{fakeItem{}}
+	return []InterfaceCartItem{fakeItem{}, anotherFakeItem{}}
 }
 
 type fakeItem struct {
@@ -28,6 +28,14 @@ type fakeItem struct {
 
 func (fakeItem) GetProduct() string {
 	return "This is the end"
+}
+
+type anotherFakeItem struct {
+	InterfaceCartItem
+}
+
+func (anotherFakeItem) GetProduct() string {
+	return "This is another end"
 }
 
 func getRates(checkoutI InterfaceCheckout) {
