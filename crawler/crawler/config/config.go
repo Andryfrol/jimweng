@@ -88,74 +88,61 @@ func ReadConfig(filename string) (*CrawlerConfig, error) {
 	}
 
 	// TOD: make a loop for auto collect implement plugins
-	cfgInputMap := buildInputMap("crawler", newInputPlugin(&ccfg.Inputs))
+	mInput := make(map[string]utils.Input)
+	for i, j := range ccfg.Inputs {
+		mInput[i] = newInputPlugin(j)
+	}
 	// assign implement input plugins to cfg input plugin
-	cfg.InputPlugins = *cfgInputMap
+	cfg.InputPlugins = mInput
 
-	cfgOutputMap := buildOutputMap("mysql", newOutPlugin(&ccfg.Outputs))
+	mOutput := make(map[string]utils.Output)
+	for i, j := range ccfg.Outputs {
+		mOutput[i] = newOutPlugin(j)
+	}
 	// assign implement output plugins to cfg input plugin
-	cfg.OutputPlugins = *cfgOutputMap
+	cfg.OutputPlugins = mOutput
 
 	return &cfg, nil
 }
 
-func newOutPlugin(m *map[string]interface{}) utils.Output {
-	var outputMysql = mysql.SQLConfig{}
-	for i, j := range *m {
-		// fmt.Printf("implement output plugin '%v' with value %v\n", i, j)
-		if i == "mysql" {
-			for key, value := range j.(map[string]interface{}) {
-				switch key {
-				case "dbname":
-					outputMysql.DBName = value.(string)
-				case "dbaddr":
-					outputMysql.DBAddr = value.(string)
-				case "password":
-					outputMysql.Password = value.(string)
-				case "dbtype":
-					outputMysql.DBType = value.(string)
-				case "maxidelconns":
-					outputMysql.MaxIdleConns = int(value.(int64))
-				case "maxopenconns":
-					outputMysql.MaxOpenConns = int(value.(int64))
-				case "dbport":
-					outputMysql.DBPort = value.(string)
-				case "user":
-					outputMysql.User = value.(string)
-				case "keepalive":
-					outputMysql.KeepAlive = int(value.(int64))
-				}
-			}
-		}
-	}
-	return &outputMysql
-}
-
-func newInputPlugin(m *map[string]interface{}) utils.Input {
+// TODO: structure less...
+// For Now, still need to specify crawler structure ...
+func newInputPlugin(j interface{}) utils.Input {
 	var inputCrawler = crawler.QueryUrl{}
-	for i, j := range *m {
-		// fmt.Printf("implement input plugin '%v' with value %v\n", i, j)
-		if i == "crawler" {
-			for key, value := range j.(map[string]interface{}) {
-				if key == "url" {
-					inputCrawler.Url = value.(string)
-				}
-			}
+	for key, value := range j.(map[string]interface{}) {
+		// fmt.Printf("the value & key: %v and value: %v\n", key, value)
+		if key == "url" {
+			inputCrawler.Url = value.(string)
 		}
 	}
 	return &inputCrawler
 }
 
-func buildInputMap(name string, utilInput utils.Input) *map[string]utils.Input {
-	m := make(map[string]utils.Input)
-	m[name] = utilInput
-	return &m
-}
-
-func buildOutputMap(name string, utilInput utils.Output) *map[string]utils.Output {
-	m := make(map[string]utils.Output)
-	m[name] = utilInput
-	return &m
+func newOutPlugin(j interface{}) utils.Output {
+	var outputMysql = mysql.SQLConfig{}
+	for key, value := range j.(map[string]interface{}) {
+		switch key {
+		case "dbname":
+			outputMysql.DBName = value.(string)
+		case "dbaddr":
+			outputMysql.DBAddr = value.(string)
+		case "password":
+			outputMysql.Password = value.(string)
+		case "dbtype":
+			outputMysql.DBType = value.(string)
+		case "maxidelconns":
+			outputMysql.MaxIdleConns = int(value.(int64))
+		case "maxopenconns":
+			outputMysql.MaxOpenConns = int(value.(int64))
+		case "dbport":
+			outputMysql.DBPort = value.(string)
+		case "user":
+			outputMysql.User = value.(string)
+		case "keepalive":
+			outputMysql.KeepAlive = int(value.(int64))
+		}
+	}
+	return &outputMysql
 }
 
 func genConfig() error {
