@@ -7,6 +7,9 @@ create database `demo_db`;
 grant all privileges on demo_db.* to 'jim';
 ```
 
+# 學習相關紀錄
+1. 7/8 實作CRUD
+2. 7/14 實作交易
 
 # refer
 - golang的orm操作手冊

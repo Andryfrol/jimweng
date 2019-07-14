@@ -36,6 +36,35 @@ type OPDB interface {
 	deleteData(name string, email string) error
 	Closed() error
 	debug()
+	transaction() error
+}
+
+// An transaction example for `gorm`
+func (db *OperationDatabase) transaction() error {
+	tx := db.DB.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+
+	if err := tx.Error; err != nil {
+		return err
+	}
+
+	// under transaction mode create an object
+	if err := tx.Create(&DemoTable{Name: "Jim"}).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	if err := tx.Create(&DemoTable{Name: "Jim2"}).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+	return tx.Commit().Error
+
+	return nil
 }
 
 func (dbc *DBConfig) NewDBConnection() (OPDB, error) {
