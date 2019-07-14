@@ -11,8 +11,6 @@ import (
 	"time"
 
 	"github.com/goPractice/crawler/crawler/config"
-	"github.com/goPractice/crawler/crawler/plugins/inputs/crawler"
-	"github.com/goPractice/crawler/crawler/plugins/outputs/mysql"
 	"github.com/goPractice/crawler/crawler/utils"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
@@ -35,8 +33,8 @@ func main() {
 
 	go matric(c, 5)
 
-	// go agent(c, 15)
-	collect()
+	go agent(c, 5)
+	// collect()
 	sigs := make(chan os.Signal, 1)
 	done := make(chan bool, 1)
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
@@ -75,60 +73,19 @@ func (h HelloHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 func collect() {
 	var points *[]*utils.PKGContent
 
-	for i, j := range cfg.Inputs {
-		if i == "crawler" {
-			var inputCrawler = crawler.QueryUrl{}
-
-			for key, value := range j.(map[string]interface{}) {
-				if key == "url" {
-					inputCrawler.Url = value.(string)
-				}
-			}
-			cfg.Inputs[i] = inputCrawler
-			pts, _ := inputCrawler.Gather()
+	for _, j := range cfg.InputPlugins {
+		if pts, err := j.Gather(); err != nil {
+			log.Fatal("%v\n", err)
+		} else {
 			points = pts.(*[]*utils.PKGContent)
 		}
-		// if pts, err := j.(utils.Input).Gather(); err != nil {
-		// 	log.Fatal("%v\n", err)
-		// } else {
-		// 	points = pts.(*[]*utils.PKGContent)
-		// }
 	}
 
-	for i, j := range cfg.Outputs {
-		if i == "mysql" {
-			var OutputMysql = mysql.SQLConfig{}
-
-			for key, value := range j.(map[string]interface{}) {
-				switch key {
-				case "dbname":
-					OutputMysql.DBName = value.(string)
-				case "dbaddr":
-					OutputMysql.DBAddr = value.(string)
-				case "password":
-					OutputMysql.Password = value.(string)
-				case "dbtype":
-					OutputMysql.DBType = value.(string)
-				case "maxidelconns":
-					OutputMysql.MaxIdleConns = int(value.(int64))
-				case "maxopenconns":
-					OutputMysql.MaxOpenConns = int(value.(int64))
-				case "dbport":
-					OutputMysql.DBPort = value.(string)
-				case "user":
-					OutputMysql.User = value.(string)
-				case "keepalive":
-					OutputMysql.KeepAlive = int(value.(int64))
-				}
-			}
-
-			if err := OutputMysql.Write(points); err != nil {
-				log.Fatal("%v\n", err)
-			}
-			// if err := j.(utils.Output).Write(points); err != nil {
-			// 	log.Fatal("%v\n", err)
-			// }
+	for _, j := range cfg.OutputPlugins {
+		if err := j.Write(points); err != nil {
+			log.Fatal("%v\n", err)
 		}
+
 	}
 }
 
