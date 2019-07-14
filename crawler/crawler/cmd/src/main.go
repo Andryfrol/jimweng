@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"flag"
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -12,6 +11,8 @@ import (
 	"time"
 
 	"github.com/goPractice/crawler/crawler/config"
+	"github.com/goPractice/crawler/crawler/plugins/inputs/crawler"
+	"github.com/goPractice/crawler/crawler/plugins/outputs/mysql"
 	"github.com/goPractice/crawler/crawler/utils"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
@@ -74,28 +75,59 @@ func (h HelloHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 func collect() {
 	var points *[]*utils.PKGContent
 
-	for _, j := range cfg.Inputs {
-		fmt.Println(j)
-		pts, err := j.Gather()
-		if err != nil {
-			log.Fatal("%v\n", err)
-		}
-		points = pts.(*[]*utils.PKGContent)
-	}
-	// // fmt.Println(points)
-	// for i, j := range *points {
-	// 	if i == 0 {
-	// 		continue
-	// 	}
-	// 	fmt.Printf("%d____the value of j includes Name:%v___Parent:%v___Synopsis:%v___Href:%v\n", i, j.Name, j.Parent, j.Synopsis, j.Href)
+	for i, j := range cfg.Inputs {
+		if i == "crawler" {
+			var inputCrawler = crawler.QueryUrl{}
 
-	// }
+			for key, value := range j.(map[string]interface{}) {
+				if key == "url" {
+					inputCrawler.Url = value.(string)
+				}
+			}
+			cfg.Inputs[i] = inputCrawler
+			pts, _ := inputCrawler.Gather()
+			points = pts.(*[]*utils.PKGContent)
+		}
+		// if pts, err := j.(utils.Input).Gather(); err != nil {
+		// 	log.Fatal("%v\n", err)
+		// } else {
+		// 	points = pts.(*[]*utils.PKGContent)
+		// }
+	}
 
 	for i, j := range cfg.Outputs {
 		if i == "mysql" {
-			if err := j.Write(points); err != nil {
+			var OutputMysql = mysql.SQLConfig{}
+
+			for key, value := range j.(map[string]interface{}) {
+				switch key {
+				case "dbname":
+					OutputMysql.DBName = value.(string)
+				case "dbaddr":
+					OutputMysql.DBAddr = value.(string)
+				case "password":
+					OutputMysql.Password = value.(string)
+				case "dbtype":
+					OutputMysql.DBType = value.(string)
+				case "maxidelconns":
+					OutputMysql.MaxIdleConns = int(value.(int64))
+				case "maxopenconns":
+					OutputMysql.MaxOpenConns = int(value.(int64))
+				case "dbport":
+					OutputMysql.DBPort = value.(string)
+				case "user":
+					OutputMysql.User = value.(string)
+				case "keepalive":
+					OutputMysql.KeepAlive = int(value.(int64))
+				}
+			}
+
+			if err := OutputMysql.Write(points); err != nil {
 				log.Fatal("%v\n", err)
 			}
+			// if err := j.(utils.Output).Write(points); err != nil {
+			// 	log.Fatal("%v\n", err)
+			// }
 		}
 	}
 }

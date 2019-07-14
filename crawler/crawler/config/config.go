@@ -1,21 +1,25 @@
 package config
 
 import (
+	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
 
 	"github.com/BurntSushi/toml"
 	_ "github.com/goPractice/crawler/crawler/plugins/inputs/all"
-	"github.com/goPractice/crawler/crawler/plugins/inputs/crawler"
+
+	// "github.com/goPractice/crawler/crawler/plugins/inputs/crawler"
 	_ "github.com/goPractice/crawler/crawler/plugins/outputs/all"
-	"github.com/goPractice/crawler/crawler/plugins/outputs/mysql"
+	// "github.com/goPractice/crawler/crawler/plugins/outputs/mysql"
 )
 
 type CrawlerConfig struct {
 	Interval int
-	Inputs   map[string]crawler.QueryUrl
-	Outputs  map[string]mysql.SQLConfig
+	// Inputs   map[string]crawler.QueryUrl
+	Inputs map[string]interface{}
+	// Outputs  map[string]mysql.SQLConfig
+	Outputs map[string]interface{}
 }
 
 var helpDoc = `
@@ -57,6 +61,12 @@ func NewConfig(conf string) *CrawlerConfig {
 		if err != nil {
 			log.Fatal("Error happened while read configuration: %v", err)
 			return nil
+		}
+		for i, j := range c.Inputs {
+			fmt.Printf("inputs %v___%v\n", i, j)
+		}
+		for i, j := range c.Outputs {
+			fmt.Printf("outputs %v___%v\n", i, j)
 		}
 		return c
 	case "new":
