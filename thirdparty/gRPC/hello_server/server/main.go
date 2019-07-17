@@ -26,7 +26,7 @@ import (
 	"log"
 	"net"
 
-	pb "github.com/goPractice/gRPC/hello_server/helloworld"
+	pb "github.com/goPractice/thirdparty/gRPC/hello_server/helloworld"
 	"google.golang.org/grpc"
 )
 
