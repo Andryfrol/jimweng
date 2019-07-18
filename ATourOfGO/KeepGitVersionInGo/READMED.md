@@ -7,12 +7,12 @@
 # execute command
 way to process program directly
 ```
-go run -ldflags "-X main.xyz=abc" main.go
+go run -ldflags "-X main.xyz=`git log|head -1|awk '{print $2}'`" main.go
 ```
 
 way to build the binary with specific version
 ```
-go build -ldflags "-X main.xyz=`git log|tail -5|head -1|awk '{print $2}'`" main.go
+go build -ldflags "-X main.xyz=`git log|head -1|awk '{print $2}'`" main.go
 ```
 
 # refer
