@@ -3,13 +3,13 @@
 
 package practice
 
-import (
-	"context"
-	fmt "fmt"
-	math "math"
+import proto "github.com/golang/protobuf/proto"
+import fmt "fmt"
+import math "math"
 
-	proto "github.com/golang/protobuf/proto"
-	"google.golang.org/grpc"
+import (
+	context "golang.org/x/net/context"
+	grpc "google.golang.org/grpc"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -21,7 +21,7 @@ var _ = math.Inf
 // is compatible with the proto package it is being compiled against.
 // A compilation error at this line likely means your copy of the
 // proto package needs to be updated.
-const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
+const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
 
 // The request message containing the user's name.
 type PracticeRequest struct {
@@ -35,17 +35,16 @@ func (m *PracticeRequest) Reset()         { *m = PracticeRequest{} }
 func (m *PracticeRequest) String() string { return proto.CompactTextString(m) }
 func (*PracticeRequest) ProtoMessage()    {}
 func (*PracticeRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f26ec9f60532c360, []int{0}
+	return fileDescriptor_practice_8aabd2c6fbc73ce5, []int{0}
 }
-
 func (m *PracticeRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PracticeRequest.Unmarshal(m, b)
 }
 func (m *PracticeRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_PracticeRequest.Marshal(b, m, deterministic)
 }
-func (m *PracticeRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PracticeRequest.Merge(m, src)
+func (dst *PracticeRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PracticeRequest.Merge(dst, src)
 }
 func (m *PracticeRequest) XXX_Size() int {
 	return xxx_messageInfo_PracticeRequest.Size(m)
@@ -75,17 +74,16 @@ func (m *PracticeReply) Reset()         { *m = PracticeReply{} }
 func (m *PracticeReply) String() string { return proto.CompactTextString(m) }
 func (*PracticeReply) ProtoMessage()    {}
 func (*PracticeReply) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f26ec9f60532c360, []int{1}
+	return fileDescriptor_practice_8aabd2c6fbc73ce5, []int{1}
 }
-
 func (m *PracticeReply) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PracticeReply.Unmarshal(m, b)
 }
 func (m *PracticeReply) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_PracticeReply.Marshal(b, m, deterministic)
 }
-func (m *PracticeReply) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PracticeReply.Merge(m, src)
+func (dst *PracticeReply) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PracticeReply.Merge(dst, src)
 }
 func (m *PracticeReply) XXX_Size() int {
 	return xxx_messageInfo_PracticeReply.Size(m)
@@ -108,9 +106,83 @@ func init() {
 	proto.RegisterType((*PracticeReply)(nil), "practice.PracticeReply")
 }
 
-func init() { proto.RegisterFile("practice.proto", fileDescriptor_f26ec9f60532c360) }
+// Reference imports to suppress errors if they are not otherwise used.
+var _ context.Context
+var _ grpc.ClientConn
 
-var fileDescriptor_f26ec9f60532c360 = []byte{
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the grpc package it is being compiled against.
+const _ = grpc.SupportPackageIsVersion4
+
+// GreeterClient is the client API for Greeter service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
+type GreeterClient interface {
+	// Sends a greeting
+	SayHello(ctx context.Context, in *PracticeRequest, opts ...grpc.CallOption) (*PracticeReply, error)
+}
+
+type greeterClient struct {
+	cc *grpc.ClientConn
+}
+
+func NewGreeterClient(cc *grpc.ClientConn) GreeterClient {
+	return &greeterClient{cc}
+}
+
+func (c *greeterClient) SayHello(ctx context.Context, in *PracticeRequest, opts ...grpc.CallOption) (*PracticeReply, error) {
+	out := new(PracticeReply)
+	err := c.cc.Invoke(ctx, "/practice.Greeter/SayHello", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// GreeterServer is the server API for Greeter service.
+type GreeterServer interface {
+	// Sends a greeting
+	SayHello(context.Context, *PracticeRequest) (*PracticeReply, error)
+}
+
+func RegisterGreeterServer(s *grpc.Server, srv GreeterServer) {
+	s.RegisterService(&_Greeter_serviceDesc, srv)
+}
+
+func _Greeter_SayHello_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PracticeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GreeterServer).SayHello(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/practice.Greeter/SayHello",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GreeterServer).SayHello(ctx, req.(*PracticeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+var _Greeter_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "practice.Greeter",
+	HandlerType: (*GreeterServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "SayHello",
+			Handler:    _Greeter_SayHello_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "practice.proto",
+}
+
+func init() { proto.RegisterFile("practice.proto", fileDescriptor_practice_8aabd2c6fbc73ce5) }
+
+var fileDescriptor_practice_8aabd2c6fbc73ce5 = []byte{
 	// 142 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0x2b, 0x28, 0x4a, 0x4c,
 	0x2e, 0xc9, 0x4c, 0x4e, 0xd5, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0xe2, 0x80, 0xf1, 0x95, 0x54,
@@ -122,64 +194,3 @@ var fileDescriptor_f26ec9f60532c360 = []byte{
 	0xcd, 0x42, 0x29, 0x71, 0x6c, 0x52, 0x05, 0x39, 0x95, 0x4a, 0x0c, 0x49, 0x6c, 0x60, 0xf7, 0x1a,
 	0x03, 0x02, 0x00, 0x00, 0xff, 0xff, 0xd7, 0x8d, 0xa7, 0x59, 0xc1, 0x00, 0x00, 0x00,
 }
-
-type PracticeClient interface {
-	PracticeHello(ctx context.Context, in *PracticeRequest, opts ...grpc.CallOption) (*PracticeReply, error)
-}
-
-type practiceClient struct {
-	cc *grpc.ClientConn
-}
-
-func NewGreeterClient(cc *grpc.ClientConn) PracticeClient {
-	return &practiceClient{cc}
-}
-
-func (c *practiceClient) PracticeHello(ctx context.Context, in *PracticeRequest, opts ...grpc.CallOption) (*PracticeReply, error) {
-	out := new(PracticeReply)
-	err := c.cc.Invoke(ctx, "/practice.Greeter/PracticeHello", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-type PracticeServer interface {
-	PracticeHello(context.Context, *PracticeRequest) (*PracticeReply, error)
-}
-
-// func _Greeter_SayHello_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-// 	in := new(HelloRequest)
-// 	if err := dec(in); err != nil {
-// 		return nil, err
-// 	}
-// 	if interceptor == nil {
-// 		return srv.(GreeterServer).SayHello(ctx, in)
-// 	}
-// 	info := &grpc.UnaryServerInfo{
-// 		Server:     srv,
-// 		FullMethod: "/helloworld.Greeter/SayHello",
-// 	}
-// 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-// 		return srv.(GreeterServer).SayHello(ctx, req.(*HelloRequest))
-// 	}
-// 	return interceptor(ctx, in, info, handler)
-// }
-
-
-var _Practice_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "practice.Greeter",
-	HandlerType: (*GreeterServer)(nil),
-	Methods: []grpc.MethodDesc{
-		{
-			MethodName: "PracticeHello",
-			Handler: _Greeter_PracticeHello_Handler,
-		},
-	},
-	Streams: []grpc.StreamDesc{},
-	Metadata: "practice.proto",
-}
-
-// func RegisterPracticeServer(s *grpc.Server, srv PracticeServer) {
-// 	s.RegisterService(&_Practice_serviceDesc, srv)
-// }

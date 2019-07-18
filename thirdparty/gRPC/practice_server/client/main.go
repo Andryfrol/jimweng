@@ -31,7 +31,7 @@ func main() {
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
-	r, err := c.SayHello(ctx, &pb.HelloRequest{Name: name})
+	r, err := c.SayHello(ctx, &pb.PracticeRequest{Name: name})
 	if err != nil {
 		log.Fatalf("could not greet: %v", err)
 	}
