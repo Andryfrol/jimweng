@@ -3,13 +3,14 @@
 
 package practice
 
-import proto "github.com/golang/protobuf/proto"
-import fmt "fmt"
-import math "math"
-
 import (
-	context "golang.org/x/net/context"
+	context "context"
+	fmt "fmt"
+	proto "github.com/golang/protobuf/proto"
 	grpc "google.golang.org/grpc"
+	codes "google.golang.org/grpc/codes"
+	status "google.golang.org/grpc/status"
+	math "math"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -21,7 +22,7 @@ var _ = math.Inf
 // is compatible with the proto package it is being compiled against.
 // A compilation error at this line likely means your copy of the
 // proto package needs to be updated.
-const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
+const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
 // The request message containing the user's name.
 type PracticeRequest struct {
@@ -35,16 +36,17 @@ func (m *PracticeRequest) Reset()         { *m = PracticeRequest{} }
 func (m *PracticeRequest) String() string { return proto.CompactTextString(m) }
 func (*PracticeRequest) ProtoMessage()    {}
 func (*PracticeRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_practice_8aabd2c6fbc73ce5, []int{0}
+	return fileDescriptor_f26ec9f60532c360, []int{0}
 }
+
 func (m *PracticeRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PracticeRequest.Unmarshal(m, b)
 }
 func (m *PracticeRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_PracticeRequest.Marshal(b, m, deterministic)
 }
-func (dst *PracticeRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PracticeRequest.Merge(dst, src)
+func (m *PracticeRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PracticeRequest.Merge(m, src)
 }
 func (m *PracticeRequest) XXX_Size() int {
 	return xxx_messageInfo_PracticeRequest.Size(m)
@@ -74,16 +76,17 @@ func (m *PracticeReply) Reset()         { *m = PracticeReply{} }
 func (m *PracticeReply) String() string { return proto.CompactTextString(m) }
 func (*PracticeReply) ProtoMessage()    {}
 func (*PracticeReply) Descriptor() ([]byte, []int) {
-	return fileDescriptor_practice_8aabd2c6fbc73ce5, []int{1}
+	return fileDescriptor_f26ec9f60532c360, []int{1}
 }
+
 func (m *PracticeReply) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PracticeReply.Unmarshal(m, b)
 }
 func (m *PracticeReply) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_PracticeReply.Marshal(b, m, deterministic)
 }
-func (dst *PracticeReply) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PracticeReply.Merge(dst, src)
+func (m *PracticeReply) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PracticeReply.Merge(m, src)
 }
 func (m *PracticeReply) XXX_Size() int {
 	return xxx_messageInfo_PracticeReply.Size(m)
@@ -104,6 +107,21 @@ func (m *PracticeReply) GetMessage() string {
 func init() {
 	proto.RegisterType((*PracticeRequest)(nil), "practice.PracticeRequest")
 	proto.RegisterType((*PracticeReply)(nil), "practice.PracticeReply")
+}
+
+func init() { proto.RegisterFile("practice.proto", fileDescriptor_f26ec9f60532c360) }
+
+var fileDescriptor_f26ec9f60532c360 = []byte{
+	// 142 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0x2b, 0x28, 0x4a, 0x4c,
+	0x2e, 0xc9, 0x4c, 0x4e, 0xd5, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0xe2, 0x80, 0xf1, 0x95, 0x54,
+	0xb9, 0xf8, 0x03, 0xa0, 0xec, 0xa0, 0xd4, 0xc2, 0xd2, 0xd4, 0xe2, 0x12, 0x21, 0x21, 0x2e, 0x96,
+	0xbc, 0xc4, 0xdc, 0x54, 0x09, 0x46, 0x05, 0x46, 0x0d, 0xce, 0x20, 0x30, 0x5b, 0x49, 0x93, 0x8b,
+	0x17, 0xa1, 0xac, 0x20, 0xa7, 0x52, 0x48, 0x82, 0x8b, 0x3d, 0x37, 0xb5, 0xb8, 0x38, 0x31, 0x1d,
+	0xa6, 0x0e, 0xc6, 0x35, 0xf2, 0xe6, 0x62, 0x77, 0x2f, 0x4a, 0x4d, 0x2d, 0x49, 0x2d, 0x12, 0x72,
+	0xe0, 0xe2, 0x08, 0x4e, 0xac, 0xf4, 0x48, 0xcd, 0xc9, 0xc9, 0x17, 0x92, 0xd4, 0x83, 0xbb, 0x01,
+	0xcd, 0x42, 0x29, 0x71, 0x6c, 0x52, 0x05, 0x39, 0x95, 0x4a, 0x0c, 0x49, 0x6c, 0x60, 0xf7, 0x1a,
+	0x03, 0x02, 0x00, 0x00, 0xff, 0xff, 0xd7, 0x8d, 0xa7, 0x59, 0xc1, 0x00, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -145,6 +163,14 @@ type GreeterServer interface {
 	SayHello(context.Context, *PracticeRequest) (*PracticeReply, error)
 }
 
+// UnimplementedGreeterServer can be embedded to have forward compatible implementations.
+type UnimplementedGreeterServer struct {
+}
+
+func (*UnimplementedGreeterServer) SayHello(ctx context.Context, req *PracticeRequest) (*PracticeReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SayHello not implemented")
+}
+
 func RegisterGreeterServer(s *grpc.Server, srv GreeterServer) {
 	s.RegisterService(&_Greeter_serviceDesc, srv)
 }
@@ -178,19 +204,4 @@ var _Greeter_serviceDesc = grpc.ServiceDesc{
 	},
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "practice.proto",
-}
-
-func init() { proto.RegisterFile("practice.proto", fileDescriptor_practice_8aabd2c6fbc73ce5) }
-
-var fileDescriptor_practice_8aabd2c6fbc73ce5 = []byte{
-	// 142 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0x2b, 0x28, 0x4a, 0x4c,
-	0x2e, 0xc9, 0x4c, 0x4e, 0xd5, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0xe2, 0x80, 0xf1, 0x95, 0x54,
-	0xb9, 0xf8, 0x03, 0xa0, 0xec, 0xa0, 0xd4, 0xc2, 0xd2, 0xd4, 0xe2, 0x12, 0x21, 0x21, 0x2e, 0x96,
-	0xbc, 0xc4, 0xdc, 0x54, 0x09, 0x46, 0x05, 0x46, 0x0d, 0xce, 0x20, 0x30, 0x5b, 0x49, 0x93, 0x8b,
-	0x17, 0xa1, 0xac, 0x20, 0xa7, 0x52, 0x48, 0x82, 0x8b, 0x3d, 0x37, 0xb5, 0xb8, 0x38, 0x31, 0x1d,
-	0xa6, 0x0e, 0xc6, 0x35, 0xf2, 0xe6, 0x62, 0x77, 0x2f, 0x4a, 0x4d, 0x2d, 0x49, 0x2d, 0x12, 0x72,
-	0xe0, 0xe2, 0x08, 0x4e, 0xac, 0xf4, 0x48, 0xcd, 0xc9, 0xc9, 0x17, 0x92, 0xd4, 0x83, 0xbb, 0x01,
-	0xcd, 0x42, 0x29, 0x71, 0x6c, 0x52, 0x05, 0x39, 0x95, 0x4a, 0x0c, 0x49, 0x6c, 0x60, 0xf7, 0x1a,
-	0x03, 0x02, 0x00, 0x00, 0xff, 0xff, 0xd7, 0x8d, 0xa7, 0x59, 0xc1, 0x00, 0x00, 0x00,
 }
