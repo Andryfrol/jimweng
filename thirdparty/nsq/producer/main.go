@@ -12,25 +12,27 @@ var (
 	topicFlag = flag.String("topic", "write_test", "pre-define the consumer topic.")
 	nsqAddr   = flag.String("nsqAddr", "127.0.0.1", "Specific the nsq address to write")
 	nsqPort   = flag.String("nsqPort", "4150", "Specify the used nsqd port")
+	nsqMsg    = flag.String("nsqMsg", "test", "Enter the msg want to send to nsq")
 
-	// main controll variable for nsq
-	nsqP   = &nsq.Producer{}
+	// main variables
+	nsqP   = &nsqProducer{}
 	nsqURI string
-	// wg     = &sync.WaitGroup{}
 )
 
-func main() {
-	// config := nsq.NewConfig()
-	// w, _ := nsq.NewProducer("127.0.0.1:4150", config)
+type nsqProducer struct {
+	producer *nsq.Producer
+	topic    string
+	msg      string
+}
 
-	for i := 0; i < 100; i++ {
-		err := nsqP.Publish("write_test", []byte("test"))
-		if err != nil {
-			log.Panic("Could not connect")
-		}
-	}
+func (nq *nsqProducer) Stop() {
+	nq.producer.Stop()
+}
 
-	nsqP.Stop()
+func (nq *nsqProducer) Publish() error {
+	var err error
+	err = nq.producer.Publish(nq.topic, []byte(nq.msg))
+	return err
 }
 
 func nsqConnectURI(uri string, port string) string {
@@ -46,8 +48,26 @@ func newNsqProducer(channel string, topic string) *nsq.Producer {
 	return w
 }
 
+func main() {
+	// config := nsq.NewConfig()
+	// w, _ := nsq.NewProducer("127.0.0.1:4150", config)
+
+	// for i := 0; i < 100; i++ {
+
+	err := nsqP.Publish()
+	// err := nsqP.Publish("write_test", []byte("test"))
+	if err != nil {
+		log.Panic("Could not connect")
+	}
+	// }
+
+	nsqP.Stop()
+}
+
 func init() {
 	flag.Parse()
 	nsqURI = nsqConnectURI(*nsqAddr, *nsqPort)
-	nsqP = newNsqProducer(*chanFlag, *topicFlag)
+	nsqP.producer = newNsqProducer(*chanFlag, *topicFlag)
+	nsqP.topic = *topicFlag
+	nsqP.msg = *nsqMsg
 }
