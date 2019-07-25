@@ -17,7 +17,6 @@ message PersonInfo {
 }
 
 // The request message containing the user's name.
-// ps: use repeated PersonInfo personinfo to mean an array of structure
 message CheckHealthRequest {
   PersonInfo personinfo = 1;
 }
@@ -31,7 +30,6 @@ message ReportInfo{
 }
 
 // The response message containing the greetings
-// ps: use repeated ReportInfo reportinfo to mean an array of structure
 message CheckHealthReply {
   ReportInfo reportinfo = 1;
 }
