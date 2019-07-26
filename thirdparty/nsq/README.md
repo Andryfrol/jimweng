@@ -31,6 +31,15 @@ For timeout msg, msg would stored in queue and resend to clients
 That being said, NSQD only guarantee that every msg would be sent `at least once` whereas `exactly once` reliablity need to be performed by clients.
 ```
 
+# About nsqd lookup
+- https://nsq.io/components/nsqlookupd.html
+```
+nsqlookupd is the daemon that manages topology information. Clients query nsqlookupd to discover nsqd producers for a specific topic and nsqd nodes broadcasts topic and channel information.
+
+There are two interfaces: A TCP interface which is used by nsqd for broadcasts and an HTTP interface for clients to perform discovery and administrative actions.
+```
+
+
 # refer:
 - http://tleyden.github.io/blog/2014/11/12/an-example-of-using-nsq-from-go/
 - https://nsq.io/overview/design.html
@@ -38,3 +47,4 @@ That being said, NSQD only guarantee that every msg would be sent `at least once
 - https://www.youtube.com/watch?v=GCOvuCKe5zA
 - https://swanspouse.github.io/2018/12/10/nsq-message-in-flight/
 - https://blog.csdn.net/sd653159/article/details/83624661
+- https://nsq.io/components/nsqlookupd.html
