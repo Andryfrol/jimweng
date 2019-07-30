@@ -6,10 +6,10 @@ import (
 	"github.com/go-redis/redis"
 )
 
-func NewRedisClient() redisDAO {
+func NewRedisClient(addr string, pw string) redisDAO {
 	client := redis.NewClient(&redis.Options{
-		Addr:     "localhost:6379",
-		Password: "",
+		Addr:     addr,
+		Password: pw,
 		DB:       0,
 	})
 	rO := &redisObject{
@@ -19,11 +19,11 @@ func NewRedisClient() redisDAO {
 }
 
 func main() {
-	redisClient := NewRedisClient()
-	redisClient.ping()
+	redisClient := NewRedisClient("localhost:6379", "yourpassword")
+	fmt.Println(redisClient.ping())
 	// fmt.Printf("%v\n", pong)
-	redisClient.setValue("a", "jim")
-	redisClient.queryValue("a")
+	fmt.Println(redisClient.setValue("a", "jim"))
+	fmt.Println(redisClient.queryValue("a"))
 }
 
 type redisObject struct {
@@ -31,34 +31,36 @@ type redisObject struct {
 }
 
 type redisDAO interface {
-	ping()                   // expect to print out pong on the console
-	setValue(string, string) // expect to set value into redis
-	queryValue(string)
-	deleteValue(string)
+	ping() string                  // expect to print out pong on the console
+	setValue(string, string) error // expect to set value into redis
+	queryValue(string) string
+	deleteValue(string) error
 }
 
-func (r *redisObject) ping() {
+func (r *redisObject) ping() string {
 	pong, _ := r.ro.Ping().Result()
-	fmt.Println(pong)
+	return pong
 }
 
-func (r *redisObject) setValue(key string, value string) {
+func (r *redisObject) setValue(key string, value string) error {
 	err := r.ro.Set(key, value, 0).Err()
 	if err != nil {
-		panic(err)
+		return err
 	}
+	return nil
 }
 
-func (r *redisObject) queryValue(key string) {
+func (r *redisObject) queryValue(key string) string {
 	if val, err := r.ro.Get(key).Result(); err != nil {
-		fmt.Println(err)
+		return fmt.Sprintf("Error happend with %v\n", err)
 	} else {
-		fmt.Printf("Query key '%s', get return value '%s'\n", key, val)
+		return fmt.Sprintf("Query key '%s', get return value '%s'\n", key, val)
 	}
 }
 
-func (r *redisObject) deleteValue(key string) {
-
+func (r *redisObject) deleteValue(key string) error {
+	_, err := r.ro.Del(key).Result()
+	return err
 }
 
 // val2, err := client.Get("key2").Result()
