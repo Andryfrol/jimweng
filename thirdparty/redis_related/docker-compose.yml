@@ -2,7 +2,7 @@ version: '2'
 services:
   redis:
     container_name: redis
-    #command: redis-server --requirepass yourpassword
+    command: redis-server --requirepass yourpassword
     image: redis
     restart: always
     # command: ["redis-server", "--appendonly", "yes"]
