@@ -12,10 +12,10 @@ import (
 )
 
 var (
-	name   = flag.String("name", "", "for health check name")
-	sexual = flag.String("sex", "", "for health check sexual")
-	hight  = flag.Int("hight", 0, "for health check hight")
-	weight = flag.Int("weight", 0, "for health check weight")
+	name   = flag.String("name", "Testman", "for health check name")
+	sexual = flag.String("sex", "NoSexual", "for health check sexual")
+	hight  = flag.Int("hight", 180, "for health check hight")
+	weight = flag.Int("weight", 75, "for health check weight")
 )
 
 const (
