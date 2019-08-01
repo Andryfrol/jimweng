@@ -4,8 +4,8 @@ import (
 	"log"
 	"strconv"
 
-	"github.com/biezhi/gorm-paginator/pagination"
 	"github.com/gin-gonic/gin"
+	pagination "github.com/goPractice/memoServer/paginator"
 	"github.com/jinzhu/gorm"
 )
 
@@ -16,15 +16,8 @@ type User struct {
 	UserName string `gorm:"not full;size:100;unique"`
 }
 
-func InitDB() (*gorm.DB, error) {
-	var err error
-	if db, err = gorm.Open("sqlite3", "example.db"); err != nil {
-		return nil, err
-	}
-
-	db.AutoMigrate(&User{})
-	count := 0
-	db.Model(User{}).Count(&count)
+/* insert sample data */
+func InsertSampleData() {
 	db.Create(User{ID: 1, UserName: "biezhi"})
 	db.Create(User{ID: 2, UserName: "rose"})
 	db.Create(User{ID: 3, UserName: "jack"})
@@ -34,15 +27,23 @@ func InitDB() (*gorm.DB, error) {
 	db.Create(User{ID: 7, UserName: "anny"})
 	db.Create(User{ID: 8, UserName: "wat"})
 	log.Println("Insert OK!")
+}
+
+func InitDB() (*gorm.DB, error) {
+	var err error
+	if db, err = gorm.Open("sqlite3", "example.db"); err != nil {
+		return nil, err
+	}
+	db.AutoMigrate(&User{})
 
 	return db, err
 
 }
 
 func ReturnPageInfo(ctx *gin.Context) {
+	var users []User
 	page, _ := strconv.Atoi(ctx.DefaultQuery("page", "1"))
 	limit, _ := strconv.Atoi(ctx.DefaultQuery("limit", "3"))
-	var users []User
 
 	paginator := pagination.Paging(&pagination.Param{
 		DB:      db,
