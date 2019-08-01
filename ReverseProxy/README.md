@@ -15,6 +15,8 @@ To be more clearly what proxy (especially reverse proxy) do, I decide to write m
 # feature
 ... on-going
 
+# bug
+1. connection keep-alive...
 
 # refer
 - https://github.com/jim0409/go-proxy-example
