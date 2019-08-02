@@ -2,10 +2,8 @@ package model
 
 import (
 	"log"
-	"strconv"
 
-	"github.com/gin-gonic/gin"
-	pagination "github.com/goPractice/memoServer/paginator"
+	pagination "github.com/goPractice/memoServer/model/paginator"
 	"github.com/jinzhu/gorm"
 )
 
@@ -24,14 +22,14 @@ func InsertSampleData() {
 	db.AutoMigrate(&MemoList{})
 
 	db.Create(&MemoList{Title: "TestTitle1", Description: "1001 words included", Category: 0})
-	db.Create(&MemoList{Title: "TestTitle2", Description: "1002 words included", Category: 0})
-	db.Create(&MemoList{Title: "TestTitle3", Description: "1003 words included", Category: 0})
+	db.Create(&MemoList{Title: "TestTitle2", Description: "1002 words included", Category: 1})
+	db.Create(&MemoList{Title: "TestTitle3", Description: "1003 words included", Category: 2})
 	db.Create(&MemoList{Title: "TestTitle4", Description: "1004 words included", Category: 0})
-	db.Create(&MemoList{Title: "TestTitle5", Description: "1005 words included", Category: 0})
-	db.Create(&MemoList{Title: "TestTitle6", Description: "1006 words included", Category: 0})
+	db.Create(&MemoList{Title: "TestTitle5", Description: "1005 words included", Category: 1})
+	db.Create(&MemoList{Title: "TestTitle6", Description: "1006 words included", Category: 2})
 	db.Create(&MemoList{Title: "TestTitle7", Description: "1007 words included", Category: 0})
-	db.Create(&MemoList{Title: "TestTitle8", Description: "1008 words included", Category: 0})
-	db.Create(&MemoList{Title: "TestTitle9", Description: "1009 words included", Category: 0})
+	db.Create(&MemoList{Title: "TestTitle8", Description: "1008 words included", Category: 1})
+	db.Create(&MemoList{Title: "TestTitle9", Description: "1009 words included", Category: 2})
 	log.Println("Insert OK!")
 }
 
@@ -46,17 +44,23 @@ func InitDB() (*gorm.DB, error) {
 
 }
 
-func ReturnPageInfo(ctx *gin.Context) {
-	var memoss []MemoList
-	page, _ := strconv.Atoi(ctx.DefaultQuery("page", "1"))
-	limit, _ := strconv.Atoi(ctx.DefaultQuery("limit", "3"))
+// InsertData would create an new record for the memo list
+func InsertData(title string, description string, category int) error {
+	return db.Create(&MemoList{Title: title, Description: description, Category: category}).Error
+}
 
-	paginator := pagination.Paging(&pagination.Param{
+// GetData would return the paginator info
+func GetData(page int, limit int) *pagination.Paginator {
+	var memoss []MemoList
+	return pagination.Paging(&pagination.Param{
 		DB:      db,
 		Page:    page,
 		Limit:   limit,
 		OrderBy: []string{"id"},
 		ShowSQL: true,
 	}, &memoss)
-	ctx.JSON(200, paginator)
 }
+
+func DeleteData() {}
+
+func UpdateData() {}

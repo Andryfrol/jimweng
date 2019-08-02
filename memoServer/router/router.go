@@ -2,7 +2,7 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/goPractice/memoServer/model"
+	"github.com/goPractice/memoServer/controllers"
 )
 
 type Router struct {
@@ -20,7 +20,7 @@ type RouterImpl interface {
 func NewRouter() RouterImpl {
 	var rr Router
 	r := gin.Default()
-	r.GET("/v1", model.ReturnPageInfo)
+	r.GET("/v1", controllers.ReturnPageInfo)
 
 	rr.router = r
 	return &rr
