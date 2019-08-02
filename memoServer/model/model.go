@@ -61,6 +61,12 @@ func GetData(page int, limit int) *pagination.Paginator {
 	}, &memoss)
 }
 
-func DeleteData() {}
+// DeleteData would delete the specify id data
+func DeleteData(id string) error {
+	return db.Where("id = ?", id).Delete(&MemoList{}).Error
+}
 
-func UpdateData() {}
+// UpdateData would update origin description via id
+func UpdateData(id string, description string) error {
+	return db.Where("id = ?", id).Update(&MemoList{}).Error
+}
