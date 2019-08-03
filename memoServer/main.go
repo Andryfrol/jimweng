@@ -8,12 +8,6 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-// User 用户
-type User struct {
-	ID       int
-	UserName string `gorm:"not null;size:100;unique"`
-}
-
 func init() {
 	_, err := model.InitDB()
 	if err != nil {
