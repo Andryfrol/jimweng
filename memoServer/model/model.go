@@ -9,6 +9,7 @@ import (
 
 var db *gorm.DB
 
+/* TODO: add extra category handle for MemoList*/
 // meomo column: Title; Description; Start Date; End Date; Category[Pesonal, Business, Others]
 type MemoList struct {
 	gorm.Model
@@ -28,6 +29,7 @@ func InitDB() (*gorm.DB, error) {
 
 }
 
+/* TODO: add extra category handle for Category */
 // InsertData would create an new record for the memo list
 func InsertData(title string, description string, category int) error {
 	return db.Create(&MemoList{Title: title, Description: description, Category: category}).Error
