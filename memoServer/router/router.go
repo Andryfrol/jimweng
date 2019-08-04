@@ -1,6 +1,7 @@
 package router
 
 import (
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/goPractice/memoServer/controllers"
 )
@@ -20,6 +21,12 @@ type RouterImpl interface {
 func NewRouter() RouterImpl {
 	var rr Router
 	r := gin.Default()
+
+	// add CORS allow header
+	corsConfig := cors.DefaultConfig()
+	corsConfig.AllowAllOrigins = true
+
+	r.Use(cors.New(corsConfig))
 
 	r.GET("/v1", controllers.ReturnPageInfo)
 	r.DELETE("/v1", controllers.DeleteSpecificValue)
