@@ -1,5 +1,5 @@
 package all
 
 import (
-	_ "github.com/goPractice/crawler/crawler/plugins/outputs/mysql"
+	_ "github.com/jimweng/crawler/crawler/plugins/outputs/mysql"
 )

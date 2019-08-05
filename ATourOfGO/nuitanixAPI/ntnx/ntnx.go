@@ -8,13 +8,13 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/goPractice/ATourOfGO/nuitanixAPI/ntnx/cluster"
-	"github.com/goPractice/ATourOfGO/nuitanixAPI/ntnx/disks"
-	"github.com/goPractice/ATourOfGO/nuitanixAPI/ntnx/hosts"
-	"github.com/goPractice/ATourOfGO/nuitanixAPI/ntnx/storagecontainers"
-	"github.com/goPractice/ATourOfGO/nuitanixAPI/ntnx/storagepool"
-	"github.com/goPractice/ATourOfGO/nuitanixAPI/ntnx/virtualmachine"
-	"github.com/goPractice/ATourOfGO/nuitanixAPI/ntnx/volumegroups"
+	"github.com/jimweng/ATourOfGO/nuitanixAPI/ntnx/cluster"
+	"github.com/jimweng/ATourOfGO/nuitanixAPI/ntnx/disks"
+	"github.com/jimweng/ATourOfGO/nuitanixAPI/ntnx/hosts"
+	"github.com/jimweng/ATourOfGO/nuitanixAPI/ntnx/storagecontainers"
+	"github.com/jimweng/ATourOfGO/nuitanixAPI/ntnx/storagepool"
+	"github.com/jimweng/ATourOfGO/nuitanixAPI/ntnx/virtualmachine"
+	"github.com/jimweng/ATourOfGO/nuitanixAPI/ntnx/volumegroups"
 )
 
 // basic information

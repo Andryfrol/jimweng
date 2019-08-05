@@ -3,8 +3,8 @@
 
 #!/bin/bash
 
-# PATH=/Users/mac/go/src/github.com/goPractice/ATourOfGO/basic
-cd /Users/mac/go/src/github.com/goPractice/ATourOfGO/basic
+# PATH=/Users/mac/go/src/github.com/jimweng/ATourOfGO/basic
+cd /Users/mac/go/src/github.com/jimweng/ATourOfGO/basic
 # save the git log as temp variable
 lastCommit=`git log|head -5 | tail -1`
 echo $lastCommit

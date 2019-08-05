@@ -11,7 +11,7 @@ import (
 	"syscall"
 	"time"
 
-	pb "github.com/goPractice/pkgserver/pkgserver"
+	pb "github.com/jimweng/pkgserver/pkgserver"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"google.golang.org/grpc"
 )

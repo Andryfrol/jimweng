@@ -5,7 +5,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/goPractice/pkgmanagement/utils"
+	"github.com/jimweng/pkgmanagement/utils"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/stretchr/testify/assert"
 )

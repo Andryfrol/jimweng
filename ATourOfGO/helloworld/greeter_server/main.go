@@ -25,7 +25,7 @@ import (
 	"log"
 	"net"
 
-	"github.com/goPractice/ATourOfGO/helloworld/helloworld"
+	"github.com/jimweng/ATourOfGO/helloworld/helloworld"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"

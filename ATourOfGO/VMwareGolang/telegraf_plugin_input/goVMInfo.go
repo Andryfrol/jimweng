@@ -4,7 +4,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/goPractice/ATourOfGO/VMwareGolang/telegraf_plugin_input/example"
+	"github.com/jimweng/ATourOfGO/VMwareGolang/telegraf_plugin_input/example"
 )
 
 // "github.com/influxdata/telegraf"

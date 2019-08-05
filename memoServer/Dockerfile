@@ -6,7 +6,7 @@ RUN set -eux; \
         apk add --no-cache --virtual .build-deps gcc libc-dev git
 
 ENV GOPATH /go/
-ENV GO_WORKDIR $GOPATH/src/github.com/goPractice/memoServer
+ENV GO_WORKDIR $GOPATH/src/github.com/jimweng/memoServer
 ENV GO111MODULE=on
 # claim workdir and move to workdir loc
 WORKDIR $GO_WORKDIR
@@ -19,7 +19,7 @@ FROM alpine:3.8
 RUN set -eux; \
         apk add --no-cache ca-certificates wget openssl
 # copy binary into container
-COPY --from=builder /go/src/github.com/goPractice/memoServer/backend .
+COPY --from=builder /go/src/github.com/jimweng/memoServer/backend .
 ADD ./entrypoint.sh .
 RUN chmod +x entrypoint.sh
 

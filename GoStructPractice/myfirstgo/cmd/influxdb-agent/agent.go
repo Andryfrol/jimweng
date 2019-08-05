@@ -7,8 +7,8 @@ import (
 	"os"
 	"os/signal"
 
-	"github.com/goPractice/GoStructPractice/myfirstgo"
-	_ "github.com/goPractice/GoStructPractice/myfirstgo/plugins/all"
+	"github.com/jimweng/GoStructPractice/myfirstgo"
+	_ "github.com/jimweng/GoStructPractice/myfirstgo/plugins/all"
 )
 
 var fDebug = flag.Bool("debug", false, "show metrics as they're generated to stdout")

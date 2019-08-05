@@ -5,7 +5,7 @@
 package mock_practice
 
 import (
-	proto "github.com/goPractice/thirdparty/gRPC/practice_server/proto"
+	proto "github.com/jimweng/thirdparty/gRPC/practice_server/proto"
 	gomock "github.com/golang/mock/gomock"
 	context "golang.org/x/net/context"
 	grpc "google.golang.org/grpc"

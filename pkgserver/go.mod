@@ -1,4 +1,4 @@
-module github.com/goPractice/pkgserver
+module github.com/jimweng/pkgserver
 
 go 1.12
 

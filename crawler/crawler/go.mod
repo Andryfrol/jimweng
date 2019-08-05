@@ -1,4 +1,4 @@
-module github.com/goPractice/crawler/crawler
+module github.com/jimweng/crawler/crawler
 
 go 1.12
 

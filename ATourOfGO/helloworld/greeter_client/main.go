@@ -24,7 +24,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/goPractice/ATourOfGO/helloworld/helloworld"
+	"github.com/jimweng/ATourOfGO/helloworld/helloworld"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 )

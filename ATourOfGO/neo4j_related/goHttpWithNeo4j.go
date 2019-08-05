@@ -14,7 +14,7 @@ var (
 )
 
 func curlWithJSONFile() {
-	f, err := os.Open("/Users/mac/go/src/github.com/goPractice/ATourOfGO/basic/operation/create.json")
+	f, err := os.Open("/Users/mac/go/src/github.com/jimweng/ATourOfGO/basic/operation/create.json")
 	if err != nil {
 		// handle err
 	}

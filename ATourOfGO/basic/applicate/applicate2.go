@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/goPractice/GoStructPractice/myfirstgo/plugins"
+	"github.com/jimweng/GoStructPractice/myfirstgo/plugins"
 	"github.com/naoina/toml"
 	"github.com/naoina/toml/ast"
 	"github.com/vektra/cypress"

@@ -1,6 +1,6 @@
 package inputs
 
-import "github.com/goPractice/pkgmanagement/utils"
+import "github.com/jimweng/pkgmanagement/utils"
 
 type Creator func() utils.Input
 

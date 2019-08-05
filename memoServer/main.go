@@ -3,8 +3,8 @@ package main
 import (
 	"flag"
 
-	"github.com/goPractice/memoServer/model"
-	"github.com/goPractice/memoServer/router"
+	"github.com/jimweng/memoServer/model"
+	"github.com/jimweng/memoServer/router"
 	_ "github.com/mattn/go-sqlite3"
 )
 

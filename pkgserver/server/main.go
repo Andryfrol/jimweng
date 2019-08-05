@@ -7,7 +7,7 @@ import (
 	"net"
 	"os"
 
-	pb "github.com/goPractice/pkgserver/pkgserver"
+	pb "github.com/jimweng/pkgserver/pkgserver"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"google.golang.org/grpc"

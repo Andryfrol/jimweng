@@ -1,4 +1,4 @@
-module github.com/goPractice/crawler/pipeline
+module github.com/jimweng/crawler/pipeline
 
 go 1.12
 

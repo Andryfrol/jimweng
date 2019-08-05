@@ -20,7 +20,7 @@ mysql ----|                                                         |-- nginx
 
 # Installation
 - With git cli
-> git clone https://github.com/jim0409/goPractice.git
+> git clone https://github.com/jim0409/jimweng.git
 - Move to this folder
 > cd ./crawler
 

@@ -11,7 +11,7 @@ import (
 	"syscall"
 	"time"
 
-	pb "github.com/goPractice/crawler/pipeline/grpcproto"
+	pb "github.com/jimweng/crawler/pipeline/grpcproto"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"google.golang.org/grpc"
 )

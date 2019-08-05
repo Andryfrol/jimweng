@@ -3,7 +3,7 @@ package model
 import (
 	"log"
 
-	pagination "github.com/goPractice/memoServer/model/paginator"
+	pagination "github.com/jimweng/memoServer/model/paginator"
 	"github.com/jinzhu/gorm"
 )
 

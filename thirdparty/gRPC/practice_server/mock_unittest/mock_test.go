@@ -6,10 +6,10 @@ import (
 	"testing"
 	"time"
 
-	pb "github.com/goPractice/thirdparty/gRPC/practice_server/proto"
+	pb "github.com/jimweng/thirdparty/gRPC/practice_server/proto"
 
-	// hwmock "github.com/goPractice/thirdparty/gRPC/hello_server/mock_unittest"
-	pbmock "github.com/goPractice/thirdparty/gRPC/practice_server/mock_unittest"
+	// hwmock "github.com/jimweng/thirdparty/gRPC/hello_server/mock_unittest"
+	pbmock "github.com/jimweng/thirdparty/gRPC/practice_server/mock_unittest"
 	"github.com/golang/mock/gomock"
 	"github.com/golang/protobuf/proto"
 )

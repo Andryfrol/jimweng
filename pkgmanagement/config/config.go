@@ -6,10 +6,10 @@ import (
 	"os"
 
 	"github.com/BurntSushi/toml"
-	_ "github.com/goPractice/pkgmanagement/plugins/inputs/all"
-	"github.com/goPractice/pkgmanagement/plugins/inputs/crawler"
-	_ "github.com/goPractice/pkgmanagement/plugins/outputs/all"
-	"github.com/goPractice/pkgmanagement/plugins/outputs/mysql"
+	_ "github.com/jimweng/pkgmanagement/plugins/inputs/all"
+	"github.com/jimweng/pkgmanagement/plugins/inputs/crawler"
+	_ "github.com/jimweng/pkgmanagement/plugins/outputs/all"
+	"github.com/jimweng/pkgmanagement/plugins/outputs/mysql"
 )
 
 type CrawlerConfig struct {

@@ -5,7 +5,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/goPractice/memoServer/model"
+	"github.com/jimweng/memoServer/model"
 )
 
 func ReturnPageInfo(ctx *gin.Context) {

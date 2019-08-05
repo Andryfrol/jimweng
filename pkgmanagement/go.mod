@@ -1,4 +1,4 @@
-module github.com/goPractice/pkgmanagement
+module github.com/jimweng/pkgmanagement
 
 go 1.12
 

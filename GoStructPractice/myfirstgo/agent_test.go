@@ -3,7 +3,7 @@ package myfirstgo
 import (
 	"testing"
 
-	"github.com/goPractice/GoStructPractice/myfirstgo/plugins"
+	"github.com/jimweng/GoStructPractice/myfirstgo/plugins"
 	// "github.com/influxdb/tivan/plugins"
 	"github.com/stretchr/testify/require"
 	"github.com/vektra/cypress"

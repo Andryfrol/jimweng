@@ -4,8 +4,8 @@ import (
 	"log"
 	"time"
 
-	"github.com/goPractice/crawler/crawler/plugins/outputs"
-	"github.com/goPractice/crawler/crawler/utils"
+	"github.com/jimweng/crawler/crawler/plugins/outputs"
+	"github.com/jimweng/crawler/crawler/utils"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )

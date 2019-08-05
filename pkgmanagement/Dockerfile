@@ -8,7 +8,7 @@ RUN set -eux; \
 
 # env for go workdir and mod vendor
 ENV GOPATH /go/
-ENV GO_WORKDIR $GOPATH/src/github.com/goPractice/pkgserver/
+ENV GO_WORKDIR $GOPATH/src/github.com/jimweng/pkgserver/
 ENV GO111MODULE=on
 # claim workdir and move to workdir loc
 WORKDIR $GO_WORKDIR
@@ -20,6 +20,6 @@ RUN cd ${gRPCRole};go build main.go
 
 FROM alpine:3.8
 # copy binary into container
-COPY --from=builder /go/src/github.com/goPractice/pkgserver/${gRPCRole} .
+COPY --from=builder /go/src/github.com/jimweng/pkgserver/${gRPCRole} .
 
 CMD ["sh"]

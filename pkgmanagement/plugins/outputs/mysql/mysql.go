@@ -4,8 +4,8 @@ import (
 	"log"
 	"time"
 
-	"github.com/goPractice/pkgmanagement/plugins/outputs"
-	"github.com/goPractice/pkgmanagement/utils"
+	"github.com/jimweng/pkgmanagement/plugins/outputs"
+	"github.com/jimweng/pkgmanagement/utils"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )

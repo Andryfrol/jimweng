@@ -1,5 +1,5 @@
 package all
 
 import (
-	_ "github.com/goPractice/pkgmanagement/plugins/outputs/mysql"
+	_ "github.com/jimweng/pkgmanagement/plugins/outputs/mysql"
 )

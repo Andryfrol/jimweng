@@ -11,8 +11,8 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/goPractice/pkgmanagement/config"
-	"github.com/goPractice/pkgmanagement/utils"
+	"github.com/jimweng/pkgmanagement/config"
+	"github.com/jimweng/pkgmanagement/utils"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 

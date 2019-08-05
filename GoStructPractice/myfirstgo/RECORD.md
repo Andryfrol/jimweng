@@ -2,7 +2,7 @@
 > 
 ### For myfirstgo proj
 1. myfirstgo/cmd/agent.go
-- 	"github.com/goPractice/GoStructPractice/myfirstgo"
--	_ "github.com/goPractice/GoStructPractice/myfirstgo/plugins/all"
+- 	"github.com/jimweng/GoStructPractice/myfirstgo"
+-	_ "github.com/jimweng/GoStructPractice/myfirstgo/plugins/all"
 2. myfirstgo/agent.go
 - 

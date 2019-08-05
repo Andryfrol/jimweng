@@ -1,4 +1,4 @@
-module github.com/goPractice
+module github.com/jimweng
 
 go 1.12
 

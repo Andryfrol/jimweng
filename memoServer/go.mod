@@ -1,4 +1,4 @@
-module github.com/goPractice/memoServer
+module github.com/jimweng/memoServer
 
 go 1.12
 

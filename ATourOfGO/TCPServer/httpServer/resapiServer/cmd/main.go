@@ -5,8 +5,8 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/goPractice/ATourOfGO/TCPServer/httpServer/resapiServer/behavior/sayhi"
-	"github.com/goPractice/ATourOfGO/TCPServer/httpServer/resapiServer/behavior/vmwareapi/query"
+	"github.com/jimweng/ATourOfGO/TCPServer/httpServer/resapiServer/behavior/sayhi"
+	"github.com/jimweng/ATourOfGO/TCPServer/httpServer/resapiServer/behavior/vmwareapi/query"
 )
 
 // Descriptions of Operation steps:

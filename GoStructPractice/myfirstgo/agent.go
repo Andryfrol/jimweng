@@ -5,7 +5,7 @@ import (
 	"log"
 	"sort"
 
-	"github.com/goPractice/GoStructPractice/myfirstgo/plugins"
+	"github.com/jimweng/GoStructPractice/myfirstgo/plugins"
 	// "github.com/influxdb/tivan/plugins"
 	"github.com/vektra/cypress"
 	"github.com/vektra/cypress/plugins/metrics"

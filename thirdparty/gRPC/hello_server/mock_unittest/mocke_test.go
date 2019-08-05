@@ -24,8 +24,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/goPractice/thirdparty/gRPC/hello_server/helloworld"
-	hwmock "github.com/goPractice/thirdparty/gRPC/hello_server/mock_unittest"
+	"github.com/jimweng/thirdparty/gRPC/hello_server/helloworld"
+	hwmock "github.com/jimweng/thirdparty/gRPC/hello_server/mock_unittest"
 	"github.com/golang/mock/gomock"
 	"github.com/golang/protobuf/proto"
 )

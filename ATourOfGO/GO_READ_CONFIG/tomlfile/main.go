@@ -43,7 +43,7 @@ type clients struct {
 
 func main() {
 	var config tomlConfig
-	filePath := "/Users/jimweng/go/src/github.com/goPractice/ATourOfGO/GO_READ_CONFIG/tomlfile/test.conf"
+	filePath := "/Users/jimweng/go/src/github.com/jimweng/ATourOfGO/GO_READ_CONFIG/tomlfile/test.conf"
 	if aa, err := toml.DecodeFile(filePath, &config); err != nil {
 		fmt.Printf("%v\n", aa)
 		panic(err)

@@ -6,9 +6,9 @@ import (
 	"os"
 
 	"github.com/BurntSushi/toml"
-	"github.com/goPractice/crawler/crawler/plugins/inputs/crawler"
-	"github.com/goPractice/crawler/crawler/plugins/outputs/mysql"
-	"github.com/goPractice/crawler/crawler/utils"
+	"github.com/jimweng/crawler/crawler/plugins/inputs/crawler"
+	"github.com/jimweng/crawler/crawler/plugins/outputs/mysql"
+	"github.com/jimweng/crawler/crawler/utils"
 )
 
 type CrawlerConfig struct {

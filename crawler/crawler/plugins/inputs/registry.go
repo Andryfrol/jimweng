@@ -1,6 +1,6 @@
 package inputs
 
-import "github.com/goPractice/crawler/crawler/utils"
+import "github.com/jimweng/crawler/crawler/utils"
 
 type Creator func() utils.Input
 
