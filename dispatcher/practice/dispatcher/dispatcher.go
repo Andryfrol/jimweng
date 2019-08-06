@@ -6,13 +6,17 @@ import (
 	"github.com/jimweng/dispatcher/practice/worker"
 )
 
+// var workers []worker.Worker
+
 func StartDispatcher(nworkers int) {
 	worker.WorkerPool = make(worker.WorkerPoolType, nworkers)
+	// workers = make([]worker.Worker, nworkers)
 
 	for i := 0; i < nworkers; i++ {
 		fmt.Println("Starting worker", i+1)
-		worker := worker.NewWorker(i+1, worker.WorkerPool)
-		worker.Start()
+		worker.NewWorker(i+1, worker.WorkerPool).Start()
+		// workers[i]= worker.NewWorker(i+1, worker.WorkerPool)
+		// workers[i].Start()
 	}
 
 	go func() {
@@ -21,12 +25,19 @@ func StartDispatcher(nworkers int) {
 			case work := <-worker.WorkQueue:
 				fmt.Println("Received work requeust")
 				go func() {
-					worker := <-worker.WorkerPool
+					workerPool := <-worker.WorkerPool
 
 					fmt.Println("Dispatching work request")
-					worker <- work
+					workerPool <- work
+
 				}()
 			}
 		}
 	}()
+}
+
+func StopWorker() {
+	for _, j := range worker.Workers {
+		j.Stop()
+	}
 }

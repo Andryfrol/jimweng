@@ -15,17 +15,28 @@ type Worker struct {
 
 type WorkerPoolType chan chan WorkRequest
 
-var WorkQueue = make(chan WorkRequest, 100)
+var (
+	WorkQueue  = make(chan WorkRequest, 100)
+	WorkerPool WorkerPoolType
+	Workers    []*Worker
+)
 
-var WorkerPool WorkerPoolType
-
-func NewWorker(id int, workerQueue chan chan WorkRequest) Worker {
-	return Worker{
+func NewWorker(id int, workerQueue chan chan WorkRequest) *Worker {
+	worker := &Worker{
 		ID:         id,
 		Work:       make(chan WorkRequest),
 		WorkerPool: workerQueue,
 		QuitChan:   make(chan bool),
 	}
+	Workers = append(Workers, worker)
+
+	return worker
+	// return Worker{
+	// 	ID:         id,
+	// 	Work:       make(chan WorkRequest),
+	// 	WorkerPool: workerQueue,
+	// 	QuitChan:   make(chan bool),
+	// }
 }
 
 func (w Worker) Start() {
@@ -41,5 +52,14 @@ func (w Worker) Start() {
 				return
 			}
 		}
+	}()
+}
+
+// Stop tells the worker to stop listening for work requests.
+//
+// Note that the worker will only stop *after* it has finished its work.
+func (w Worker) Stop() {
+	go func() {
+		w.QuitChan <- true
 	}()
 }
