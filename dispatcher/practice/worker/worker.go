@@ -43,10 +43,3 @@ func (w Worker) Start() {
 		}
 	}()
 }
-
-func ActiveWorkMethod(f func(config interface{}) error) WorkRequest {
-	work := WorkRequest{
-		Execute: f,
-	}
-	return work
-}
