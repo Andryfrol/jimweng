@@ -10,8 +10,8 @@ import (
 
 func Collector(w http.ResponseWriter, r *http.Request) {
 	// Make sure we can only be called with an HTTP POST request.
-	if r.Method != "POST" {
-		w.Header().Set("Allow", "POST")
+	if r.Method != "GET" {
+		w.Header().Set("Allow", "GET")
 		w.WriteHeader(http.StatusMethodNotAllowed)
 		return
 	}
@@ -40,7 +40,8 @@ func Collector(w http.ResponseWriter, r *http.Request) {
 
 	// Now, we take the delay, and the person's name, and make a WorkRequest out of them.
 	doFunc := func(config interface{}) error {
-		log.Println("Doing shiit\n")
+		log.Printf("Doing shiit --%v\n", name)
+		log.Println(config)
 		return nil
 	}
 

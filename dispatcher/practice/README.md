@@ -1,3 +1,13 @@
+# mechanism
+- main flow
+```
+main.go -> dispatcher.StartDispatcher(Active Workers Pool) -> go Serverrun (go signal)
+```
+- collecotr flow
+```
+client(Request) -> Collector -> send WorkRequest to chan with pre-define doFunc
+```
+
 # check cli
 curl -v -X POST "localhost:8001/work?delay=1s&name=foo"
 

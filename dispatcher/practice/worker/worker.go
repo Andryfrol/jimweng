@@ -40,7 +40,12 @@ func (w Worker) Start() {
 
 			select {
 			case work := <-w.Work:
-				work.Execute(nil)
+				switch w.ID {
+				case 1:
+					work.Execute(fmt.Sprintf("Request go to worker %v", w.ID))
+				default:
+					work.Execute("Request go to another worker")
+				}
 			case <-w.QuitChan:
 				fmt.Printf("worker %d stopping\n", w.ID)
 				return
