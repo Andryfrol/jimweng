@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
 	"net/http"
 	"time"
 )
@@ -125,7 +126,7 @@ func Collector(w http.ResponseWriter, r *http.Request) {
 	// Now, we take the delay, and the person's name, and make a WorkRequest out of them.
 	//work := WorkRequest{Name: name, Delay: delay}
 	doFunc := func(config interface{}) error {
-		fmt.Sprintf("Doing shiit")
+		log.Println("Doing shiit")
 		//return errors.New("Not a real problem..")
 		return nil
 	}
