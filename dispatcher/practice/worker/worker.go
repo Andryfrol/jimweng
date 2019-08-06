@@ -50,11 +50,3 @@ func ActiveWorkMethod(f func(config interface{}) error) WorkRequest {
 	}
 	return work
 }
-
-func PushWorkToQueue(w WorkRequest) {
-	WorkQueue <- w
-}
-
-func SyncWorkerPool(w *WorkerPoolType) {
-	WorkerPool = *w
-}

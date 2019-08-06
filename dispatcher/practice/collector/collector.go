@@ -41,20 +41,18 @@ func Collector(w http.ResponseWriter, r *http.Request) {
 	// Now, we take the delay, and the person's name, and make a WorkRequest out of them.
 	//work := WorkRequest{Name: name, Delay: delay}
 	doFunc := func(config interface{}) error {
-		log.Println("Doing shiit")
+		log.Println("Doing shiit\n")
 		//return errors.New("Not a real problem..")
 		return nil
 	}
 
 	// define the Execute method for work
-	work := worker.ActiveWorkMethod(doFunc)
-	// work := WorkRequest{
-	// 	Execute: doFunc,
-	// }
+	work := worker.WorkRequest{
+		Execute: doFunc,
+	}
 
 	// Push the work onto the queue.
-	worker.PushWorkToQueue(work)
-	// WorkQueue <- work
+	worker.WorkQueue <- work
 
 	log.Println("Work request queued")
 
