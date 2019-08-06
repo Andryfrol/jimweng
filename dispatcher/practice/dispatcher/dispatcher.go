@@ -6,17 +6,12 @@ import (
 	"github.com/jimweng/dispatcher/practice/worker"
 )
 
-// var workers []worker.Worker
-
 func StartDispatcher(nworkers int) {
 	worker.WorkerPool = make(worker.WorkerPoolType, nworkers)
-	// workers = make([]worker.Worker, nworkers)
 
 	for i := 0; i < nworkers; i++ {
 		fmt.Println("Starting worker", i+1)
 		worker.NewWorker(i+1, worker.WorkerPool).Start()
-		// workers[i]= worker.NewWorker(i+1, worker.WorkerPool)
-		// workers[i].Start()
 	}
 
 	go func() {
