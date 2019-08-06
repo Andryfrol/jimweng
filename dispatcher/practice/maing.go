@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"log"
 	"net/http"
@@ -13,17 +14,23 @@ import (
 	"github.com/jimweng/dispatcher/practice/dispatcher"
 )
 
+var (
+	workerNum = flag.Int("worker", 4, "showthe number of workers.")
+	httpAddr  = flag.String("addr", "127.0.0.1:8001", "specific the http address.")
+)
+
 func main() {
+	flag.Parse()
 	// Start the dispatcher.
 	fmt.Println("Starting the dispatcher")
-	dispatcher.StartDispatcher(4)
+	dispatcher.StartDispatcher(*workerNum)
 
 	// Register our collector as an HTTP handler function.
 	fmt.Println("Registering the collector")
 	http.HandleFunc("/work", collector.Collector)
 
 	// Start the HTTP server!
-	go ServerRun()
+	go ServerRun(*httpAddr)
 
 	// create one chan to print awaiting signal on console
 	sigs := make(chan os.Signal, 1)
@@ -49,9 +56,9 @@ func main() {
 
 }
 
-func ServerRun() {
-	fmt.Println("HTTP server listening on", "127.0.0.1:8001")
-	if err := http.ListenAndServe("127.0.0.1:8001", nil); err != nil {
+func ServerRun(addr string) {
+	fmt.Println("HTTP server listening on", addr)
+	if err := http.ListenAndServe(addr, nil); err != nil {
 		fmt.Println(err.Error())
 	}
 }
