@@ -36,14 +36,15 @@ func InsertData(title string, description string, category int) error {
 }
 
 // GetData would return the paginator info
-func GetData(page int, limit int) *pagination.Paginator {
+func GetData(page int, limit int, index string, order string) *pagination.Paginator {
 	var memoss []MemoList
+
 	return pagination.Paging(&pagination.Param{
 		DB:      db,
 		Page:    page,
 		Limit:   limit,
-		OrderBy: []string{"id"},
-		ShowSQL: false,
+		OrderBy: []string{index + " " + order},
+		ShowSQL: true,
 	}, &memoss)
 }
 

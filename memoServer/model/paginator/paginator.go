@@ -30,7 +30,6 @@ type Paginator struct {
 // Paging 分頁
 func Paging(p *Param, result interface{}) *Paginator {
 	db := p.DB
-
 	if p.ShowSQL {
 		db = db.Debug()
 	}
@@ -60,6 +59,7 @@ func Paging(p *Param, result interface{}) *Paginator {
 	}
 
 	db.Limit(p.Limit).Offset(offset).Find(result)
+
 	<-done
 
 	paginator.TotalRecord = count

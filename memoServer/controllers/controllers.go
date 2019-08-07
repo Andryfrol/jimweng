@@ -9,9 +9,12 @@ import (
 )
 
 func ReturnPageInfo(ctx *gin.Context) {
-	page, _ := strconv.Atoi(ctx.DefaultQuery("page", "1"))
+	page, _ := strconv.Atoi(ctx.DefaultQuery("offset", "1"))
 	limit, _ := strconv.Atoi(ctx.DefaultQuery("limit", "3"))
-	paginator := model.GetData(page, limit)
+	index := ctx.DefaultQuery("index", "id")
+	order := ctx.DefaultQuery("order", "asc")
+
+	paginator := model.GetData(page, limit, index, order)
 	ctx.JSON(200, paginator)
 	return
 }
@@ -31,7 +34,7 @@ func PostData(ctx *gin.Context) {
 		json.Unmarshal(reqBody, &postStructure)
 		model.InsertData(postStructure.Title, postStructure.Description, postStructure.Category)
 	}
-	ctx.JSON(201, "{ status: 'add data success}")
+	ctx.JSON(201, "{ status: 'add data success'}")
 	return
 }
 
@@ -42,6 +45,6 @@ func UpdateData(ctx *gin.Context) {
 		json.Unmarshal(reqBody, &postStructure)
 		model.UpdateData(postStructure.Title, postStructure.Description, postStructure.Category)
 	}
-	ctx.JSON(200, "{ status: 'update data success}")
+	ctx.JSON(200, "{ status: 'update data success'}")
 	return
 }
