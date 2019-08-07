@@ -25,6 +25,7 @@ func NewRouter() RouterImpl {
 	// add CORS allow header
 	corsConfig := cors.DefaultConfig()
 	corsConfig.AllowAllOrigins = true
+	corsConfig.AddAllowHeaders("*")
 
 	r.Use(cors.New(corsConfig))
 

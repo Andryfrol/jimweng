@@ -11,7 +11,7 @@ import (
 func ReturnPageInfo(ctx *gin.Context) {
 	page, _ := strconv.Atoi(ctx.DefaultQuery("offset", "1"))
 	limit, _ := strconv.Atoi(ctx.DefaultQuery("limit", "3"))
-	index := ctx.DefaultQuery("index", "id")
+	index := ctx.DefaultQuery("sort", "id")
 	order := ctx.DefaultQuery("order", "asc")
 
 	paginator := model.GetData(page, limit, index, order)
@@ -43,6 +43,9 @@ func UpdateData(ctx *gin.Context) {
 	if reqBody, err := ctx.GetRawData(); err == nil {
 		postStructure := model.MemoList{}
 		json.Unmarshal(reqBody, &postStructure)
+
+		// log.Printf("%v___%v___%v\n", postStructure.Title, postStructure.Description, postStructure.Category)
+
 		model.UpdateData(postStructure.Title, postStructure.Description, postStructure.Category)
 	}
 	ctx.JSON(200, "{ status: 'update data success'}")
